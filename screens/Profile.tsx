@@ -12,6 +12,7 @@ import Layout from '../layouts/Layout'
 // ** Third Pary
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 import AntDesign from '@expo/vector-icons/AntDesign'
+import { FormProvider, useForm } from "react-hook-form";
 
 // ** Components
 import Input from "../components/Input";
@@ -19,8 +20,18 @@ import { Divider } from 'native-base'
 import BottomSheet from '../components/bottom-sheet/BottomSheet'
 
 
+const defaultValues = {
+  bio: '',
+}
+
+interface UserData {
+  bio: string
+}
+
 const Profile = ({navigation}: {navigation: any}) => {
   const [show, setShow ] = useState(false) 
+
+  const methods = useForm({defaultValues});
 
   return (
       <Layout
@@ -55,11 +66,14 @@ const Profile = ({navigation}: {navigation: any}) => {
 
               {/*  */}
               <View style={{marginVertical: 25}} className="" >
-                {/* Email Address set up */}
-                <Input
-                  label="Bio"
-                  placeholder="What’s your bio"
-                />
+                <FormProvider {...methods}>
+                  {/* Email Address set up */}
+                  <Input
+                    label="Bio"
+                    name='bio'
+                    placeholder="What’s your bio"
+                  />
+                </FormProvider>
               </View>
 
               <View className='space-y-8'>

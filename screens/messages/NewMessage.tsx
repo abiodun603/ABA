@@ -1,17 +1,37 @@
 import React from 'react'
-import { RootStackParamList } from "../../types";
+
+// ** React Native Library 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Dimensions, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Dimensions, StyleSheet, Text, View } from 'react-native';
+
+// ** Layout
 import Layout from '../../layouts/Layout';
+
+// ** Contants
 import FontSize from '../../constants/FontSize';
 import Font from '../../constants/Font';
 import Colors from '../../constants/Colors';
-import {MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons'; 
+
+// ** Third Party
+import { FormProvider, useForm } from "react-hook-form";
+
+// ** Component
 import Input from '../../components/Input';
 import ChatTab from '../../components/ChatTab';
+
+// ** Types
+import { RootStackParamList } from "../../types";
 type Props = NativeStackScreenProps<RootStackParamList, "NewMessage">;
 
 const w = Dimensions.get('window').width
+
+const defaultValues = {
+  recipient: '',
+}
+
+interface UserData {
+  recipient: string
+}
 
 const MessageCard = () => {
   return (
@@ -25,19 +45,28 @@ const MessageCard = () => {
 }
 
 const NewMessage: React.FC<Props> = ({ navigation: { navigate } }) => {
+  const methods = useForm({defaultValues});
+
+  const handleSubmit = (data: UserData) => {
+    // Handle login logic here
+    console.log(data);
+  }
+  
   return (
     <Layout 
       title = "New Message"
       // iconButton
       // onPress={()=> navigate("NewMessage")}
     >
-      <View style={styles.container}>
-        {/*  */}
-        <Input placeholder='Recipient' suffixIcon />
-        {/*  */}
-        {/* ====== Chat Input Field ====== */}
-        <ChatTab/>
-      </View>
+      <FormProvider {...methods}>
+        <View style={styles.container}>
+          {/*  */}
+          <Input name='recipient' placeholder='Recipient' suffixIcon />
+          {/*  */}
+          {/* ====== Chat Input Field ====== */}
+          <ChatTab/>
+        </View>
+      </FormProvider>
     </Layout>
   )
 }

@@ -1,11 +1,19 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import Input from '../../components/Input'
+
+// ** React Native Library 
+import { useNavigation } from '@react-navigation/native';
+
+// ** Third Party
 import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 import { SelectList } from 'react-native-dropdown-select-list';
+import { FormProvider, useForm } from "react-hook-form";
+
+// ** Component
+import Input from '../../components/Input'
 import CustomButton from '../../components/CustomButton';
-//
-import { useNavigation } from '@react-navigation/native';
+
+
 
 
 const data = [
@@ -16,71 +24,98 @@ const data = [
   {key:'5', value:'Oyo'}
 ]
 
+
+const defaultValues = {
+  fname: '',
+  lname: '',
+  uname: '',
+  bio: '',
+
+}
+
+interface UserData {
+  fname: string
+  lname: string
+  uname: string
+  bio: string
+}
+
 const Personal = () => {
   const [selected, setSelected] = React.useState("");
 
   //
   const navigation = useNavigation();
 
+
+  const methods = useForm({defaultValues});
+
+
   return (
     <View className='relative' style={{flex:1}}>
-      {/* Image */}
-      <View className='relative'>
-        <View className='w-[159px] h-[159px] rounded-full bg-slate-500 self-center my-8'>
+      <FormProvider {...methods}>
 
+        {/* Image */}
+        <View className='relative'>
+          <View className='w-[159px] h-[159px] rounded-full bg-slate-500 self-center my-8'>
+
+          </View>
+          {/*  */}
+          <View className='absolute bottom-10 left-[50%] translate-x-10 w-9 h-9  flex items-center justify-center rounded-full bg-kprimary'>
+            <MaterialCommunityIcons
+              name = "pencil-outline"
+              color="#FFFFFF"
+              size={22}
+            />
+          </View>
         </View>
-        {/*  */}
-        <View className='absolute bottom-10 left-[50%] translate-x-10 w-9 h-9  flex items-center justify-center rounded-full bg-kprimary'>
-          <MaterialCommunityIcons
-            name = "pencil-outline"
-            color="#FFFFFF"
-            size={22}
+      
+        <Input
+          label="First name"
+          name='fname'
+          placeholder="Enter first name"
+        />
+
+        <Input
+          label="Last name"
+          name= "lname"
+          placeholder="Enter last name"
+        />
+
+        <Input
+          label="Username"
+          name = "uname"
+          placeholder="Enter username"
+        />
+
+        <View className='relative'>
+          <Text style={[styles.label]}>Location</Text>
+          <SelectList
+            setSelected={(val: React.SetStateAction<string>) => setSelected(val)} 
+            data={data} 
+            save="value"
+            boxStyles={{borderRadius:4, borderColor: "#80747B", marginBottom: 25, paddingVertical: 17}}
+            search={false} 
+            placeholder='Select Location'
           />
         </View>
-      </View>
-     
-      <Input
-        label="First name"
-        placeholder="Enter first name"
-      />
 
-      <Input
-        label="Last name"
-        placeholder="Enter last name"
-      />
-
-      <Input
-        label="Username"
-        placeholder="Enter username"
-      />
-
-      <View className='relative'>
-        <Text style={[styles.label]}>Location</Text>
-        <SelectList
-          setSelected={(val: React.SetStateAction<string>) => setSelected(val)} 
-          data={data} 
-          save="value"
-          boxStyles={{borderRadius:4, borderColor: "#80747B", marginBottom: 25, paddingVertical: 17}}
-          search={false} 
-          placeholder='Select Location'
+        <Input
+          label="Bio"
+          placeholder="Enter a short bio"
+          name="bio"
         />
-      </View>
 
-      <Input
-        label="Bio"
-        placeholder="Enter a short bio"
-      />
-
-      <View className='absolute bottom-10 w-full'>
-        <CustomButton 
-          title='Next' 
-          // onPress={() => {
-          //   navigation.navigate('TopNavPanel', {
-          //   });
-          // }}
-      
-        />
-      </View>
+        <View className='absolute bottom-10 w-full'>
+          <CustomButton 
+            title='Next' 
+            // onPress={() => {
+            //   navigation.navigate('TopNavPanel', {
+            //   });
+            // }}
+        
+          />
+        </View>
+      </FormProvider>
     </View>
   )
 }

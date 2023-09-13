@@ -5,7 +5,7 @@ import {
   Text,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React from "react";
 import { RootStackParamList } from "../../types";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import Input from "../../components/Input";
@@ -15,12 +15,29 @@ import FontSize from "../../constants/FontSize";
 import Colors from "../../constants/Colors";
 import Font from "../../constants/Font";
 import Spacing from "../../constants/Spacing";
+
+// ** Third Party
+import { FormProvider, useForm } from "react-hook-form";
+
 import { styled } from "nativewind";
 type Props = NativeStackScreenProps<RootStackParamList, "EmailVerification">;
 const StyledView = styled(View)
 
+const defaultValues = {
+  email: '',
+}
+
+interface UserData {
+  code: string
+}
+
 const EmailVerification: React.FC<Props> = ({ navigation: { navigate } }) => {
-  const [toggleCheckBox, setToggleCheckBox] = useState(false)
+  const methods = useForm({defaultValues});
+
+  const handleSumbit = (data: UserData) => {
+    // Handle login logic here
+    console.log(data);
+  }
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -41,26 +58,30 @@ const EmailVerification: React.FC<Props> = ({ navigation: { navigate } }) => {
 
         />
         {/* ====== ======== */}
-        <View style={{marginVertical: 20}} className="grow" >
-          {/* Email Address set up */}
-          <Input
-            label="Confirmation code"
-            placeholder="Enter confirmation code"
-            password
-            passwordIcon
-          />
+        <FormProvider {...methods}>  
+          {/* ====== ======== */}
+          <View style={{marginVertical: 20}} className="grow" >
+            {/* Email Address set up */}
+            <Input
+              label="Confirmation code"
+              placeholder="Enter confirmation code"
+              name="code"
+              password
+              passwordIcon
+            />
 
-          <Text className="text-center text-[#6E5868] text-[16px] font-medium">Didn't get confirmation code? <Text className="text-black underline">Resend</Text></Text>
-        </View>
-        <View>
-          <View style={{ backgroundColor: "red"}} className="bg-red-800" />
-            <Button title="Submit" onPress={() => navigate("AccountSuccess")} />
-          <Text style={styles.text1}>
-            By continuing, you agree to One Reach’s{'\n'} 
-            <Text style={styles.text2}>Terms & Conditions</Text> and <Text style={styles.text2}>Privacy Policy.</Text>
-          </Text>
+            <Text className="text-center text-[#6E5868] text-[16px] font-medium">Didn't get confirmation code? <Text className="text-black underline">Resend</Text></Text>
+          </View>
+          <View>
+            <View style={{ backgroundColor: "red"}} className="bg-red-800" />
+              <Button title="Submit" onPress={() => navigate("AccountSuccess")} />
+            <Text style={styles.text1}>
+              By continuing, you agree to One Reach’s{'\n'} 
+              <Text style={styles.text2}>Terms & Conditions</Text> and <Text style={styles.text2}>Privacy Policy.</Text>
+            </Text>
 
-        </View>
+          </View>
+        </FormProvider>
       </ScrollView>
     </SafeAreaView>
   )

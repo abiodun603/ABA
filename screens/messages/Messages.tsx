@@ -10,6 +10,7 @@ import FontSize from '../../constants/FontSize'
 import Layout from '../../layouts/Layout'
 
 // ** Third Pary
+import { FormProvider, useForm } from "react-hook-form";
 import Ionicons from "@expo/vector-icons/Ionicons"
 import BottomSheet from '../../components/bottom-sheet/BottomSheet'
 import Input from '../../components/Input'
@@ -126,6 +127,15 @@ const MessageCard: React.FC<MessageCardProps> = ({name , message, newMessageNumb
   )
 }
 
+const defaultValues = {
+  email: '',
+}
+
+interface UserData {
+  code: string
+}
+
+
 const Messages = ({navigation}: {navigation: any}) => {
   const [show, setShow ] = useState(false) 
 
@@ -133,6 +143,14 @@ const Messages = ({navigation}: {navigation: any}) => {
     navigation.navigate("ViewMessage")
     setShow(!show)
   }
+
+  const methods = useForm({defaultValues});
+
+  const handleSubmit = (data: UserData) => {
+    // Handle login logic here
+    console.log(data);
+  }
+  
   return (
     <Layout
       title='Chats'
@@ -175,18 +193,19 @@ const Messages = ({navigation}: {navigation: any}) => {
           height={0.28}
           enableBackdropDismiss
         >
-          <View>
-            <Text className='text-normal text-[28px] text-black '>Enter contact’s
-email address</Text>
-
-            <View className='mt-6'>
-              <Input
-                label="Email"
-                placeholder="Enter email address"
-              />
-              <CustomButton title="Submit" onPress={handleViewMessage}/>
+          <FormProvider {...methods}>
+            <View>
+              <Text className='text-normal text-[28px] text-black '>Enter contact’s email address</Text>
+              <View className='mt-6'>
+                <Input
+                  name='email'
+                  label="Email"
+                  placeholder="Enter email address"
+                />
+                <CustomButton title="Submit" onPress={handleViewMessage}/>
+              </View>
             </View>
-          </View>
+          </FormProvider>
         </BottomSheet>
       </ScrollView>
     </Layout>

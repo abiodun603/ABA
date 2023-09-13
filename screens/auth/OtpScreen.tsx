@@ -7,20 +7,47 @@ import {
   View,
 } from "react-native";
 import React from 'react'
-import { RootStackParamList } from "../../types";
+
+// ** React Native Library 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import Input from "../../components/Input";
-import Button from "../../components/CustomButton";
+
+// ** Layout
 import Header from "../../layouts/authHeader/AuthHeader";
+
+// ** Contants
 import FontSize from "../../constants/FontSize";
 import Colors from "../../constants/Colors";
 import Font from "../../constants/Font";
 import Spacing from "../../constants/Spacing";
-type Props = NativeStackScreenProps<RootStackParamList, "OtpScreen">;
+
+// ** Third Party
+import { FormProvider, useForm } from "react-hook-form";
 import Ionicons from '@expo/vector-icons/Ionicons';
 
+// ** Component
+import Input from "../../components/Input";
+import Button from "../../components/CustomButton";
+
+// ** Types
+import { RootStackParamList } from "../../types";
+type Props = NativeStackScreenProps<RootStackParamList, "OtpScreen">;
+
+const defaultValues = {
+  email: '',
+}
+
+interface UserData {
+  code: string
+}
 
 const OtpScreen: React.FC<Props> = ({ navigation: { navigate }}) => {
+  const methods = useForm({defaultValues});
+
+  const handleSubmit = (data: UserData) => {
+    // Handle login logic here
+    console.log(data);
+  }
+
   return (
     <SafeAreaView>
       <ScrollView 
@@ -34,17 +61,24 @@ const OtpScreen: React.FC<Props> = ({ navigation: { navigate }}) => {
           title="Check your inbox"
           description="We sent a reset code to you."
         />
-        {/* ====== ======== */}
-        <View style={{marginVertical: 20}}>
-          <Input
-            label="Reset Code"
-            placeholder="Enter your reset code"
-          />
+        {/* ==== ======= */}
+        <FormProvider {...methods}>
+          {/* ====== ======== */}
+          <View style={{marginVertical: 20}}>
+            <Input
+              name="code"
+              label="Reset Code"
+              placeholder="Enter your reset code"
+              rules={{
+                required: 'Code is required',
+              }}
+            />
 
-          <View style={{marginTop: Spacing*2}} />
-          <Button title="Proceed" onPress={() => navigate('ResetPassword')} />
-        </View>
+            <View style={{marginTop: Spacing*2}} />
+            <Button title="Proceed" onPress={() => navigate('ResetPassword')} />
+          </View>
         {/* ===== ======= */}
+        </FormProvider>
         <Text style={styles.text3}>Didn’t receive a code?<Text style={styles.text4} > Click to resend</Text>.</Text>
 
         {/* ===== ======== */}
