@@ -1,4 +1,4 @@
-import { StyleProp, StyleSheet, Text, TouchableOpacity, ViewStyle } from 'react-native'
+import { ActivityIndicator, StyleProp, StyleSheet, Text, TouchableOpacity, ViewStyle } from 'react-native'
 import React from 'react'
 import Colors from '../constants/Colors';
 import Font from '../constants/Font';
@@ -14,9 +14,10 @@ interface ButtonType {
   textStyle? : any;
   iconName? : any;
   iconColor? : any;
+  isLoading?: boolean;
 }
 
-const CustomButton: React.FC<ButtonType> = ({title, buttonStyle,titleColor, buttonColor, textStyle,iconName, iconColor, onPress=()=>{}, ...props}) => {
+const CustomButton: React.FC<ButtonType> = ({title, buttonStyle, isLoading = false, titleColor, buttonColor, textStyle,iconName, iconColor, onPress=()=>{}, ...props}) => {
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -25,13 +26,16 @@ const CustomButton: React.FC<ButtonType> = ({title, buttonStyle,titleColor, butt
         backgroundColor: buttonColor || Colors.secondary,
         ...buttonStyle,
       }}
-      
+      disabled={isLoading}
     >
-      {
-        iconName &&
-        <Ionicons name={iconName} size={20} color={iconColor}  />
-      }
-      <Text  style={{...styles.title, ...textStyle, color: titleColor || Colors.background}}>{title}</Text>
+      {isLoading ? (
+        <ActivityIndicator size="small" color={titleColor || Colors.background} />
+      ) : (
+        <>
+          {iconName && <Ionicons name={iconName} size={20} color={iconColor} />}
+          <Text style={{ ...styles.title, ...textStyle, color: titleColor || Colors.background }}>{title}</Text>
+        </>
+      )}
     </TouchableOpacity>
   )
 }

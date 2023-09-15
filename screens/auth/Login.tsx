@@ -5,33 +5,47 @@ import {
   Text,
   View,
 } from "react-native";
-import React, { useState } from "react";
-import { RootStackParamList } from "../../types";
+import React from "react";
+
+
+// ** React Native Library 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import Input from "../../components/Input";
-import Button from "../../components/CustomButton";
-import AuthHeader from "../../layouts/authHeader/AuthHeader";
+
+// ** Constants 
 import FontSize from "../../constants/FontSize";
 import Colors from "../../constants/Colors";
 import Font from "../../constants/Font";
 import Spacing from "../../constants/Spacing";
 
+// ** Components
+import Input from "../../components/Input";
+import Button from "../../components/CustomButton";
+
+// ** Layouts
+import AuthHeader from "../../layouts/authHeader/AuthHeader";
 
 // ** Thired Party
 import { FormProvider, useForm } from 'react-hook-form';
 import { Box, Checkbox } from "native-base";
 import { styled } from "nativewind";
+import { Toast, ToastDescription, ToastTitle, VStack, useToast } from "@gluestack-ui/themed";
+
+// ** Types
+import { RootStackParamList } from "../../types";
+
+// ** Store and Action
+import { useLoginMutation } from "../../stores/features/auth/authService";
 
 // ** Hook
-import { useAuth } from "../../hooks/useAuth";
-
+import { useAppDispatch } from "../../hooks/useTypedSelector";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Login">;
+
 const StyledView = styled(View)
 
 const defaultValues = {
-  email: 'steve7@app.com',
-  password: 'passcode'
+  email: 'dap@gmail.com',
+  password: 'Telvida@123!!'
 }
 
 interface UserData {
@@ -40,21 +54,47 @@ interface UserData {
 }
 
 const LoginScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
-  const [toggleCheckBox, setToggleCheckBox] = useState(false)
   const methods = useForm({defaultValues});
+  const toast = useToast()
+  const [login, { isLoading }] = useLoginMutation();
 
-   // ** Hooks
-   const auth = useAuth()
+  const dispatch = useAppDispatch();
 
-
-  const handleLogin = (data: UserData) => {
+  const handleLogin = async (data: UserData) => {
     // Handle login logic here
-    console.log(data);
-    const { email, password } = data
-    auth.login({ email, password }, () => {
-      
-    })
-    navigate("CustomDrawer")
+    try {
+      const user = await login(data).unwrap().then((res) => console.log(res));
+      console.log(user);
+      // Being that the result is handled in extraReducers in authSlice,
+      // we know that we're authenticated after this, so the user
+      // and token will be present in the store
+      navigate('CustomDrawer');
+    } catch (err: any) {
+      console.log(err)
+      if(err.status === 401){
+        toast.show({
+          placement: "top",
+          render: ({ id }) => {
+            return (
+              <Toast nativeID={id} action="error" variant="accent">
+                <VStack space="xs">
+                  <ToastTitle>New Message</ToastTitle>
+                  <ToastDescription>
+                    The email or password provided is incorrect.
+                  </ToastDescription>
+                </VStack>
+              </Toast>
+            )
+          },
+        })
+      }
+      // toast({
+      //   status: 'error',
+      //   title: 'Error',
+      //   description: 'Oh no, there was an error!',
+      //   isClosable: true,
+      // });
+    }
   };
 
   return (
@@ -131,6 +171,7 @@ const LoginScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
               <View style={{ backgroundColor: "red"}} className="bg-red-800" />
               <Button 
                 title="Sign in" 
+                isLoading={isLoading}
                 onPress={methods.handleSubmit(handleLogin)}              
               />
               <Text style={styles.text3}>Or sign in with</Text>
@@ -148,7 +189,6 @@ const LoginScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
                     title='Apple'
                     buttonStyle={{backgroundColor: 'transparent', borderColor: "#B3B3B3", borderWidth: 1, width: 117}}
                     titleColor= {Colors.secondary}
-
                   />
                 </Box>
               </StyledView>

@@ -1,6 +1,9 @@
-'use client'
+import { useMemo } from 'react'
+import { useAppSelector } from './useTypedSelector'
+import { selectCurrentUser } from '../stores/features/auth/authSlice'
 
-import { useContext } from 'react'
-import { AuthContext } from '../contexts/AuthContext'
+export const useAuth = () => {
+  const user = useAppSelector(selectCurrentUser)
 
-export const useAuth = () => useContext(AuthContext)
+  return useMemo(() => ({ user }), [user])
+}

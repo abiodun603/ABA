@@ -93,7 +93,7 @@ const Input: React.FC<InputProps> = ({
               <MaterialCommunityIcons
                 onPress={() => setHidePassword(!hidePassword)}
                 style={{ fontSize: FontSize.large, color: '#B2B2B2' }}
-                name={!hidePassword ? 'eye-off-outline' : 'eye-outline'}
+                name={hidePassword ? 'eye-off-outline' : 'eye-outline'}
               />
             )}
           </View>
