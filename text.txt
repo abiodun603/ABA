@@ -1,0 +1,22 @@
+ {
+          contents?.map((content, index) => {
+            return (
+              <View className='flex-row items-center justify-between' key={index}>
+                {/* feed */}
+                <TouchableOpacity  onPress={() => setShow(true)} className='flex-row items-center space-x-3'>
+                  {/* Image */}
+                  <View className='h-12 w-12 flex items-center justify-center rounded-2xl bg-ksecondary'>
+                    <Text className='text-white text-sm font-bold'>A</Text>
+                  </View>
+                  <View className='space-y-1'>
+                    <Text className='text-kblack text-sm font-normal'><ShortenedWord word={content.title} maxLength={30} /></Text>
+                    <Text className='text-kdesc text-[11px] text-medium'>{content.email}</Text>
+                  </View>
+                </TouchableOpacity>
+
+                {/* more icon */}
+                <MaterialIcons name='more-vert' size={30} />
+              </View>
+            )
+          })
+        }

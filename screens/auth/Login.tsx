@@ -36,9 +36,6 @@ import { RootStackParamList } from "../../types";
 // ** Store and Action
 import { useLoginMutation } from "../../stores/features/auth/authService";
 
-// ** Hook
-import { useAppDispatch } from "../../hooks/useTypedSelector";
-
 type Props = NativeStackScreenProps<RootStackParamList, "Login">;
 
 const StyledView = styled(View)
@@ -57,8 +54,6 @@ const LoginScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
   const methods = useForm({defaultValues});
   const toast = useToast()
   const [login, { isLoading }] = useLoginMutation();
-
-  const dispatch = useAppDispatch();
 
   const handleLogin = async (data: UserData) => {
     // Handle login logic here

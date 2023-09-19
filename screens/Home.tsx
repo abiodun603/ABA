@@ -16,9 +16,14 @@ import BottomSheet from '../components/bottom-sheet/BottomSheet'
 import { Colors, constants } from '../constants'
 import Font from '../constants/Font'
 
-//
+//** Store and Action 
 import { setSelectedTab } from '../stores/tab/tabAction'
 import { connect } from 'react-redux'
+import { useGetEventQuery, useGetEventsQuery } from '../stores/features/event/eventService'
+import { useGetResourcesQuery } from '../stores/features/resources/resourcesService'
+
+// ** Helpers
+import { ShortenedWord } from '../helpers/wordShorther'
 
 const conversations = [
   {
@@ -35,54 +40,7 @@ const conversations = [
   }
 ]
 
-const newEvents = [
-  
-  {
-    id: 1,
-    title: 'NEW EVENTS',
-    contents: [
-      {
-        id: 1,
-        title: 'GTB ABA Meeting Today',
-        username: '@loukia124'
-      },
-      {
-        id: 2,
-        title: 'GTB ABA Meeting Today',
-        username: '@loukia124'
-      },
-      {
-        id: 3,
-        title: 'GTB ABA Meeting Today',
-        username: '@loukia124'
-      }
-    ]
-  }
-]
 
-const newResources = [
-  {
-    id: 1,
-    title: 'NEW RESOURCES',
-    contents: [
-      {
-        id: 1,
-        title: 'Adantages.pdf Today',
-        username: '@loukia124'
-      },
-      {
-        id: 2,
-        title: 'Adantages.pdf Today',
-        username: '@loukia124'
-      },
-      {
-        id: 3,
-        title: 'Adantages.pdf Today',
-        username: '@loukia124'
-      },
-    ]
-  }
-]
 
 interface ConversationCardProps {
   name: string ;
@@ -106,20 +64,76 @@ const ConversationCard: FC<ConversationCardProps> = ({id,name,onPress,count}) =>
   )
 }
 
-type IContent = {
-  id: number;
-  title: string;
-  username: string;
+type IUserProps = {
+  email: string
 }
+
+type IContent = {
+  id: string;
+  title: string;
+  filename: string; 
+  email?: string
+  user?: IUserProps;
+}
+
 
 interface IFeeds {
   title: string;
   contents: IContent[];
 }
 
-const Feeds: FC<IFeeds> = ({title, contents}) => {
-  const [show, setShow ] = useState(false) 
+interface IEventBottomSheetModuleProps {
+  id: string;
+  show : boolean;
+  setShow: React.Dispatch<React.SetStateAction<boolean>>;
+}
+const EventBottomSheetModule: FC<IEventBottomSheetModuleProps> = ({id, show, setShow}) => {
+  const {data} = useGetEventQuery(id)
 
+  console.log( data)
+  return (
+    <BottomSheet
+      show={show}
+      onDismiss={() => {
+        setShow(false);
+      }}
+      height={0.85}
+      enableBackdropDismiss
+    >
+      <View>
+        {/* Image */}
+        <View className='w-full h-[279px] bg-slate-400 rounded-2xl'>
+
+        </View>
+        {/*  */}
+        <View className='flex-row items-center justify-between mt-4'>
+          <View style={{marginLeft: 10}}>
+            {/* name */}
+            <Text style={styles.title}>{data?.title || "" }</Text>
+            {/* incoming message type */}
+            <Text style={styles.description}>{data?.user?.email || "" }</Text>
+          </View>
+          <View className=''>
+            <Fontisto name ="bookmark" size={25} />
+          </View>
+        </View>
+        <Divider className='my-5'/>
+        <Text className='text-justify text-ktext text-sm'>
+          {data?.description || ""}
+        </Text>
+        <Divider className='my-5'/>
+        <View className='space-y-2'>
+          <Text className='text-ktext text-sm'>Date: May 16 2023</Text>
+          <Text className='text-ktext text-sm'>Time: 7pm </Text>
+          <Text className='text-ktext text-sm'>Location: <Text className='text-ksecondary'>www.zoom.com/abaGTBmeeting </Text> </Text>
+        </View>
+      </View>
+    </BottomSheet>
+  )
+} 
+
+const Feeds: FC<IFeeds> = ({title, contents}) => {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+  const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   return (
     <View className='my-5'>
       {/* Header */}
@@ -130,74 +144,99 @@ const Feeds: FC<IFeeds> = ({title, contents}) => {
       <Divider className='my-4'/>
       <View className='space-y-4'>
         {
-          contents.map((content, index) => {
+          contents?.length > 0 && contents?.map((content, index) => {
             return (
-              <View className='flex-row items-center justify-between' key={index}>
-                {/* feed */}
-                <TouchableOpacity  onPress={() => setShow(true)} className='flex-row items-center space-x-3'>
-                  {/* Image */}
-                  <View className='h-12 w-12 flex items-center justify-center rounded-2xl bg-ksecondary'>
-                    <Text className='text-white text-sm font-bold'>A</Text>
-                  </View>
-                  <View className='space-y-1'>
-                    <Text className='text-kblack text-sm font-normal'>{content.title}</Text>
-                    <Text className='text-kdesc text-[11px] text-medium'>{content.username}</Text>
-                  </View>
-                </TouchableOpacity>
+                <View className='flex-row items-center justify-between' key={index}>
+                  {/* feed */}
+                  <TouchableOpacity  
+                    onPress={() => setSelectedItemId(content.id)} 
+                    className='flex-row items-center space-x-3'>
+                    {/* Image */}
+                    <View className='h-12 w-12 flex items-center justify-center rounded-2xl bg-ksecondary'>
+                      <Text className='text-white text-sm font-bold'>A</Text>
+                    </View>
+                    <View className='space-y-1'>
+                      <Text className='text-kblack text-sm font-normal'><ShortenedWord word={content.title || content.filename} maxLength={30} /></Text>
+                      <Text className='text-kdesc text-[11px] text-medium'>{content.email}</Text>
+                    </View>
+                  </TouchableOpacity>
 
-                {/* more icon */}
-                <MaterialIcons name='more-vert' size={30} />
-              </View>
+                  {/* more icon */}
+                  <MaterialIcons name='more-vert' size={30} />
+
+                  {/* Render EventBottomSheetModule conditionally */}
+                  {selectedItemId === content.id && (
+                    <EventBottomSheetModule
+                      id={content.id}
+                      show={true}
+                      setShow={() => setSelectedItemId(null)}
+                      key={content.id}
+                    />
+                  )}
+                </View>
             )
           })
         }
-        
       </View>
-      <BottomSheet
-          show={show}
-          onDismiss={() => {
-            setShow(false);
-          }}
-          height={0.85}
-          enableBackdropDismiss
-        >
-          <View>
-            {/* Image */}
-            <View className='w-full h-[279px] bg-slate-400 rounded-2xl'>
-
-            </View>
-            {/*  */}
-            <View className='flex-row items-center justify-between mt-4'>
-              <View style={{marginLeft: 10}}>
-                {/* name */}
-                <Text style={styles.title}>GTB ABA Meeting</Text>
-                {/* incoming message type */}
-                <Text style={styles.description}>@loukia124</Text>
-              </View>
-              <View className=''>
-                <Fontisto name ="bookmark" size={25} />
-              </View>
-            </View>
-            <Divider className='my-5'/>
-            <Text className='text-justify text-ktext text-sm'>
-              Lorem ipsum dolor sit amet consectetur. Eget natoque sit nec eget in eleifend nulla enim donec. Nam sed ornare velit velit habitasse integer. Placerat lectus rhoncus bibendum blandit adipiscing orci. Diam amet a ut quam tempor.
-            </Text>
-            <Divider className='my-5'/>
-            <View className='space-y-2'>
-              <Text className='text-ktext text-sm'>Date: May 16 2023</Text>
-              <Text className='text-ktext text-sm'>Time: 7pm </Text>
-              <Text className='text-ktext text-sm'>Location: <Text className='text-ksecondary'>www.zoom.com/abaGTBmeeting </Text> </Text>
-            </View>
-          </View>
-        </BottomSheet>
     </View>
   )
 }
 
 
+const NewEvents = () => {
+  const {data, isError} = useGetEventsQuery()
+  
+   //Get all event data into the Feed Componennt
+   const newEvents = [
+    {
+      id: 1,
+      title: 'NEW EVENTS',
+      contents: data?.docs.slice(0,3).map((item: IContent) => ({
+        id: item.id,
+        title: item.title,
+        email: item.user?.email
+      }))
+    }
+  ]
+
+  if(isError) {
+    console.log("error")
+  }
+
+  return (
+    <Feeds title={newEvents[0].title} contents={newEvents[0].contents} />
+  )
+}
+
+const NewResources = () => {
+  const {data, isError} = useGetResourcesQuery()
+  //  Get all event data into the Feed Componennt
+   const newResources = [
+    {
+      id: 1,
+      title: 'NEW RESOURCES',
+      contents: data?.docs.slice(0,3).map((item: IContent) => ({
+        id: item.id,
+        filename: item.filename,
+        email: item.user?.email
+      }))
+    }
+  ]
+
+  if(isError) {
+    console.log("error")
+  }
+  console.log(data)
+  
+  return (
+    <Feeds title={newResources[0].title} contents={newResources[0].contents} />
+  )
+
+}
 
 
 const Home = ({navigation}: {navigation: any}) => {
+  
   const handleConversationRoute = () => {
     setSelectedTab(constants.screens.community)
     navigation.navigate("MainLayout")
@@ -234,8 +273,15 @@ const Home = ({navigation}: {navigation: any}) => {
           }
         </View>
         
-        <Feeds title={newEvents[0].title} contents={newEvents[0].contents} />
-        <Feeds title={newResources[0].title} contents={newResources[0].contents} />
+        <View>
+          
+        </View>
+        {/* New Events Feed */}
+        <NewEvents />
+
+        {/* New Resources Feed */}
+        <NewResources />
+        {/* <Feeds title={newResources[0].title} contents={newResources[0].contents} /> */}
       </ScrollView>
     </Layout>
   )

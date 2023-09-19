@@ -25,11 +25,8 @@ export const authApi = createApi({
         method: 'POST',
         body: credentials,
       }),
-    }),
-    protected: builder.mutation<{ message: string }, void>({
-      query: () => 'protected',
-    }),
+    })
   }),
 })
 
-export const { useLoginMutation, useProtectedMutation } = authApi
+export const { useLoginMutation } = authApi
