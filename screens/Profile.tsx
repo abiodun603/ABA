@@ -61,8 +61,8 @@ const Profile = ({navigation}: {navigation: any}) => {
                     <Text className='text-white text-sm font-bold'>A</Text>
                   </View>
                   <View className='space-y-1'>
-                    <Text className='text-kblack text-sm font-normal'>{profile && profile[0].firstname}</Text>
-                    <Text className='text-kdesc text-[11px] text-medium'>{profile && profile[0].username}</Text>
+                    <Text className='text-kblack text-sm font-normal'>{profile && profile[0]?.firstname || "firstname"}</Text>
+                    <Text className='text-kdesc text-[11px] text-medium'>{profile && profile[0]?.username || "username"}</Text>
                   </View>
                 </View>
 
@@ -79,7 +79,7 @@ const Profile = ({navigation}: {navigation: any}) => {
                   <Input
                     label="Bio"
                     name='bio'
-                    placeholder={profile && profile[0].short_bio || "What's your bio"}
+                    placeholder={profile && profile[0]?.short_bio || "What's your bio"}
                   />
                 </FormProvider>
               </View>

@@ -10,6 +10,7 @@ import ChatTab from '../../components/ChatTab';
 import { useAppSelector } from '../../hooks/useTypedSelector';
 import socket from '../../utils/socket';
 import useGlobalState from '../../hooks/global.state';
+import { FlatList } from 'native-base';
 type Props = NativeStackScreenProps<RootStackParamList, "ViewMessage">;
 
 interface IMessageCardProps {
@@ -64,10 +65,20 @@ const ViewMessage: React.FC<Props> = ({ navigation: { navigate } }) => {
       recipientId: getContactId,
       message: message
     }
+
+    console.log(data);
     // socket.em
-    socket.emit("sendMessage", getFindContactId);
+    socket.emit("sendMessage", data);
+
+    socket.on("getAllMessageByChatId", (message) => {
+      console.log(message)
+      setChats(message.docs)
+      // dispatch(setGetData(data))
+    });
 
   }
+
+  console.log(chats)
   return (
     <Layout 
       title = {`${getContactEmail}`}
@@ -78,13 +89,22 @@ const ViewMessage: React.FC<Props> = ({ navigation: { navigate } }) => {
         {/* time */}
         <Text style={[styles.time, {textAlign: 'center'}]}>Today</Text>
 
+
+       
+
         {/*  */}
         {
-          chats && chats.length > 0 ?<MessageCard message={chats.message} />
+          chats && chats.length > 0 ? 
+          <FlatList
+          data={chats}
+          keyExtractor={(item) => item?.id}
+          renderItem={({ item }) => (
+            <MessageCard  message={item?.chatId?.message} />
+          )}
+        />
           :  <Text className='text-center mt-6 '>No message yet</Text>
         }
        
-
         {/*  */}
         <ChatTab message={message} setMessage={setMessage} onPress={handleSendMessage} />
       </View>
@@ -117,6 +137,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: FontSize.base,
     borderBottomLeftRadius: FontSize.base,
     borderBottomRightRadius: FontSize.base,
+    marginBottom: 8
   },
   messageText: {
     color: Colors.text,

@@ -141,6 +141,7 @@ const Contact = ({navigation}: {navigation: any}) => {
         dispatch(setGetData(data))
       });
     };
+
     fetchContacts();
     // Clean up the socket listener when the component unmounts
     return () => {

@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { GestureResponderEvent, StyleSheet, Text, TouchableOpacity, View} from 'react-native'
 
 // ** Constants 
@@ -29,6 +29,7 @@ import { ShortenedWord } from '../helpers/wordShorther'
 import { CustomMenu } from '../components/Menu/Menu'
 import { useGetProfileQuery } from '../stores/features/auth/authService'
 import useGlobalState from '../hooks/global.state'
+import socket from '../utils/socket'
 
 const conversations = [
   {
@@ -357,11 +358,28 @@ const Home = ({navigation}: {navigation: any}) => {
     console.log("route")
   }
 
-  console.log(docs)
+  
+  useEffect(() => {
+    // Fetch contacts when the component mounts
+    const addSocketId = () => {
+      const data = {
+        current_user : user?.id
+      }
+      console.log(data);
+      socket.emit("addUser", data);
+    };
+    addSocketId();
+   console.log("i just fired")
+    // Clean up the socket listener when the component unmounts
+    return () => {
+      socket.off("addUser");
+      socket.disconnect();
+    };
+  }, []); 
 
   return (
     <Layout
-      title={docs && docs[0].firstname}
+      title={docs && docs[0]?.firstname || `firstname`}
       navigation={navigation}
       iconName={"bell-outline"}
       iconColor="#000000"
