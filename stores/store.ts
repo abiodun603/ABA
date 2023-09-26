@@ -3,6 +3,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { authApi } from './features/auth/authService';
 import authReducer from './features/auth/authSlice'
 import contactReducer from './features/contacts/contactSlice'
+import findContactReducer from './features/findContact/findContactSlice'
 import tabReducer from './tab/tabReducer';
 import { eventsApi } from './features/event/eventService';
 import { resourcesApi } from './features/resources/resourcesService';
@@ -13,6 +14,7 @@ const store = configureStore({
      [eventsApi.reducerPath]: eventsApi.reducer, 
      [resourcesApi.reducerPath]: resourcesApi.reducer,   
      contact: contactReducer,
+     findContact: findContactReducer,
      auth: authReducer,
      tabReducer: tabReducer,
   },

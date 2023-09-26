@@ -1,5 +1,5 @@
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { FC } from 'react'
 import {MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons'; 
 import Input from './Input';
 import FontSize from '../constants/FontSize';
@@ -8,7 +8,15 @@ import { TextInput } from 'react-native-paper';
 
 const w = Dimensions.get('window').width
 
-const ChatTab = () => {
+interface IChatTabProps {
+  message: string
+  setMessage: React.Dispatch<React.SetStateAction<string>>
+  onPress: () => void
+}
+
+const ChatTab: FC<IChatTabProps> = ({message, setMessage, onPress}) => {
+  
+
   return (
     <View style={styles.chatInputFieldContainer} className='mb-10'>
       <TouchableOpacity
@@ -22,11 +30,13 @@ const ChatTab = () => {
           placeholder='Text message'
           mode="outlined"
           style={{ backgroundColor: 'transparent' }}
+          onChangeText={setMessage}
+          value={message}
         />
       </View>
       {/* Send Button */}
       <TouchableOpacity
-        onPress={() => null}
+        onPress={onPress}
       >
          <FontAwesome name='send'  color="#A3229A" size={20} />
       </TouchableOpacity>
