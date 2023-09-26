@@ -10,8 +10,21 @@ export const resourcesApi = createApi({
         url: '/resources',
         method: 'GET',
       }),
+    }),
+    getSavedResources: builder.query<any, void>({
+      query: () => ({ 
+        url: "/saves/resource",
+        method: 'GET',
+      })
+    }),
+    saveResource: builder.mutation<void, any>({
+      query: (credentials) => ({ 
+        url: `/saves`,
+        method: 'POST',
+        body: credentials
+      })
     })
   })
 })
 
-export const { useGetResourcesQuery } = resourcesApi
+export const { useGetResourcesQuery, useGetSavedResourcesQuery, useSaveResourceMutation } = resourcesApi

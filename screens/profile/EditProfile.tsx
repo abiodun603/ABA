@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 
 // ** Constants
 import FontSize from '../../constants/FontSize';
@@ -13,9 +13,13 @@ import { FormProvider, useForm } from "react-hook-form";
 // ** Third Party
 import { styled } from 'nativewind';
 import { Divider } from 'native-base';
+import { Toast, ToastDescription, ToastTitle, VStack, useToast } from "@gluestack-ui/themed";
 
 // ** Layout
 import Layout from '../../layouts/Layout';
+
+// ** Hooks
+import useGlobalState from '../../hooks/global.state';
 
 // ** Components
 import CustomButton from '../../components/CustomButton';
@@ -23,29 +27,91 @@ import CustomButton from '../../components/CustomButton';
 //
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import Input from '../../components/Input';
+
+// ** Types
+import { useUpdateProfileMutation, type ProfileRequest } from '../../stores/features/auth/authService';
+
 type Props = NativeStackScreenProps<RootStackParamList, "EditProfile">;
 const StyledView = styled(View)
 
 const defaultValues = {
-  fname: '',
-  dname: '',
-  email: ''
+  firstname: '',
+  username: '',
+  email: '',
+  phone: ''
 }
 
-interface UserData {
-  fname: string
-  dname: string
-  email: string
-}
+
 
 
 const EditProfile: React.FC<Props> = ({ navigation: { navigate } }) => {
-  const methods = useForm({defaultValues});
+  const [updateProfile, { isLoading }] = useUpdateProfileMutation();
+  const {profile, user} = useGlobalState()
 
-  const handleSubmit = (data: UserData) => {
+  const methods= useForm({defaultValues});
+  const {setValue} = methods
+
+  //
+  const toast = useToast()
+
+
+  
+
+
+  const handleUpdate = async(data: ProfileRequest) => {
     // Handle login logic here
-    console.log(data);
+    const formData = {
+      id: user?.id,
+      firstname: data.firstname,
+      username: data.username
+    }
+    console.log(formData)
+
+    try {
+      await updateProfile(formData).unwrap().then((res) => console.log(res));
+      toast.show({
+        placement: "top",
+        render: ({ id }) => {
+          return (
+            <Toast nativeID={id} action="success" variant="accent">
+              <VStack space="xs">
+                <ToastTitle>Profile update successful!!!</ToastTitle>
+              </VStack>
+            </Toast>
+          )
+        },
+      })
+    } catch (err: any) {
+      console.log(err)
+      if(err.status === 401){
+        toast.show({
+          placement: "top",
+          render: ({ id }) => {
+            return (
+              <Toast nativeID={id} action="error" variant="accent">
+                <VStack space="xs">
+                  <ToastTitle>Error updating profile!!!</ToastTitle>
+                </VStack>
+              </Toast>
+            )
+          },
+        })
+      }
+    }
   }
+
+  
+
+  // Populate the form fields with the profile data when it's available
+  useEffect(() => {
+    if (profile) {
+      // Set the default values of the form fields using setValue
+      setValue('firstname', profile[0].firstname || ''); // Set the default value to an empty string if the property is undefined
+      setValue('username', profile[0].username || '');
+      setValue('email', user?.email || '');
+      setValue('phone', 'No phone number');
+    }
+  }, [profile, setValue]);
 
   return (
     <Layout
@@ -69,18 +135,18 @@ const EditProfile: React.FC<Props> = ({ navigation: { navigate } }) => {
         <View className='flex flex-col '>
           <Divider className='my-8'/>
           <Input
-            name='fname'
+            name='firstname'
             label="Full Name"
             placeholder="Timothy Hilda"
           />
           <Input
-            name='dname'
+            name='username'
             label="Display Name"
             placeholder="Advocate001"
           />
           <Divider className='mb-6 mt-1 bg-[#D2C2CB]'/>
           <Input
-            name='emial'
+            name='email'
             label="Email address"
             placeholder="timothyhilda@gmail.com"
           />
@@ -90,6 +156,11 @@ const EditProfile: React.FC<Props> = ({ navigation: { navigate } }) => {
             placeholder="+23490897656"
           />
         </View>
+        <CustomButton 
+          title="Update" 
+          isLoading={isLoading}
+          onPress={methods.handleSubmit(handleUpdate)}              
+        />
       </FormProvider>
     </View>
   </Layout>

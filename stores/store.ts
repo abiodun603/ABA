@@ -2,6 +2,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { authApi } from './features/auth/authService';
 import authReducer from './features/auth/authSlice'
+import contactReducer from './features/contacts/contactSlice'
 import tabReducer from './tab/tabReducer';
 import { eventsApi } from './features/event/eventService';
 import { resourcesApi } from './features/resources/resourcesService';
@@ -10,7 +11,8 @@ const store = configureStore({
   reducer: {
      [authApi.reducerPath]: authApi.reducer,
      [eventsApi.reducerPath]: eventsApi.reducer, 
-     [resourcesApi.reducerPath]: resourcesApi.reducer,    
+     [resourcesApi.reducerPath]: resourcesApi.reducer,   
+     contact: contactReducer,
      auth: authReducer,
      tabReducer: tabReducer,
   },

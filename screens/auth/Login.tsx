@@ -35,6 +35,7 @@ import { RootStackParamList } from "../../types";
 
 // ** Store and Action
 import { useLoginMutation } from "../../stores/features/auth/authService";
+import { CustomMenu } from "../../components/Menu/Menu";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Login">;
 
@@ -189,6 +190,8 @@ const LoginScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
               </StyledView>
             </View>
           </FormProvider>
+
+         
       </ScrollView>
     </SafeAreaView>
   )

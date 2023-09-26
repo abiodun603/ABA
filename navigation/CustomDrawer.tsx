@@ -14,6 +14,7 @@ import { constants } from '../constants'
 import MainLayout from '../screens/MainLayout'
 import { Divider } from 'native-base'
 import SimpleModal from '../components/modal/Modal'
+import socket from '../utils/socket'
 
 const Drawer = createDrawerNavigator()
 
@@ -77,6 +78,7 @@ const CustomDrawerContent = ({navigation, selectedTab, setSelectedTab}: {navigat
 
   const handleLogout = () => {
     // Perform logout logic here if needed
+    // socket.disconnect()
     setIsModalVisible(false);
     navigation.navigate('Login'); // Navigate to the login screen
   };

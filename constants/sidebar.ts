@@ -19,27 +19,31 @@ const sidebar__tabs = [
         label: screens.home,
     },
     {
+      id: 1,
+      label: screens.contact
+    },
+    {
         id: 2,
         label: screens.chats
     },
     {
-        id: 1,
+        id: 3,
         label: screens.community
     },
     {
-        id: 3,
+        id: 4,
         label: screens.profile
     },
     {
-      id: 4,
+      id: 5,
       label: screens.rate
     },
     {
-      id: 5,
+      id: 6,
       label: screens.contact
     },
     {
-      id: 6,
+      id: 7,
       label: screens.support
     }
 ]

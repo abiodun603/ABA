@@ -27,6 +27,7 @@ import Home from './Home'
 import Messages from './messages/Messages'
 import Community from './Community'
 import Profile from './Profile'
+import Contact from './Contact';
 
 // ** Images
 
@@ -100,6 +101,8 @@ const MainLayout = ({navigation, selectedTab, setSelectedTab}: {navigation: any,
     const homeTabColor = useSharedValue(COLORS.white)
     const messagesTabFlex = useSharedValue(1)
     const messagesTabColor = useSharedValue(COLORS.white)
+    const contactTabFlex = useSharedValue(1)
+    const contactTabColor = useSharedValue(COLORS.white)
     const padTabFlex = useSharedValue(1)
     const padTabColor = useSharedValue(COLORS.white)
     const notificationTabFlex = useSharedValue(1)
@@ -117,6 +120,18 @@ const MainLayout = ({navigation, selectedTab, setSelectedTab}: {navigation: any,
             backgroundColor: homeTabColor.value
         }
     })
+
+    const contactFlexStyle = useAnimatedStyle(() => {
+      return {
+          flex: contactTabFlex.value
+      }
+  })
+
+  const contactColorStyle = useAnimatedStyle(() => {
+      return {
+          backgroundColor: contactTabColor.value
+      }
+  })
 
     
     const messagesFlexStyle = useAnimatedStyle(() => {
@@ -171,10 +186,22 @@ const MainLayout = ({navigation, selectedTab, setSelectedTab}: {navigation: any,
             homeTabFlex.value = withTiming(1 , {duration: 500})
             homeTabColor.value = withTiming(COLORS.white, {duration: 500})
         }
+        
+        if(selectedTab == constants.screens.contact) {
+          flatListRef?.current?.scrollToIndex({
+              index: 1,
+              animated: false
+          })
+          contactTabFlex.value = withTiming(4 , {duration: 500})
+          contactTabColor.value = withTiming(Colors.transparent, {duration: 500})
+        }else {
+          contactTabFlex.value = withTiming(1 , {duration: 500})
+          contactTabColor.value = withTiming(COLORS.white, {duration: 500})
+        }
 
         if(selectedTab == constants.screens.chats) {
             flatListRef?.current?.scrollToIndex({
-                index: 1,
+                index: 2,
                 animated: false
             })
             messagesTabFlex.value = withTiming(4 , {duration: 500})
@@ -187,7 +214,7 @@ const MainLayout = ({navigation, selectedTab, setSelectedTab}: {navigation: any,
 
         if(selectedTab == constants.screens.community) {
             flatListRef?.current?.scrollToIndex({
-                index: 2,
+                index: 3,
                 animated: false
             })
             padTabFlex.value = withTiming(4 , {duration: 500})
@@ -199,7 +226,7 @@ const MainLayout = ({navigation, selectedTab, setSelectedTab}: {navigation: any,
         
         if(selectedTab == constants.screens.profile) {
             flatListRef?.current?.scrollToIndex({
-                index: 3,
+                index: 4,
                 animated: false
             })
             notificationTabFlex.value = withTiming(4 , {duration: 500})
@@ -233,6 +260,7 @@ const MainLayout = ({navigation, selectedTab, setSelectedTab}: {navigation: any,
                       }}
                     >
                       {item.label === constants.screens.home && <Home navigation={navigation}/>}
+                      {item.label == constants.screens.contact && <Contact navigation={navigation}/>}
                       {item.label == constants.screens.chats && <Messages navigation={navigation}/>}
                       {item.label == constants.screens.community && <Community navigation={navigation}/>}
                       {item.label == constants.screens.profile && <Profile navigation={navigation}/>}
@@ -288,7 +316,15 @@ const MainLayout = ({navigation, selectedTab, setSelectedTab}: {navigation: any,
                     innerContainerStyle = {homeFlexStyle}
                     onPress={() => setSelectedTab(constants.screens.home)}
                   />
-                    
+                  <TabButton
+                    label="Contact"
+                    icon={chat}
+                    isFocused={selectedTab == constants.screens.contact}
+                    outerContainerStyle ={contactColorStyle}
+                    innerContainerStyle = {contactFlexStyle}
+                    onPress={() => setSelectedTab(constants.screens.contact)}
+                  />
+
                   <TabButton
                     label="Chats"
                     icon={chat}

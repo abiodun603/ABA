@@ -19,13 +19,18 @@ import Layout from '../../layouts/Layout';
 // ** Components
 import CustomButton from '../../components/CustomButton';
 
-//
+// ** Hooks
+import useGlobalState from '../../hooks/global.state';
+
+
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 type Props = NativeStackScreenProps<RootStackParamList, "ProfilePreview">;
 const StyledView = styled(View)
 
 
 const ProfilePreview: React.FC<Props> = ({ navigation: { navigate } }) => {
+  const {profile, user} = useGlobalState()
+  console.log(user)
   return (
     <Layout
       title = "Profile Preview"
@@ -36,13 +41,13 @@ const ProfilePreview: React.FC<Props> = ({ navigation: { navigate } }) => {
 
       </View>
       {/* name */}
-      <Text className='text-kblack font-normal text-[22px] mt-3'>Timothy Hilda</Text>
+      <Text className='text-kblack font-normal text-[22px] mt-3'>{profile && profile[0].firstname}</Text>
       <Divider className='mt-2'/>
 
       {/* username */}
       <View className='mt-6 space-y-1'>
-        <Text className='text-kdesc text-[11px] text-medium'>@loukia124</Text>
-        <Text className='text-kblack text-sm font-normal'>timothyhilda@abaglobal.com</Text>
+        <Text className='text-kdesc text-[11px] text-medium'>@{profile && profile[0].username}</Text>
+        <Text className='text-kblack text-sm font-normal'>{user && user.email}</Text>
         <Text className='text-kgreen text-[11px] font-normal'>Active</Text>
       </View>
       <Divider className='mt-5'/>

@@ -19,6 +19,9 @@ import Input from "../components/Input";
 import { Divider } from 'native-base'
 import BottomSheet from '../components/bottom-sheet/BottomSheet'
 
+// ** Hooks
+import useGlobalState from '../hooks/global.state'
+
 
 const defaultValues = {
   bio: '',
@@ -30,6 +33,11 @@ interface UserData {
 
 const Profile = ({navigation}: {navigation: any}) => {
   const [show, setShow ] = useState(false) 
+
+  // Get Global State
+  const {profile} = useGlobalState()
+
+  console.log(profile)
 
   const methods = useForm({defaultValues});
 
@@ -53,8 +61,8 @@ const Profile = ({navigation}: {navigation: any}) => {
                     <Text className='text-white text-sm font-bold'>A</Text>
                   </View>
                   <View className='space-y-1'>
-                    <Text className='text-kblack text-sm font-normal'>Loukia Tsami</Text>
-                    <Text className='text-kdesc text-[11px] text-medium'>@loukia124</Text>
+                    <Text className='text-kblack text-sm font-normal'>{profile && profile[0].firstname}</Text>
+                    <Text className='text-kdesc text-[11px] text-medium'>{profile && profile[0].username}</Text>
                   </View>
                 </View>
 
@@ -71,7 +79,7 @@ const Profile = ({navigation}: {navigation: any}) => {
                   <Input
                     label="Bio"
                     name='bio'
-                    placeholder="What’s your bio"
+                    placeholder={profile && profile[0].short_bio || "What's your bio"}
                   />
                 </FormProvider>
               </View>

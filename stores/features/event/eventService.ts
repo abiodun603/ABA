@@ -3,11 +3,15 @@ import { baseQuery } from '../../../configs/authConfig'
 import type { EventResponse } from '../../models/events.model'
 
 
+export interface SaveEventRequest {
+  event: string
+}
+
 export const eventsApi = createApi({
   baseQuery,
   reducerPath: 'eventsApi',
   endpoints: (builder) => ({
-    getEvents: builder.query<any, void>({
+    getEvents: builder.query<EventResponse, void>({
       query: () => ({
         url: '/events',
         method: 'GET',
@@ -18,8 +22,21 @@ export const eventsApi = createApi({
         url: `/events/${id}`,
         method: 'GET',
       })
+    }),
+    getSavedEvent: builder.query<EventResponse, void>({
+      query: () => ({ 
+        url: "/saves/event",
+        method: 'GET',
+      })
+    }),
+    saveEvent: builder.mutation<void, SaveEventRequest>({
+      query: (credentials) => ({ 
+        url: `/saves`,
+        method: 'POST',
+        body: credentials
+      })
     })
   })
 })
 
-export const { useGetEventsQuery, useGetEventQuery } = eventsApi
+export const { useGetEventsQuery, useGetEventQuery, useGetSavedEventQuery, useSaveEventMutation } = eventsApi

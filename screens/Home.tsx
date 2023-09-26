@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react'
-import { StyleSheet, Text, TouchableOpacity, View} from 'react-native'
+import { GestureResponderEvent, StyleSheet, Text, TouchableOpacity, View} from 'react-native'
 
 // ** Constants 
 import FontSize from '../constants/FontSize'
@@ -10,7 +10,7 @@ import Layout from '../layouts/Layout'
 // ** Third Pary
 import { Divider } from 'native-base'
 import { ScrollView } from 'react-native-gesture-handler'
-import MaterialIcons from '@expo/vector-icons/MaterialIcons'
+import { Toast, ToastDescription, ToastTitle, VStack, useToast,AddIcon, Icon, MenuItem, MenuItemLabel } from "@gluestack-ui/themed";
 import Fontisto from '@expo/vector-icons/Fontisto'
 import BottomSheet from '../components/bottom-sheet/BottomSheet'
 import { Colors, constants } from '../constants'
@@ -19,11 +19,16 @@ import Font from '../constants/Font'
 //** Store and Action 
 import { setSelectedTab } from '../stores/tab/tabAction'
 import { connect } from 'react-redux'
-import { useGetEventQuery, useGetEventsQuery } from '../stores/features/event/eventService'
-import { useGetResourcesQuery } from '../stores/features/resources/resourcesService'
+import { useGetEventQuery, useGetEventsQuery, useSaveEventMutation } from '../stores/features/event/eventService'
+import { useGetResourcesQuery, useSaveResourceMutation } from '../stores/features/resources/resourcesService'
 
 // ** Helpers
 import { ShortenedWord } from '../helpers/wordShorther'
+
+// ** Components
+import { CustomMenu } from '../components/Menu/Menu'
+import { useGetProfileQuery } from '../stores/features/auth/authService'
+import useGlobalState from '../hooks/global.state'
 
 const conversations = [
   {
@@ -134,6 +139,89 @@ const EventBottomSheetModule: FC<IEventBottomSheetModuleProps> = ({id, show, set
 
 const Feeds: FC<IFeeds> = ({title, contents}) => {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+  const [saveEvent, { isLoading }] = useSaveEventMutation();
+  const [saveResource] = useSaveResourceMutation()
+
+  // Toast
+  const toast = useToast()
+
+  const handleSaveEvent = async(id: string, type: string) => {
+
+    if (type ==="event") {
+      const data = {event: id}
+      try {
+        await saveEvent(data).unwrap()
+        toast.show({
+          placement: "top",
+          render: ({ id }) => {
+            return (
+              <Toast nativeID={id} action="success" variant="accent">
+                <VStack space="xs">
+                  <ToastTitle>Event Saved Successfully</ToastTitle>
+                </VStack>
+              </Toast>
+            )
+          },
+        })
+        }catch (err: any) {
+        console.log(err)
+        if(err.status === 401){
+          toast.show({
+            placement: "top",
+            render: ({ id }) => {
+              return (
+                <Toast nativeID={id} action="error" variant="accent">
+                  <VStack space="xs">
+                    <ToastTitle>New Message</ToastTitle>
+                    <ToastDescription>
+                      The email or password provided is incorrect.
+                    </ToastDescription>
+                  </VStack>
+                </Toast>
+              )
+            },
+          })
+        }
+      }
+    }else if (type === "resource") {
+      const data = {resource: id}
+      try {
+        await saveResource(data).unwrap()
+        toast.show({
+          placement: "top",
+          render: ({ id }) => {
+            return (
+              <Toast nativeID={id} action="success" variant="accent">
+                <VStack space="xs">
+                  <ToastTitle>Resource Saved Successfully</ToastTitle>
+                </VStack>
+              </Toast>
+            )
+          },
+        })
+      } catch (err: any) {
+        console.log(err)
+        if(err.status === 401){
+          toast.show({
+            placement: "top",
+            render: ({ id }) => {
+              return (
+                <Toast nativeID={id} action="error" variant="accent">
+                  <VStack space="xs">
+                    <ToastTitle>New Message</ToastTitle>
+                    <ToastDescription>
+                      The email or password provided is incorrect.
+                    </ToastDescription>
+                  </VStack>
+                </Toast>
+              )
+            },
+          })
+        }
+      }
+    }
+  }
+
   return (
     <View className='my-5'>
       {/* Header */}
@@ -162,7 +250,29 @@ const Feeds: FC<IFeeds> = ({title, contents}) => {
                   </TouchableOpacity>
 
                   {/* more icon */}
-                  <MaterialIcons name='more-vert' size={30} />
+                  {
+                    content.filename ? 
+                    <CustomMenu>
+                      <MenuItem key={content.id} textValue="Add event" onPress={(e : GestureResponderEvent) => handleSaveEvent(content.id, "resource")}>
+                        <Icon as={AddIcon} size="sm" mr="$2" />
+                        <MenuItemLabel size="sm">Add Resources</MenuItemLabel>
+                      </MenuItem>
+                    </CustomMenu> : 
+                    <CustomMenu>
+                      <MenuItem key={content.id} textValue="Add event" onPress={(e : GestureResponderEvent) => handleSaveEvent(content.id, "event")}>
+                        <Icon as={AddIcon} size="sm" mr="$2" />
+                        <MenuItemLabel size="sm">Add Event</MenuItemLabel>
+                      </MenuItem>
+                    </CustomMenu>
+                  }
+                  {/* <CustomMenu>
+                    <MenuItem key={content.id} textValue="Add event" onPress={(e : GestureResponderEvent) => handleSaveEvent(content.id)}>
+                      <Icon as={AddIcon} size="sm" mr="$2" />
+                      <MenuItemLabel size="sm">Add Event</MenuItemLabel>
+                    </MenuItem>
+                  </CustomMenu> */}
+                 
+                  {/* <MaterialIcons name='more-vert' size={30} /> */}
 
                   {/* Render EventBottomSheetModule conditionally */}
                   {selectedItemId === content.id && (
@@ -236,6 +346,10 @@ const NewResources = () => {
 
 
 const Home = ({navigation}: {navigation: any}) => {
+  const {user} = useGlobalState()
+  const id = user?.id;
+  const {data} = useGetProfileQuery(id)
+  const docs = data?.docs;
   
   const handleConversationRoute = () => {
     setSelectedTab(constants.screens.community)
@@ -243,9 +357,11 @@ const Home = ({navigation}: {navigation: any}) => {
     console.log("route")
   }
 
+  console.log(docs)
+
   return (
     <Layout
-      title='Hi, Loukia'
+      title={docs && docs[0].firstname}
       navigation={navigation}
       iconName={"bell-outline"}
       iconColor="#000000"
