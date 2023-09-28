@@ -11,12 +11,20 @@ import { useAppSelector } from '../../hooks/useTypedSelector';
 import socket from '../../utils/socket';
 import useGlobalState from '../../hooks/global.state';
 import { FlatList } from 'native-base';
+import { KeyboardAvoidingView } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 type Props = NativeStackScreenProps<RootStackParamList, "ViewMessage">;
 
-interface IMessageCardProps {
+type IChatIdProps = {
   message: string
 }
-const MessageCard: FC<IMessageCardProps> = ({message}) => {
+
+interface IMessageCardProps {
+  id: string
+  message: string
+  chatId: IChatIdProps
+}
+const MessageCard = ({message}: {message: string}) => {
   return (
     <View style={styles.cardContainer}>
       <Text style={styles.messageText}>
@@ -30,6 +38,8 @@ const MessageCard: FC<IMessageCardProps> = ({message}) => {
 const ViewMessage: React.FC<Props> = ({ navigation: { navigate } }) => {
   const [message, setMessage] = useState('');
   const [chats, setChats] = useState<IMessageCardProps[] | null >(null);
+  const [messagesRecieved, setMessagesReceived] = useState<IMessageCardProps[]>([]);
+
 
   const getFindContactId = useAppSelector(state => state.findContact.id)
   const getContactEmail = useAppSelector(state => state.findContact.email)
@@ -37,26 +47,37 @@ const ViewMessage: React.FC<Props> = ({ navigation: { navigate } }) => {
   const {user} = useGlobalState();
   console.log(getContactEmail, getFindContactId)
 
-
+  // Runs whenever a socket event is recieved from the server
   useEffect(() => {
     // Fetch contacts when the component mounts
-    const fetchContacts = () => {
-      socket.emit("getMessage", getFindContactId);
-      // Listen for the server's response
-      socket.on("getAllMessageByChatId", (data) => {
-        console.log(data)
-        setChats(data.docs)
-        // dispatch(setGetData(data))
-      });
-    };
-    fetchContacts();
+    // socket.emit("getMessage", getFindContactId);
+    // Listen for the server's response
+    socket.on("getAllMessageByChatId", (data) => {
+      console.log(data)
+      setChats(data.docs)
+      // dispatch(setGetData(data))
+    });
     // Clean up the socket listener when the component unmounts
     return () => {
-      socket.off("getMessage");
+      // socket.off("getMessage");
       socket.off("getAllMessageByChatId");
-      socket.disconnect();
+      // socket.disconnect();
     };
   }, []); 
+
+  // Add this
+  useEffect(() => {
+    socket.on('last_100_messages', (last100Messages) => {
+      console.log('Last 100 messages:', JSON.parse(last100Messages));
+      const parsedMessages = JSON.parse(last100Messages);
+      setMessagesReceived((prevMessages) => [...parsedMessages, ...prevMessages]);    
+    })
+  
+    return () => {
+      socket.off('last_100_messages')
+    }
+  }, [socket])
+  
 
   const handleSendMessage = () => {
     const data = {
@@ -68,14 +89,7 @@ const ViewMessage: React.FC<Props> = ({ navigation: { navigate } }) => {
 
     console.log(data);
     // socket.em
-    socket.emit("sendMessage", data);
-
-    socket.on("getAllMessageByChatId", (message) => {
-      console.log(message)
-      setChats(message.docs)
-      // dispatch(setGetData(data))
-    });
-
+    socket.emit("sendMessage", data)
   }
 
   console.log(chats)
@@ -85,29 +99,23 @@ const ViewMessage: React.FC<Props> = ({ navigation: { navigate } }) => {
       onPress={()=> navigate("NewMessage")}
       extraOneIcon="call-outline"
     >
-      <View style={styles.container}>
-        {/* time */}
-        <Text style={[styles.time, {textAlign: 'center'}]}>Today</Text>
-
-
-       
-
-        {/*  */}
-        {
-          chats && chats.length > 0 ? 
-          <FlatList
-          data={chats}
-          keyExtractor={(item) => item?.id}
-          renderItem={({ item }) => (
-            <MessageCard  message={item?.chatId?.message} />
-          )}
-        />
-          :  <Text className='text-center mt-6 '>No message yet</Text>
-        }
-       
-        {/*  */}
+      <KeyboardAvoidingView style={styles.container}>
+        <ScrollView>
+          {/* <Text style={[styles.time, {textAlign: 'center'}]}>Today</Text>*/}
+            {
+              chats && chats.length > 0 ? 
+              <FlatList
+              data={messagesRecieved}
+              keyExtractor={(item) => item?.id}
+              renderItem={({ item }) => (
+                <MessageCard  message={item.chatId.message} />
+              )}
+            />
+              :  <Text className='text-center mt-6 '>No message yet</Text>
+            } 
+        </ScrollView>
         <ChatTab message={message} setMessage={setMessage} onPress={handleSendMessage} />
-      </View>
+      </KeyboardAvoidingView>
     </Layout>
   )
 }
@@ -118,7 +126,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 20,
-    position: 'relative',
   },
   time: {
     fontSize: FontSize.xsmall,
