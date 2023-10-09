@@ -47,7 +47,7 @@ const MessageCard = ({message, time, chatId}: {message: string, time: any, chatI
   // console.log(getFindContactId, chatId)
   return (
     <View style={user?.id === chatId ? [styles.cardContainer, styles.rightChat, { width: containerWidth }]: [styles.cardContainer, , styles.leftChat, { width: containerWidth }]}>
-      <Text style={styles.messageText}>
+      <Text style={user?.id === chatId ? [styles.messageText]: {color: "#FFFFFF"}}>
         {message} 
       </Text>
       <Text style={[styles.time]} className="absolute -bottom-4 right-2">{formatTimestampToTime(time)}</Text>
@@ -181,7 +181,6 @@ const styles = StyleSheet.create({
   time: {
     fontSize: 10,
     fontFamily: Font['inter-regular'],
-    color: Colors.gray,
     marginBottom: 25
   },
 
@@ -190,7 +189,6 @@ const styles = StyleSheet.create({
     position: "relative",
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#F5E5F5",
     borderTopRightRadius: FontSize.base,
     borderBottomLeftRadius: FontSize.base,
     borderBottomRightRadius: FontSize.base,
@@ -199,6 +197,7 @@ const styles = StyleSheet.create({
   },
   leftChat: {
   alignSelf: "flex-start",
+  backgroundColor: "#470F48",
   paddingRight: 60,
   paddingLeft: 20,
   paddingVertical: 10,
@@ -207,6 +206,7 @@ const styles = StyleSheet.create({
   rightChat: {
     alignSelf: "flex-end",
     paddingRight: 60,
+    backgroundColor: "#F5E5F5",
     paddingLeft: 20,
     paddingVertical: 10,
     maxWidth: 200

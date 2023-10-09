@@ -47,7 +47,7 @@ const Card: React.FC<ICardProps> = ({id , email, resource, filename, onPress}) =
 
         <View>
           {/* time */}
-          <MaterialIcons name = "more-vert" size={25} color="#4E444B" />
+          {/* <MaterialIcons name = "more-vert" size={25} color="#4E444B" /> */}
         </View>
     
     </TouchableOpacity>
