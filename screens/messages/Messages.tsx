@@ -22,6 +22,8 @@ import socket from '../../utils/socket'
 // ** Hooks
 import useGlobalState from '../../hooks/global.state'
 import { formatTimestampToTime } from '../../helpers/timeConverter'
+import { useAppDispatch } from '../../hooks/useTypedSelector'
+import { setContactID, setFindContactData, setFindContactEmail } from '../../stores/features/findContact/findContactSlice'
 
 
 interface MessageCardProps {
@@ -91,12 +93,15 @@ const Messages = ({navigation}: {navigation: any}) => {
   const [messages, setMessages] = useState<any[]>([])
   const {user} = useGlobalState()
 
+  //
+  const dispatch = useAppDispatch()
+
+
   const handleAddContact = (data: UserData) => {
     const contact = {
       current_user: user?.id,
       email: data.email
     }
-
     // navigation.navigate("ViewMessage")
     socket.emit("addContact", contact)
 
@@ -147,7 +152,7 @@ const Messages = ({navigation}: {navigation: any}) => {
           userConversations.push({
             id: conversation.id,
             email: member.email,
-            contact_id: conversation.id,
+            contact_id: member.id,
             lastMessage: conversation.last_message,
             createdAt: conversation.createdAt
           });
@@ -163,8 +168,25 @@ const Messages = ({navigation}: {navigation: any}) => {
 
   console.log(userConversations);
 
-  const handleChatSession = (id: string) => {
-    console.log(id);
+  const handleChatSession = (id: string, email: string) => {
+    const data  = {
+      current_user_id: user?.id,
+      contact_user_id: id
+    }
+
+    socket.emit("findOneChat", data)
+
+    socket.on("findOneChat", (chat) => {
+      console.log(chat)
+      dispatch(setFindContactData(chat?.docs[0]))
+      dispatch(setFindContactEmail(email))
+      dispatch(setContactID(id))
+
+      if(chat){
+        navigation.navigate("ViewMessage")
+      }
+    })
+    console.log(data)
   }
 
   
@@ -198,7 +220,7 @@ const Messages = ({navigation}: {navigation: any}) => {
                 message={item?.lastMessage !== undefined ? item.lastMessage : ""}
                 time={item?.createdAt}
                 // newMessageNumber={item.newMessage !== null && item.newMessage.toString()}
-                onPress={() => handleChatSession(item.id)}                // onPress={() => navigation.navigate("ViewMessage")}
+                onPress={() => handleChatSession(item.contact_id, item.email)}                // onPress={() => navigation.navigate("ViewMessage")}
             /> 
           }
         />

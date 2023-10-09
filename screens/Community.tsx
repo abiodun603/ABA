@@ -1,5 +1,5 @@
 import { FlatList, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 // ** Constants 
 import Colors from '../constants/Colors'
@@ -15,6 +15,9 @@ import Ionicons from "@expo/vector-icons/Ionicons"
 import BottomSheet from '../components/bottom-sheet/BottomSheet'
 import Input from '../components/Input'
 import CustomButton from '../components/CustomButton'
+import socket from '../utils/socket'
+import { useAppDispatch } from '../hooks/useTypedSelector'
+import useGlobalState from '../hooks/global.state'
 
 const DATA = [
   {
@@ -75,6 +78,8 @@ const DATA = [
   },
 ]
 
+
+
 interface MessageCardProps {
   name: string ;
   message: string;
@@ -131,6 +136,9 @@ interface UserData {
 
 const Community = ({navigation}: {navigation: any}) => {
   const [show, setShow ] = useState(false) 
+  const {user} = useGlobalState()
+
+  const dispatch = useAppDispatch()
 
 
   const methods = useForm({defaultValues});
@@ -143,7 +151,7 @@ const Community = ({navigation}: {navigation: any}) => {
   const handleViewMessage = () => {
     navigation.navigate("ViewMessage")
     setShow(!show)
-  }
+  } 
 
 
   return (

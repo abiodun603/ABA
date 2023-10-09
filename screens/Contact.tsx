@@ -54,16 +54,8 @@ const MessageCard: React.FC<MessageCardProps> = ({name , message, newMessageNumb
             <Text style={styles.title}>{name}</Text>
             {/* incoming message type */}
             <Text style={styles.description}>@username</Text>
-            {/* === DON'T DELETE THE BELOW COMPONENT */}
-            {/* <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 5}}> */}
-              {/* icon */}
-              {/* <Ionicons name='md-play-circle' color={Colors.gray} size={20}/> */}
-              {/* text */}
-              {/* <Text style={[styles.description, {marginLeft: 5}]}>Audio</Text> */}
-            {/* </View> */}
           </View>
         </View>
-
         {/* <View>
           <Text style={{color: Colors.gray, fontFamily: Font['inter-regular'], fontSize: FontSize.xsmall, marginBottom: 5}}>16:30</Text>
           {
