@@ -13,22 +13,21 @@ import { RootStackParamList } from "../../types";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import Personal from '../identification/Personal';
 import Role from '../identification/Role';
+import All from '../../views/HomeView/All';
+import Saved from '../../views/HomeView/Saved';
+import Calendar from '../../views/HomeView/Calendar';
 type Props = NativeStackScreenProps<RootStackParamList, "Identification">;
 
 const TabData = [
-  { name: "Personal Info", component: Personal },
-  { name: "Role & Verification", component: Role },
+  { name: "Personal Info", component: All },
+  { name: "Role & Verification", component: Saved },
+  { name: " Info", component: All },
+  { name: "Verification", component: Saved },
 ];
 
 const Identification: FC<Props> = () => {
   return (
-    <Layout 
-      title = "Identity Verification"
-    >
-      <View style={{ flex: 1 }} className='px-4'>
-        <TopNavPanel tabs={TabData} /> 
-      </View>
-    </Layout>
+   <Calendar />
   )
 }
 

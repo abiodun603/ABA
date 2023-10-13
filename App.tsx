@@ -49,13 +49,13 @@ export default function App() {
     <Provider store={store}>
       <NativeBaseProvider>
         <SafeAreaProvider>
-          <PaperProvider theme={theme}>
-            <GluestackUIProvider config={config.theme}>
+          {/* <PaperProvider theme={theme}> */}
+            {/* <GluestackUIProvider config={config.theme}> */}
               <StatusBar style='auto' />
               <Navigation />
               <Toast/>
-            </GluestackUIProvider>
-          </PaperProvider>
+            {/* </GluestackUIProvider> */}
+          {/* </PaperProvider> */}
         </SafeAreaProvider>
       </NativeBaseProvider>
     </Provider>

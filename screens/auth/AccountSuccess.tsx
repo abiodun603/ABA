@@ -39,7 +39,7 @@ const AccountSuccess: React.FC<Props> = ({ navigation: { navigate } }) => {
         {/* ====== ======== */}
         <View style={{marginVertical: 20}} className="grow" >
           <Text className="text-[28px] text-kblack text-center">You’re signed up!</Text>
-          <Text className="text-[16px] text-ktext text-center mt-3">Verify your identity in two simple steps.</Text>
+          {/* <Text className="text-[16px] text-ktext text-center mt-3">Verify your identity in two simple steps.</Text> */}
           <View className="items-center w-full mt-8">
             {/* Image */}
             <Image
@@ -50,7 +50,7 @@ const AccountSuccess: React.FC<Props> = ({ navigation: { navigate } }) => {
         </View>
         <View>
         <View style={{ backgroundColor: "red"}} className="bg-red-800" />
-          <Button title="Continue to identity verification" onPress={() => navigate("Identification")} />
+          <Button title="Go to home" onPress={() => navigate("CustomDrawer")} />
         </View>
       </ScrollView>
     </SafeAreaView>
