@@ -80,3 +80,324 @@ add another screen
       {item.label == constants.screens.pad && <Community navigation={navigation}/>}
       {item.label == constants.screens.crm && <Profile navigation={navigation}/>}
   </View>
+
+
+
+
+
+
+const conversations = [
+  {
+    id: 1,
+    name: 'Communities',
+    count: 100,
+    route: 'Community'
+  },
+  {
+    id: 2,
+    name: 'Chats',
+    count: 100,
+    route: 'Community'
+  }
+]
+
+
+
+interface ConversationCardProps {
+  name: string ;
+  count: number;
+  id: number;
+  onPress: ()=>void;
+}
+
+const ConversationCard: FC<ConversationCardProps> = ({id,name,onPress,count}) => {
+  return (
+    <View>
+      <TouchableOpacity 
+        onPress={onPress }
+        key={id} 
+        className='w-full h-14 border flex-row px-5 items-center justify-between mb-3 border-[#D2C2CB] rounded-xl'
+      >
+        <Text>{name}</Text>
+        <Text>{count}+</Text>
+      </TouchableOpacity>
+    </View>
+  )
+}
+
+type IUserProps = {
+  email: string
+}
+
+type IContent = {
+  id: string;
+  title: string;
+  filename: string; 
+  email?: string
+  user?: IUserProps;
+}
+
+
+interface IFeeds {
+  title: string;
+  contents: IContent[];
+}
+
+
+
+interface IEventBottomSheetModuleProps {
+  id: string;
+  show : boolean;
+  setShow: React.Dispatch<React.SetStateAction<boolean>>;
+}
+const EventBottomSheetModule: FC<IEventBottomSheetModuleProps> = ({id, show, setShow}) => {
+  const {data} = useGetEventQuery(id)
+
+  console.log( data)
+  return (
+    <BottomSheet
+      show={show}
+      onDismiss={() => {
+        setShow(false);
+      }}
+      height={0.85}
+      enableBackdropDismiss
+    >
+      <View>
+        {/* Image */}
+        <View className='w-full h-[279px] bg-slate-400 rounded-2xl'>
+
+        </View>
+        {/*  */}
+        <View className='flex-row items-center justify-between mt-4'>
+          <View style={{marginLeft: 10}}>
+            {/* name */}
+            <Text style={styles.title}>{data?.title || "" }</Text>
+            {/* incoming message type */}
+            <Text style={styles.description}>{data?.user?.email || "" }</Text>
+          </View>
+          <View className=''>
+            <Fontisto name ="bookmark" size={25} />
+          </View>
+        </View>
+        <Divider className='my-5'/>
+        <Text className='text-justify text-ktext text-sm'>
+          {data?.description || ""}
+        </Text>
+        <Divider className='my-5'/>
+        <View className='space-y-2'>
+          <Text className='text-ktext text-sm'>Date: May 16 2023</Text>
+          <Text className='text-ktext text-sm'>Time: 7pm </Text>
+          <Text className='text-ktext text-sm'>Location: <Text className='text-ksecondary'>www.zoom.com/abaGTBmeeting </Text> </Text>
+        </View>
+      </View>
+    </BottomSheet>
+  )
+} 
+
+const Feeds: FC<IFeeds> = ({title, contents}) => {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+  const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+  const [saveEvent, { isLoading }] = useSaveEventMutation();
+  const [saveResource] = useSaveResourceMutation()
+
+  // Toast
+  const toast = useToast()
+
+  const handleSaveEvent = async(id: string, type: string) => {
+
+    if (type ==="event") {
+      const data = {event: id}
+      try {
+        await saveEvent(data).unwrap()
+        toast.show({
+          placement: "top",
+          render: ({ id }) => {
+            return (
+              <Toast nativeID={id} action="success" variant="accent">
+                <VStack space="xs">
+                  <ToastTitle>Event Saved Successfully</ToastTitle>
+                </VStack>
+              </Toast>
+            )
+          },
+        })
+        }catch (err: any) {
+        console.log(err)
+        if(err.status === 401){
+          toast.show({
+            placement: "top",
+            render: ({ id }) => {
+              return (
+                <Toast nativeID={id} action="error" variant="accent">
+                  <VStack space="xs">
+                    <ToastTitle>New Message</ToastTitle>
+                    <ToastDescription>
+                      The email or password provided is incorrect.
+                    </ToastDescription>
+                  </VStack>
+                </Toast>
+              )
+            },
+          })
+        }
+      }
+    }else if (type === "resource") {
+      const data = {resource: id}
+      try {
+        await saveResource(data).unwrap()
+        toast.show({
+          placement: "top",
+          render: ({ id }) => {
+            return (
+              <Toast nativeID={id} action="success" variant="accent">
+                <VStack space="xs">
+                  <ToastTitle>Resource Saved Successfully</ToastTitle>
+                </VStack>
+              </Toast>
+            )
+          },
+        })
+      } catch (err: any) {
+        console.log(err)
+        if(err.status === 401){
+          toast.show({
+            placement: "top",
+            render: ({ id }) => {
+              return (
+                <Toast nativeID={id} action="error" variant="accent">
+                  <VStack space="xs">
+                    <ToastTitle>New Message</ToastTitle>
+                    <ToastDescription>
+                      The email or password provided is incorrect.
+                    </ToastDescription>
+                  </VStack>
+                </Toast>
+              )
+            },
+          })
+        }
+      }
+    }
+  }
+
+  return (
+    <View className='my-5'>
+      {/* Header */}
+      <View className='flex-row justify-between items-center'>
+        <Text>{title}</Text>
+        <Text className='text-ksecondary'>see more</Text>
+      </View>
+      <Divider className='my-4'/>
+      <View className='space-y-4'>
+        {
+          contents?.length > 0 && contents?.map((content, index) => {
+            return (
+                <View className='flex-row items-center justify-between' key={index}>
+                  {/* feed */}
+                  <TouchableOpacity  
+                    onPress={() => setSelectedItemId(content.id)} 
+                    className='flex-row items-center space-x-3'>
+                    {/* Image */}
+                    <View className='h-12 w-12 flex items-center justify-center rounded-2xl bg-ksecondary'>
+                      <Text className='text-white text-sm font-bold'>A</Text>
+                    </View>
+                    <View className='space-y-1'>
+                      <Text className='text-kblack text-sm font-normal'><ShortenedWord word={content.title || content.filename} maxLength={30} /></Text>
+                      <Text className='text-kdesc text-[11px] text-medium'>{content.email}</Text>
+                    </View>
+                  </TouchableOpacity>
+
+                  {/* more icon */}
+                  {
+                    content.filename ? 
+                    <CustomMenu>
+                      <MenuItem key={content.id} textValue="Add event" onPress={(e : GestureResponderEvent) => handleSaveEvent(content.id, "resource")}>
+                        <Icon as={AddIcon} size="sm" mr="$2" />
+                        <MenuItemLabel size="sm">Add Resources</MenuItemLabel>
+                      </MenuItem>
+                    </CustomMenu> : 
+                    <CustomMenu>
+                      <MenuItem key={content.id} textValue="Add event" onPress={(e : GestureResponderEvent) => handleSaveEvent(content.id, "event")}>
+                        <Icon as={AddIcon} size="sm" mr="$2" />
+                        <MenuItemLabel size="sm">Add Event</MenuItemLabel>
+                      </MenuItem>
+                    </CustomMenu>
+                  }
+                  {/* <CustomMenu>
+                    <MenuItem key={content.id} textValue="Add event" onPress={(e : GestureResponderEvent) => handleSaveEvent(content.id)}>
+                      <Icon as={AddIcon} size="sm" mr="$2" />
+                      <MenuItemLabel size="sm">Add Event</MenuItemLabel>
+                    </MenuItem>
+                  </CustomMenu> */}
+                 
+                  {/* <MaterialIcons name='more-vert' size={30} /> */}
+
+                  {/* Render EventBottomSheetModule conditionally */}
+                  {selectedItemId === content.id && (
+                    <EventBottomSheetModule
+                      id={content.id}
+                      show={true}
+                      setShow={() => setSelectedItemId(null)}
+                      key={content.id}
+                    />
+                  )}
+                </View>
+            )
+          })
+        }
+      </View>
+    </View>
+  )
+}
+
+
+const NewEvents = () => {
+  const {data, isError} = useGetEventsQuery()
+  
+   //Get all event data into the Feed Componennt
+   const newEvents = [
+    {
+      id: 1,
+      title: 'NEW EVENTS',
+      contents: data?.docs.slice(0,3).map((item: IContent) => ({
+        id: item.id,
+        title: item.title,
+        email: item.user?.email
+      }))
+    }
+  ]
+
+  if(isError) {
+    console.log("error")
+  }
+
+  return (
+    <Feeds title={newEvents[0].title} contents={newEvents[0].contents} />
+  )
+}
+
+const NewResources = () => {
+  const {data, isError} = useGetResourcesQuery()
+  //  Get all event data into the Feed Componennt
+   const newResources = [
+    {
+      id: 1,
+      title: 'NEW RESOURCES',
+      contents: data?.docs.slice(0,3).map((item: IContent) => ({
+        id: item.id,
+        filename: item.filename,
+        email: item.user?.email
+      }))
+    }
+  ]
+
+  if(isError) {
+    console.log("error")
+  }
+  console.log(data)
+  
+  return (
+    <Feeds title={newResources[0].title} contents={newResources[0].contents} />
+  )
+
+}

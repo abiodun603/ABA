@@ -36,6 +36,9 @@ import Identification from "../screens/auth/Identification";
 import Role from "../screens/identification/Role";
 import TopNavPanel from "./TopTabs";
 import { AuthProvider } from "../contexts/AuthContext";
+import EventDetails from "../screens/events/EventDetails";
+import GroupCat from "../screens/groups/GroupCat";
+import GroupJoin from "../screens/groups/GroupJoin";
 
 const theme = {
   ...DefaultTheme,
@@ -66,13 +69,17 @@ export default function Navigation() {
   return (
     <Stack.Navigator
       screenOptions={{headerShown: false}}
-    
     >
       <Stack.Screen name="Welcome" component={Welcome} /> 
       <Stack.Screen name="ProfileNotification" component={ProfileNotification} /> 
+      {/* Group */}
+      <Stack.Screen name = "GroupCat" component={GroupCat} />
+      <Stack.Screen name = "GroupJoin" component={GroupJoin} />
+
       <Stack.Screen name="ProfilePreview" component={ProfilePreview} /> 
       <Stack.Screen name="EditProfile" component={EditProfile} /> 
       <Stack.Screen name="Events" component={Events} /> 
+      <Stack.Screen name="EventDetails" component={EventDetails} /> 
       <Stack.Screen name="Resources" component={Resources} /> 
       <Stack.Screen name="Settings" component={Settings} /> 
       <Stack.Screen name="About" component={About} /> 

@@ -26,7 +26,7 @@ const TabData = [
 const Calendar = () => {
   return (
 
-      <View style={{ flex: 1 }} className='px-4'>
+      <View style={{ flex: 1, flexDirection: 'row' }} className='px-4'>
         <TopNavPanel tabs={TabData} /> 
       </View>
   )

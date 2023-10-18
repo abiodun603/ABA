@@ -243,7 +243,7 @@ const MainLayout = ({navigation, selectedTab, setSelectedTab}: {navigation: any,
             <View style ={{flex:1}}>
               <FlatList
                 ref={flatListRef}
-                horizontal
+                // horizontal
                 scrollEnabled={false}
                 pagingEnabled
                 snapToAlignment="center"

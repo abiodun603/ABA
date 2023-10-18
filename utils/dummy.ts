@@ -105,3 +105,5 @@ export const DATA2:{
     link: "Groups"
   }
 ];
+
+export const GroupCatergory = ["New Groups", "Art & Culture", "Career & Business", "Community & Environment", "Dancing", "Games", "Health & Wellbeing", "Hobbies & Passions", "Identity & Language",  "Movements & Politics", "Music", "Parents & Family", "Pets & Animals", "Religion & Spiritual"]

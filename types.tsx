@@ -20,6 +20,10 @@ export type RootStackParamList = {
   AddContact: undefined;
   ResetCode: undefined;
   PdfPreview: undefined;
+  // Groups
+  GroupCat: undefined;
+  GroupJoin: undefined;
+  //
   OtpScreen: undefined;
   ResetPassword: undefined;
   ResetSuccess: undefined;
@@ -27,6 +31,7 @@ export type RootStackParamList = {
   ProfilePreview: undefined;
   EditProfile: undefined;
   Events: undefined;
+  EventDetails: undefined;
   Verification: undefined;
   Resources: undefined;
   TopNavPanel: undefined;

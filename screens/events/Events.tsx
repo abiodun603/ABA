@@ -12,18 +12,17 @@ import { RootStackParamList } from "../../types";
 // ** Third Party
 import { styled } from 'nativewind';
 import { Divider } from 'native-base';
-import Ionicons from "@expo/vector-icons/Ionicons"
 
 // ** Layout
 import Layout from '../../layouts/Layout';
 
 // ** Components
 import CustomButton from '../../components/CustomButton';
-
-//
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ShortenedWord } from '../../helpers/wordShorther';
 import { useGetSavedEventQuery } from '../../stores/features/event/eventService';
+//
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+
 type Props = NativeStackScreenProps<RootStackParamList, "Events">;
 const StyledView = styled(View)
 
@@ -72,7 +71,7 @@ const Events: React.FC<Props> = ({ navigation: { navigate } }) => {
       title = "Events"
       iconName="tray-arrow-up"
       extraOneIcon="bookmark-outline"
-  >
+    >
     <View style={styles.container}>
       {/* search button */}
       <View style={styles.inputContainer}>

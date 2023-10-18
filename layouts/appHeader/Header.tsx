@@ -1,6 +1,6 @@
 import { Dimensions, StyleSheet, Text, View, Image } from 'react-native'
 import React from 'react'
-import Ionicons from "@expo/vector-icons/Ionicons"
+import {Ionicons, MaterialIcons} from "@expo/vector-icons"
 import Font from '../../constants/Font';
 import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -42,20 +42,20 @@ const Header: React.FC<HeaderProps> = ({ title, extraOneIcon, profileIcon, drawe
         {
           drawerNav ? 
           <TouchableOpacity
-              style={{
-                  width: 40,
-                  height: 40,
-                  alignItems: "center",
-                  justifyContent: "center",
-                  borderWidth: 1,
-                  borderColor: COLORS.lightGray,
-                  borderRadius: SIZES.radius
-              }}
-              onPress = {() => navigation.openDrawer()}
+            style={{
+              width: 40,
+              height: 40,
+              alignItems: "center",
+              justifyContent: "center",
+              borderWidth: 1,
+              borderColor: COLORS.lightGray,
+              borderRadius: SIZES.radius
+            }}
+            onPress = {() => navigation.openDrawer()}
           >
             <Image source={menu}/>
           </TouchableOpacity>
-          : <Ionicons name="ios-arrow-back" size={28} onPress={() => navigate.goBack()} style={styles.icon} />
+          : <MaterialIcons name="keyboard-arrow-left" size={28} onPress={() => navigate.goBack()} style={styles.icon} />
         }
         
         <Text
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
   header: {
     width: '100%',
     marginTop: 50,
-    height: 80,
+    height: 40,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
