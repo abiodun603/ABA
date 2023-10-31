@@ -1,7 +1,7 @@
 // ** Interface Types
 export interface Profile {
   firstname:  string
-  lastname:   string
+  name:       string
   username:   string
   location:   string
   short_bio:  string
@@ -10,5 +10,5 @@ export interface Profile {
 
 export interface ProfileResponse {
   docs: Profile
-  profile: Profile
+  user: Profile
 }

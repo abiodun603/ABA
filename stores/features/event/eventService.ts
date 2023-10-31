@@ -17,6 +17,12 @@ export const eventsApi = createApi({
         method: 'GET',
       }),
     }),
+    getNextEvent: builder.query<EventResponse, any>({
+      query: (location) => ({ 
+        url: `/events/nextevent/${location}`,
+        method: 'GET',
+      })
+    }),
     getEvent: builder.query<EventResponse, string>({
       query: (id) => ({ 
         url: `/events/${id}`,
@@ -39,4 +45,4 @@ export const eventsApi = createApi({
   })
 })
 
-export const { useGetEventsQuery, useGetEventQuery, useGetSavedEventQuery, useSaveEventMutation } = eventsApi
+export const { useGetEventsQuery, useGetNextEventQuery, useGetEventQuery, useGetSavedEventQuery, useSaveEventMutation } = eventsApi

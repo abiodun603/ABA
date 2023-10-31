@@ -36,10 +36,37 @@ import TopNavPanel from '../navigation/TopTabs';
 // ** Store Services
 import { useGetProfileMeQuery } from '../stores/features/profile/profileService';
 import { getFirstAndLastName } from '../helpers/getFirstAndLastName';
+import useLocation from '../hooks/useLocation';
+import { useGetNextEventQuery } from '../stores/features/event/eventService';
 
 const screenWidth = Dimensions.get("window").width
 
 const viewConfigRef = { viewAreaCoveragePercentThreshold: 200 }
+
+export const renderItems = () => {
+  const {location} = useLocation()
+  const {isLoading, data} = useGetNextEventQuery(location)
+  console.log(data)
+
+  return (
+    <View className='mr-6'>
+      {/*  */}
+      <View className='w-full p-4 border border-gray-400 shadow-sm rounded-md mt-8' >
+        {/* Event Data */}
+        <Text className='text-yellow-600 text-xs font-medium'>SAT,28 OCT 10:00 WAT</Text>
+        {/* Event Description */}
+        <Text className='text-sm text-black opacity-80 font-semibold mt-2'>Azure Community Con23: Exploring Innovative Possibilities with OpenAI, and Az...</Text>
+        <Text className='text-gray-500 font-normal mt-1'>Nigeria Microsoft Azure Meetup Group</Text>
+
+        {/* Action */}
+        <View className="flex-row items-center justify-between mt-7">
+          <Text>Lagos, LA</Text>
+          <CustomButton title='View event' buttonStyle={{width: 150, height: 30, borderRadius: 6}} />
+        </View>
+      </View>
+    </View>
+  )
+}
 
 const Home = ({navigation}: {navigation: any}) => {
   let flatListRef = useRef< any | null>(null)
@@ -47,8 +74,8 @@ const Home = ({navigation}: {navigation: any}) => {
 
   // Store Service
   const {isFetching, data} = useGetProfileMeQuery()
-  const { user } = data
-  const fullName = user?.name
+ 
+  const fullName = data?.user?.name || ""
   const { firstName, lastName } = getFirstAndLastName(fullName);
 
 
@@ -75,28 +102,6 @@ const Home = ({navigation}: {navigation: any}) => {
     { name: "Saved", component: Saved },
     { name: "Past", component: Past },
   ];
-
-
-  const renderItems = () => {
-    return (
-      <View className='mr-6'>
-        {/*  */}
-        <View className='w-full p-4 border border-gray-400 shadow-sm rounded-md mt-8' >
-          {/* Event Data */}
-          <Text className='text-yellow-600 text-xs font-medium'>SAT,28 OCT 10:00 WAT</Text>
-          {/* Event Description */}
-          <Text className='text-sm text-black opacity-80 font-semibold mt-2'>Azure Community Con23: Exploring Innovative Possibilities with OpenAI, and Az...</Text>
-          <Text className='text-gray-500 font-normal mt-1'>Nigeria Microsoft Azure Meetup Group</Text>
-
-          {/* Action */}
-          <View className="flex-row items-center justify-between mt-7">
-            <Text>Lagos, LA</Text>
-            <CustomButton title='View event' buttonStyle={{width: 150, height: 30, borderRadius: 6}} />
-          </View>
-        </View>
-      </View>
-    )
-  }
 
   return (
     <Layout
