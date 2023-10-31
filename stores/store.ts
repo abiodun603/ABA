@@ -7,10 +7,12 @@ import findContactReducer from './features/findContact/findContactSlice'
 import tabReducer from './tab/tabReducer';
 import { eventsApi } from './features/event/eventService';
 import { resourcesApi } from './features/resources/resourcesService';
+import { profileApi } from './features/profile/profileService';
 
 const store = configureStore({
   reducer: {
      [authApi.reducerPath]: authApi.reducer,
+     [profileApi.reducerPath]: profileApi.reducer,
      [eventsApi.reducerPath]: eventsApi.reducer, 
      [resourcesApi.reducerPath]: resourcesApi.reducer,   
      contact: contactReducer,
@@ -22,10 +24,12 @@ const store = configureStore({
     const authApiMiddleware = authApi.middleware;
     const eventsApiMiddleware = eventsApi.middleware;
     const resourcesApiMiddleware = resourcesApi.middleware;
+    const profileApiMiddleware = profileApi.middleware;
     return getDefaultMiddleware()
       .concat(authApiMiddleware)
       .concat(eventsApiMiddleware)
-      .concat(resourcesApiMiddleware);
+      .concat(resourcesApiMiddleware)
+      .concat(profileApiMiddleware)
   },
 });
 

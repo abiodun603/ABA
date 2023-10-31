@@ -42,7 +42,7 @@ type Props = NativeStackScreenProps<RootStackParamList, "Login">;
 const StyledView = styled(View)
 
 const defaultValues = {
-  email: 'dap@gmail.com',
+  email: 'sole.africa@gmail.com',
   password: 'Telvida@123!!'
 }
 
@@ -59,8 +59,8 @@ const LoginScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
   const handleLogin = async (data: UserData) => {
     // Handle login logic here
     try {
-      // const user = await login(data).unwrap().then((res) => console.log(res));
-      // console.log(user);
+      const user = await login(data).unwrap().then((res) => console.log(res));
+      console.log(user);
       // Being that the result is handled in extraReducers in authSlice,
       // we know that we're authenticated after this, so the user
       // and token will be present in the store

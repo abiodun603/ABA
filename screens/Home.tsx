@@ -23,7 +23,6 @@ import { connect } from 'react-redux'
 import { CustomMenu } from '../components/Menu/Menu'
 import { useGetProfileQuery } from '../stores/features/auth/authService'
 import useGlobalState from '../hooks/global.state'
-import socket from '../utils/socket'
 import CustomButton from '../components/CustomButton'
 import { interestTypes } from '../utils/dummy'
 
@@ -34,6 +33,10 @@ import Past from '../views/HomeView/Past'
 import Saved from '../views/HomeView/Saved'
 import TopNavPanel from '../navigation/TopTabs';
 
+// ** Store Services
+import { useGetProfileMeQuery } from '../stores/features/profile/profileService';
+import { getFirstAndLastName } from '../helpers/getFirstAndLastName';
+
 const screenWidth = Dimensions.get("window").width
 
 const viewConfigRef = { viewAreaCoveragePercentThreshold: 200 }
@@ -41,6 +44,13 @@ const viewConfigRef = { viewAreaCoveragePercentThreshold: 200 }
 const Home = ({navigation}: {navigation: any}) => {
   let flatListRef = useRef< any | null>(null)
   const[currentIndex, setCurrentIndex] = useState(0);
+
+  // Store Service
+  const {isFetching, data} = useGetProfileMeQuery()
+  const { user } = data
+  const fullName = user?.name
+  const { firstName, lastName } = getFirstAndLastName(fullName);
+
 
   // Only needed if want to know the index
   const onViewRef = useRef(({changed}: {changed: any}) => {
@@ -54,8 +64,8 @@ const Home = ({navigation}: {navigation: any}) => {
   }
 
 
-  const {user} = useGlobalState()
-  const id = user?.id;
+  // const {user} = useGlobalState()
+  // const id = user?.id;
   // const {data} = useGetProfileQuery(id)
   // const docs = data?.docs;
 
@@ -101,7 +111,7 @@ const Home = ({navigation}: {navigation: any}) => {
     >
       <ScrollView style={styles.container}>
         <View>
-          <Text className='text-black text-3xl font-bold'>Hi Abiodun Olatunji 👋</Text>
+          <Text className='text-black text-3xl font-bold'>Hi {firstName} {lastName} 👋</Text>
           {/* ==== ===== */}
           <View className="flex-row items-center justify-between mt-4">
             <Text className="text-black text-sm font-semibold">Suggested events 🔍</Text>

@@ -9,8 +9,8 @@ interface ISettings {
 
 const settings = {
   apiUrl: '',
-  appName: 'BaaS Platform',
-  subject: 'BaaS Platform',
+  appName: 'Telvida Platform',
+  subject: 'Telvida Platform',
   baseUrl: process.env.NEXT_PUBLIC_BAAS_BASE_URL_KEY
 } as ISettings
 
