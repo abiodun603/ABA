@@ -50,9 +50,6 @@ const screenWidth = Dimensions.get("window").width
 const viewConfigRef = { viewAreaCoveragePercentThreshold: 200 }
 
 const RenderItems = () => {
-  // const {location} = useLocation()
-  // const {isLoading, data} = useGetNextEventQuery(location)
-  // console.log(data)
 
   return (
     <View className='mr-6'>
@@ -76,7 +73,10 @@ const RenderItems = () => {
 
 const Home = ({navigation}: {navigation: any}) => {
   let flatListRef = useRef< any | null>(null)
+  const {location: city} = useLocation()
   const[currentIndex, setCurrentIndex] = useState(0);
+  const {isFetching, data} = useGetProfileMeQuery()
+  const {isLoading, data: nextEventData} = useGetNextEventQuery(city)
 
   const [location, setLocation] = useState<Location.LocationObject | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -112,7 +112,6 @@ const Home = ({navigation}: {navigation: any}) => {
   }, []);
 
   // Store Service
-  const {isFetching, data} = useGetProfileMeQuery()
  
   const fullName = data?.user?.name || ""
   const { firstName, lastName } = getFirstAndLastName(fullName);
@@ -161,30 +160,31 @@ const Home = ({navigation}: {navigation: any}) => {
             <Text className="text-black text-sm font-semibold">Suggested events 🔍</Text>
             <Text className="text-ksecondary text-sm opacity-50 font-normal">Calender</Text>
           </View>
-          <View className=''>
-            <FlatList
-              horizontal
-              data = {[1, 2, 3, 4]}
-              renderItem={RenderItems}
-              keyExtractor={(item, index) => index.toString()}
-              showsHorizontalScrollIndicator = {false}
-              pagingEnabled
-              ref = {(ref) => {
-                flatListRef.current = ref;
-              }}
-              contentContainerStyle = {{maxWidth: screenWidth}}
-              viewabilityConfig={viewConfigRef}
-              onViewableItemsChanged={onViewRef.current}
-              // style = {{width: screenWidth}}
-            />
-            <View style = {{flexDirection: "row", justifyContent: "center", marginVertical: 20}} >
-              {[1,2,3,4].map((item, index:number) => {
-                return (
-                  <TouchableOpacity key = {index.toString()} style = {[styles.circle , {backgroundColor: index == currentIndex ? "black" : "grey"}]} />
-                )
-              })}
-            </View>
-          </View>
+          {nextEventData?.docs > 0 ? (
+            <View className=''>
+              <FlatList
+                horizontal
+                data = {[1, 2, 3, 4]}
+                renderItem={({ item }) => <RenderItems />}
+                keyExtractor={(item, index) => index.toString()}
+                showsHorizontalScrollIndicator = {false}
+                pagingEnabled
+                ref = {(ref) => {
+                  flatListRef.current = ref;
+                }}
+                contentContainerStyle = {{maxWidth: screenWidth}}
+                viewabilityConfig={viewConfigRef}
+                onViewableItemsChanged={onViewRef.current}
+                // style = {{width: screenWidth}}
+              />
+              <View style = {{flexDirection: "row", justifyContent: "center", marginVertical: 20}} >
+                {[1,2,3,4].map((item, index:number) => {
+                  return (
+                    <TouchableOpacity key = {index.toString()} style = {[styles.circle , {backgroundColor: index == currentIndex ? "black" : "grey"}]} />
+                  )
+                })}
+              </View>
+            </View> ) : <Text className='mt-3 mb-4 text-sm text-ksecondary font-medium'>Opps!!! Availabe Event in close to you</Text>}
         </View>
         {/* Your Groups */}
         <View className='mt-1'>

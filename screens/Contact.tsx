@@ -119,7 +119,7 @@ const Contact = ({navigation}: {navigation: any}) => {
 
   return (
     <Layout
-      title='Events'
+      title='Explore'
       navigation={navigation}
       drawerNav
       iconName="plus"

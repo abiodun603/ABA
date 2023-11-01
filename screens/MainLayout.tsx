@@ -55,13 +55,13 @@ const TabButton = ({label, icon, isFocused,onPress, outerContainerStyle, innerCo
                 justifyContent: "center",
               }, innerContainerStyle]}
             >
-              <View className={ isFocused ? 'px-4 py-1 rounded-2xl bg-[#FFD7F3]': undefined }>
+              <View className={ isFocused ? 'px-4 py-1 rounded-2xl': undefined }>
                 <Image 
                   source={icon} 
                   style={{
                     width: 20, 
                     height: 20, 
-                    tintColor: isFocused? "#000000" : "#262626"
+                    tintColor: isFocused? "#390036" : "#262626"
                     
                   }}
 
@@ -69,18 +69,18 @@ const TabButton = ({label, icon, isFocused,onPress, outerContainerStyle, innerCo
               </View>
               
 
-              {isFocused && 
+              {/* {isFocused &&  */}
                 <Text
                   numberOfLines = {1}
                   style={{
                     marginLeft: SIZES.base,
                     ...FONTS.body5,
-                    color: isFocused? "#1F1A1D" : "#262626"
+                    color: isFocused? "#390036" : "#262626"
                   }}
                 >
                   {label}
                 </Text>
-              }
+              {/* } */}
             </Animated.View>
           </Animated.View>
         </TouchableWithoutFeedback>
@@ -317,7 +317,7 @@ const MainLayout = ({navigation, selectedTab, setSelectedTab}: {navigation: any,
                     onPress={() => setSelectedTab(constants.screens.home)}
                   />
                   <TabButton
-                    label="Contact"
+                    label="Expore"
                     icon={chat}
                     isFocused={selectedTab == constants.screens.contact}
                     outerContainerStyle ={contactColorStyle}
@@ -325,14 +325,14 @@ const MainLayout = ({navigation, selectedTab, setSelectedTab}: {navigation: any,
                     onPress={() => setSelectedTab(constants.screens.contact)}
                   />
 
-                  <TabButton
+                  {/* <TabButton
                     label="Chats"
                     icon={chat}
                     isFocused={selectedTab == constants.screens.chats}
                     outerContainerStyle ={messagesColorStyle}
                     innerContainerStyle = {messagesFlexStyle}
                     onPress={() => setSelectedTab(constants.screens.chats)}
-                  />
+                  /> */}
 
                   <TabButton
                     label={constants.screens.community}
