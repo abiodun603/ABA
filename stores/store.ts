@@ -12,15 +12,15 @@ import { profileApi } from './features/profile/profileService';
 
 const store = configureStore({
   reducer: {
-     [authApi.reducerPath]: authApi.reducer,
-     [profileApi.reducerPath]: profileApi.reducer,
-     [eventsApi.reducerPath]: eventsApi.reducer, 
-     [resourcesApi.reducerPath]: resourcesApi.reducer,   
-     contact: contactReducer,
-     findContact: findContactReducer,
-     auth: authReducer,
-     event: eventReducer,
-     tabReducer: tabReducer,
+      event: eventReducer,
+      [authApi.reducerPath]: authApi.reducer,
+      [profileApi.reducerPath]: profileApi.reducer,
+      [eventsApi.reducerPath]: eventsApi.reducer, 
+      [resourcesApi.reducerPath]: resourcesApi.reducer,   
+      contact: contactReducer,
+      findContact: findContactReducer,
+      auth: authReducer,
+      tabReducer: tabReducer,
   },
   middleware: (getDefaultMiddleware) => {
     const authApiMiddleware = authApi.middleware;

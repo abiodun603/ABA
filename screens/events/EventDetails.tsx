@@ -24,7 +24,7 @@ const EventDetails: React.FC<Props>  = () => {
       <ScrollView style={styles.container}>
         <View className='px-5'>
           {/* Image */}
-          <View className='h-40 bg-blue-900 rounded-lg flex items-center justify-center'>
+          <View className='h-40 bg-blue-900 rounded-lg flex items-center justify-center mt-5'>
             <Text className='text-white text-center'>Image Banner Goes Here...</Text>
           </View>
           <Text className='text-black text-xl font-bold mt-3'>Telvida Conference Texas</Text>
@@ -47,7 +47,7 @@ const EventDetails: React.FC<Props>  = () => {
             <View className='flex-row justify-between items-center mt-4 border-b border-b-gray-400 pb-2'>
               <View className='flex-row items-center space-x-2'>
                 {/* icon calander */}
-                <Ionicons name="calendar-outline" size={28} />
+                <Ionicons name="location-outline" size={28} />
                 <View className='space-y-2'>
                   {/* day / month / year */}
                   <Text className='text-sm text-gray-800 font-semibold'>VR PLACE NIGERIA</Text>
@@ -59,14 +59,14 @@ const EventDetails: React.FC<Props>  = () => {
           </View>
 
           {/* Company Details */}
-          <View className='mt-6 flex-row items-center space-x-4'>
+          <View className='mt-6 flex-row items-center space-x-2'>
             {/* logo */}
-            <View className="h-24 w-24 rounded-lg bg-blue-900 items-center justify-center">
+            <View className="h-16 w-16 rounded-lg bg-blue-900 items-center justify-center">
               <Text className='text-white'>Logo</Text>
             </View>
             <View>
-              <Text className='text-lg font-bold'>Telvida Tech</Text>
-              <Text className='text-lg font-normal text-gray-600'>Public</Text>
+              <Text className='text-sm line-4 font-bold '>Telvida Tech</Text>
+              <Text className='text-sm font-normal text-gray-600'>Public</Text>
             </View>
           </View>
 
@@ -75,14 +75,14 @@ const EventDetails: React.FC<Props>  = () => {
             <Text className='text-black text-lg mt-4 font-bold'>About</Text>
 
             <View>
-              <Text className='mt-2 text-gray-700 font-medium'>
+              <Text className='mt-2 text-gray-700 text-xs font-medium'>
                 A MODERN EXPLORATION OF AFRICAN MUSIC THAT ADDS A NEW LAYER OF VIRTUAL INTERACTION THROUGH VIDEO GAMES. Explore an afrofuturistic metaverse experience inspired by 70s Afro Rock music.
               </Text>
 
               <View className='mt-3'>
-                <Text className='text-gray-700 font-medium'>Ticket at Door N4,000</Text>
-                <Text className='text-gray-700 font-medium'>Side Attractions Food, Games & Networking</Text>
-                <Text className='text-gray-700 font-medium'>Contact telvida@gmail.com for Inquires</Text>
+                <Text className='text-gray-700 text-xs font-medium'>Ticket at Door N4,000</Text>
+                <Text className='text-gray-700 text-xs font-medium'>Side Attractions Food, Games & Networking</Text>
+                <Text className='text-gray-700 text-xs font-medium'>Contact telvida@gmail.com for Inquires</Text>
               </View>
 
               <TouchableOpacity ><Text className='text-blue-900 font-semibold mt-1'>Read More</Text></TouchableOpacity>
@@ -149,7 +149,15 @@ const EventDetails: React.FC<Props>  = () => {
             {/*  */}
             <Text className='text-black text-lg font-bold mt-3'>Comments</Text>
           </View>
-          <Text className=''>No Comments yet !!!</Text>
+          <View className='flex-row items-center space-x-2'>
+            <View className='w-10 h-10 rounded-full bg-blue-400 items-center justify-center'>
+              <Text>A</Text>
+            </View>
+            <View>
+              <Text className='text-sm line-4 font-bold '>Telvida Tech</Text>
+              <Text className='text-sm font-normal text-gray-600'>Public</Text>
+            </View>
+          </View>
         </View>
         <Divider mt={8} thickness={8}/>
         <View className='px-4 mt-4'>

@@ -54,8 +54,10 @@ const GridView = <T extends any>(props: IGridViewProps<T>) => {
 
 const Contact = ({navigation}: {navigation: any}) => {
   const [show, setShow ] = useState(false) 
+  const [bookMark, setBookMark] = useState(false)
+  const toggleBookMark = () => setBookMark(!bookMark)
 
-  const renderEventCard = () => {
+  const renderEventCard = (toggleBookMark: any, bookMark: any, navigation: any) => {
     // const [bookMark, setBookMark] = useState(false)
   
     // const toggleBookMark = () => setBookMark(!bookMark)
@@ -85,7 +87,7 @@ const Contact = ({navigation}: {navigation: any}) => {
       
     }
     return(
-      <View className='h-60 w-52 rounded-lg mr-3'>
+      <TouchableOpacity onPress={() => navigation.navigate("EventDetails")} className='h-60 w-52 rounded-lg mr-3'>
         <View style={{flex:1}} className='rounded-t-lg bg-blue-500'>
           <Image
             source={{
@@ -105,11 +107,11 @@ const Contact = ({navigation}: {navigation: any}) => {
             <Text>Lagos</Text>
             <View className='flex-row items-center'>
                <Ionicons name='share-outline' size={20} onPress={onShare}/> 
-              {/*{!bookMark ? <Ionicons name='bookmark-outline' size={18} onPress={toggleBookMark} /> :  <Ionicons name='bookmark' size={28} color="#d82727" onPress={toggleBookMark}/>} */}
+              {!bookMark ? <Ionicons name='bookmark-outline' size={18} onPress={toggleBookMark}  /> :  <Ionicons name='bookmark' size={18} color="#d82727"/>}
             </View>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     )
   }
 
@@ -167,7 +169,7 @@ const Contact = ({navigation}: {navigation: any}) => {
             <FlatList
               horizontal
               data = {[1, 2, 3, 4]}
-              renderItem={renderEventCard}
+              renderItem={() => renderEventCard(toggleBookMark, bookMark, navigation)}
               keyExtractor={(item, index) => index.toString()}
               showsHorizontalScrollIndicator = {false}
             />
@@ -179,7 +181,7 @@ const Contact = ({navigation}: {navigation: any}) => {
             <FlatList
               horizontal
               data = {[1, 2, 3, 4]}
-              renderItem={renderEventCard}
+              renderItem={() => renderEventCard(toggleBookMark, bookMark, navigation)}
               keyExtractor={(item, index) => index.toString()}
               showsHorizontalScrollIndicator = {false}
             />
@@ -191,7 +193,7 @@ const Contact = ({navigation}: {navigation: any}) => {
             <FlatList
               horizontal
               data = {[1, 2, 3, 4]}
-              renderItem={renderEventCard}
+              renderItem={() => renderEventCard(toggleBookMark, bookMark, navigation)}
               keyExtractor={(item, index) => index.toString()}
               showsHorizontalScrollIndicator = {false}
             />
@@ -203,7 +205,7 @@ const Contact = ({navigation}: {navigation: any}) => {
             <FlatList
               horizontal
               data = {[1, 2, 3, 4]}
-              renderItem={renderEventCard}
+              renderItem={() => renderEventCard(toggleBookMark, bookMark, navigation)}
               keyExtractor={(item, index) => index.toString()}
               showsHorizontalScrollIndicator = {false}
             />

@@ -11,6 +11,8 @@ import { Fontisto } from '@expo/vector-icons';
 
 // ** Third Pary
 import { ScrollView } from 'react-native-gesture-handler'
+import * as Location from 'expo-location';
+import Constants from 'expo-constants';
 
 
 //** Store and Action 
@@ -38,15 +40,19 @@ import { useGetProfileMeQuery } from '../stores/features/profile/profileService'
 import { getFirstAndLastName } from '../helpers/getFirstAndLastName';
 import useLocation from '../hooks/useLocation';
 import { useGetNextEventQuery } from '../stores/features/event/eventService';
+import { useAppDispatch } from '../hooks/useTypedSelector';
+import { Platform } from 'react-native';
+import fetchCityFromCoordinates from '../services/fetchCityFromCoordinates';
+import { setEventLocation } from '../stores/features/event/eventSlice';
 
 const screenWidth = Dimensions.get("window").width
 
 const viewConfigRef = { viewAreaCoveragePercentThreshold: 200 }
 
-export const renderItems = () => {
-  const {location} = useLocation()
-  const {isLoading, data} = useGetNextEventQuery(location)
-  console.log(data)
+const RenderItems = () => {
+  // const {location} = useLocation()
+  // const {isLoading, data} = useGetNextEventQuery(location)
+  // console.log(data)
 
   return (
     <View className='mr-6'>
@@ -71,6 +77,39 @@ export const renderItems = () => {
 const Home = ({navigation}: {navigation: any}) => {
   let flatListRef = useRef< any | null>(null)
   const[currentIndex, setCurrentIndex] = useState(0);
+
+  const [location, setLocation] = useState<Location.LocationObject | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [currentCity, setCurrentCity] = useState<string | null>(null); // State for the current city
+
+  // 
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    (async () => {
+      if (Platform.OS === 'android' && !Constants.isDevice) {
+        setErrorMessage('Oops, this will not work on Sketch in an Android emulator. Try it on your device!');
+        return;
+      }
+
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMessage('Permission to access location was denied');
+        return;
+      }
+
+      const userLocation = await Location.getCurrentPositionAsync({});
+      setLocation(userLocation);
+
+      // Fetch the city based on coordinates
+      const city:string = await fetchCityFromCoordinates(userLocation.coords.latitude, userLocation.coords.longitude);
+      const data = {
+        location: city,
+      }
+      dispatch(setEventLocation(data));
+      setCurrentCity(city);
+    })();
+  }, []);
 
   // Store Service
   const {isFetching, data} = useGetProfileMeQuery()
@@ -126,7 +165,7 @@ const Home = ({navigation}: {navigation: any}) => {
             <FlatList
               horizontal
               data = {[1, 2, 3, 4]}
-              renderItem={renderItems}
+              renderItem={RenderItems}
               keyExtractor={(item, index) => index.toString()}
               showsHorizontalScrollIndicator = {false}
               pagingEnabled

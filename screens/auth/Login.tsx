@@ -59,14 +59,14 @@ const LoginScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
   const handleLogin = async (data: UserData) => {
     // Handle login logic here
     try {
-      const user = await login(data).unwrap().then((res) => console.log(res));
-      console.log(user);
+      // const user = await login(data).unwrap().then((res) => console.log(res));
+      // console.log(user);
       // Being that the result is handled in extraReducers in authSlice,
       // we know that we're authenticated after this, so the user
       // and token will be present in the store
       navigate('CustomDrawer');
     } catch (err: any) {
-      console.log(err)
+      console.log(err.data)
       if(err.status === 401){
         toast.show({
           placement: "top",
@@ -77,6 +77,23 @@ const LoginScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
                   <ToastTitle>New Message</ToastTitle>
                   <ToastDescription>
                     The email or password provided is incorrect.
+                  </ToastDescription>
+                </VStack>
+              </Toast>
+            )
+          },
+        })
+      }
+      if(err.status === 500){
+        toast.show({
+          placement: "top",
+          render: ({ id }) => {
+            return (
+              <Toast nativeID={id} action="error" variant="accent">
+                <VStack space="xs">
+                  <ToastTitle>New Message</ToastTitle>
+                  <ToastDescription>
+                    Email verification required
                   </ToastDescription>
                 </VStack>
               </Toast>

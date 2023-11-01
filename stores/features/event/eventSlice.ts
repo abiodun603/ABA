@@ -7,8 +7,8 @@ type EventState = {
 }
 
 const eventSlice = createSlice({
-  name: 'eventSlice',
-  initialState: { location: " " } as EventState,
+  name: 'location',
+  initialState: { location: "" } as EventState,
   reducers: {
     setEventLocation: (state, action) => {
       const { location } = action.payload;
@@ -17,6 +17,6 @@ const eventSlice = createSlice({
   }
 })
 
-export default eventSlice.reducer
 export const { setEventLocation } = eventSlice.actions;
 export const getCurrentEventLocation = (state: RootState) => state.event.location
+export default eventSlice.reducer
