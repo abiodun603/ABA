@@ -22,7 +22,7 @@ import useGlobalState from '../hooks/global.state'
 import { useAppDispatch, useAppSelector } from '../hooks/useTypedSelector'
 import { setGetData } from '../stores/features/contacts/contactSlice'
 import { setContactID, setFindContactData, setFindContactEmail } from '../stores/features/findContact/findContactSlice'
-import { useGetEventsQuery } from '../stores/features/event/eventService'
+import { useGetEventDetailsQuery, useGetEventsQuery } from '../stores/features/event/eventService'
 import { ShortenedWord } from '../helpers/wordShorther'
 
 
@@ -42,8 +42,15 @@ const Badge = ({title}: {title: string | boolean}) => {
 
 export const EventCard = ({event_about, event_time ,event_name, event_city, event_id, members, navigation}: any) => {
   const [bookMark, setBookMark] = useState(false)
-
+  // Fucnc
   const toggleBookMark = () => setBookMark(!bookMark)
+
+  // const handleViewEvent = (id: any) => {
+  //   const { isFetching, data } = useGetEventDetailsQuery(id);
+  //   if (data) {
+  //     navigation.navigate('EventDetails');
+  //   }
+  // };
 
   const onShare = async () => {
     const options = {
@@ -72,7 +79,8 @@ export const EventCard = ({event_about, event_time ,event_name, event_city, even
   return(
     <ScrollView style= {{width: "100%"}} className='border-b border-gray-200 mt-6 px-4'>
       <TouchableOpacity 
-        onPress={() => navigation.navigate("EventDetails") }
+        onPress={() => navigation.navigate("EventDetails", { eventId: event_id })}
+        // onPress={() =>handleViewEvent(event_id)}
         className='mb-3'>
           <View className='flex-row ' >
             <View className='w-2/3'>

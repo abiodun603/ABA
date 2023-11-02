@@ -13,11 +13,25 @@ import { RootStackParamList } from '../../types';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Divider } from 'native-base';
 import CustomButton from '../../components/CustomButton';
+import { useGetEventDetailsQuery } from '../../stores/features/event/eventService';
+import { ShortenedWord } from '../../helpers/wordShorther';
 type Props = NativeStackScreenProps<RootStackParamList, "EventDetails">;
 
 
 
-const EventDetails: React.FC<Props>  = () => {
+
+const EventDetails: React.FC<Props>  = ({navigation, route}) => {
+  const { eventId } = route.params;
+
+  const { isLoading, data } = useGetEventDetailsQuery(eventId);
+
+  if(isLoading){
+    return <Text>Loading...</Text>;
+  }
+
+  if (!data) {
+    return <Text>No data available.</Text>; // Display a message when there is no data
+  }
   return (
     <Layout
       title = "Event"
@@ -29,7 +43,7 @@ const EventDetails: React.FC<Props>  = () => {
             <View className='h-40 bg-blue-900 rounded-lg flex items-center justify-center mt-5'>
               <Text className='text-white text-center'>Image Banner Goes Here...</Text>
             </View>
-            <Text className='text-black text-xl font-bold mt-3'>Telvida Conference Texas</Text>
+            <Text className='text-black text-lg font-bold mt-3'><ShortenedWord word={data?.event_name} maxLength={24} /></Text>
 
             <View className='mt-4'>
               <View className='flex-row justify-between items-center mt-4 border-b border-b-gray-400 pb-2'>
@@ -40,7 +54,7 @@ const EventDetails: React.FC<Props>  = () => {
                     {/* day / month / year */}
                     <Text className='text-sm text-gray-800 font-semibold'>Saturday, 21 October 2023</Text>
                     {/* time */}
-                    <Text className='text-sm text-gray-800 font-medium'>17:00 - 23:00 WAT</Text>
+                    <Text className='text-sm text-gray-800 font-medium'>{data?.event_time}</Text>
                   </View>
                 </View>
                 {/* icon */}
@@ -52,7 +66,7 @@ const EventDetails: React.FC<Props>  = () => {
                   <Ionicons name="location-outline" size={28} />
                   <View className='space-y-2'>
                     {/* day / month / year */}
-                    <Text className='text-sm text-gray-800 font-semibold'>VR PLACE NIGERIA</Text>
+                    <Text className='text-sm text-gray-800 font-semibold capitalize'>{data.event_city}</Text>
                   </View>
                 </View>
                 {/* icon */}
@@ -68,7 +82,7 @@ const EventDetails: React.FC<Props>  = () => {
               </View>
               <View>
                 <Text className='text-sm line-4 font-bold '>Telvida Tech</Text>
-                <Text className='text-sm font-normal text-gray-600'>Public</Text>
+                <Text className='text-sm font-normal text-gray-600 capitalize'>{data.status}</Text>
               </View>
             </View>
 
