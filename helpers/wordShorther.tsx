@@ -8,7 +8,7 @@ export interface ShortenedWordProps {
 
 export function ShortenedWord({ word, maxLength }: ShortenedWordProps) {
   function shortenWord(word: string, maxLength: number): string {
-    if (word.length > maxLength) {
+    if (word?.length > maxLength) {
       return word.substring(0, maxLength) + ' ...';
     }
     return word;

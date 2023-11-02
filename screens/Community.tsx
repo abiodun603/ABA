@@ -1,4 +1,4 @@
-import { Dimensions, FlatList, ScrollView, Share, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Dimensions, FlatList, ImageBackground, ScrollView, Share, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 
 // ** Constants 
@@ -22,6 +22,8 @@ import useGlobalState from '../hooks/global.state'
 import { useAppDispatch, useAppSelector } from '../hooks/useTypedSelector'
 import { setGetData } from '../stores/features/contacts/contactSlice'
 import { setContactID, setFindContactData, setFindContactEmail } from '../stores/features/findContact/findContactSlice'
+import { useGetEventsQuery } from '../stores/features/event/eventService'
+import { ShortenedWord } from '../helpers/wordShorther'
 
 
 const windowHeight = Dimensions.get('window').height;
@@ -38,7 +40,7 @@ const Badge = ({title}: {title: string | boolean}) => {
   )
 }
 
-export const EventCard: React.FC<IEventCardProps> = ({navigation}) => {
+export const EventCard = ({event_about, event_time ,event_name, event_city, event_id, members, navigation}: any) => {
   const [bookMark, setBookMark] = useState(false)
 
   const toggleBookMark = () => setBookMark(!bookMark)
@@ -74,21 +76,28 @@ export const EventCard: React.FC<IEventCardProps> = ({navigation}) => {
         className='mb-3'>
           <View className='flex-row ' >
             <View className='w-2/3'>
-              <Text className='text-yellow-500 text-sm font-bold'>SAT, 21 OCT 10:00 WAT</Text>
+              <Text className='text-yellow-500 text-sm font-bold'>{event_time}</Text>
               {/* Event Description */}
-              <Text className='text-sm text-black opacity-80 font-semibold mt-2' numberOfLines={2} ellipsizeMode="tail">Azure Community Con23: Exploring Innovative and Az...</Text>
-              <Text className='text-gray-500 font-normal mt-1'>Nigeria Microsoft Azure Meetup Group</Text>
+              <Text className='text-sm text-black opacity-80 font-semibold mt-2' numberOfLines={2} ellipsizeMode="tail"><ShortenedWord word={event_about} maxLength={60}/></Text>
+              <Text className='text-gray-500 font-normal mt-1'><ShortenedWord word={event_name} maxLength={48} /></Text>
             </View>
-            <View className='w-1/3 bg-gray-800 rounded-lg'>
+            <View className='w-1/3 rounded-lg'>
               {/* image */}
-              <View className=' w h-24  '></View>
+              <View className=' w h-24  '>
+                <ImageBackground
+                  resizeMode="cover"
+                  imageStyle={{ borderRadius: 10}}
+                  style={{flex: 1}}
+                  source={{uri: "https://www.searchenginejournal.com/wp-content/uploads/2022/06/image-search-1600-x-840-px-62c6dc4ff1eee-sej.png"}}
+                />
+              </View>
             </View>
           </View>
-          <View className="flex-row items-center justify-between mt-5">
-            <Text>68 going Lagos</Text>
+          <View className="flex-row items-center justify-between mt-3">
+            <Text >{members?.length || "0"} going <Text className='capitalize'>{event_city}</Text></Text>
             <View className='flex-row'>
-              <Ionicons name='share-outline' size={28} onPress={onShare}/> 
-              {!bookMark ? <Ionicons name='bookmark-outline' size={28} onPress={toggleBookMark} /> :  <Ionicons name='bookmark' size={28} color="#d82727" onPress={toggleBookMark}/>}
+              <Ionicons name='share-outline' size={23} onPress={onShare}/> 
+              {!bookMark ? <Ionicons name='bookmark-outline' size={22} onPress={toggleBookMark} /> :  <Ionicons name='bookmark' size={22} color="#d82727" onPress={toggleBookMark}/>}
             </View>
           </View>
       </TouchableOpacity>
@@ -99,7 +108,18 @@ export const EventCard: React.FC<IEventCardProps> = ({navigation}) => {
 
 
 const Contact = ({navigation}: {navigation: any}) => {
-  const [show, setShow ] = useState(false) 
+
+  const {data, isError, isLoading} = useGetEventsQuery()
+
+  if(isLoading){
+    return <Text>Loading...</Text>;
+  }
+
+  if (!data) {
+    return <Text>No data available.</Text>; // Display a message when there is no data
+  }
+
+  console.log(data);
 
   return (
     <Layout
@@ -107,14 +127,19 @@ const Contact = ({navigation}: {navigation: any}) => {
       navigation={navigation}
       drawerNav
       iconName="plus"
-      onPress={()=> setShow(true)}
+      // onPress={()=> setShow(true)}
     >
-      <ScrollView className='flex-col space-y-7'> 
+      <ScrollView showsVerticalScrollIndicator={false} className='flex-col space-y-7'> 
+        <FlatList
+          data={data.docs || []}
+          renderItem={({item}) => <EventCard event_about={item.event_about} event_time={item.event_time} event_name={item.event_name} event_city={item.event_city} event_id={item.id} navigation={navigation} members = {item.members}/>
+        }
+          keyExtractor={item => item.id}
+        />
+        {/* <EventCard  navigation={navigation}/>
         <EventCard  navigation={navigation}/>
         <EventCard  navigation={navigation}/>
-        <EventCard  navigation={navigation}/>
-        <EventCard  navigation={navigation}/>
-        <EventCard  navigation={navigation}/>
+        <EventCard  navigation={navigation}/> */}
       </ScrollView>
     </Layout>
   )

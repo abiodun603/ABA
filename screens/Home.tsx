@@ -157,7 +157,7 @@ const Home = ({navigation}: {navigation: any}) => {
       drawerNav
       profileIcon
     >
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <View>
           <Text className='text-black text-3xl font-bold'>Hi {firstName} {lastName} 👋</Text>
           {/* ==== ===== */}

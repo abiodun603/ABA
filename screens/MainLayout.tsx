@@ -334,8 +334,16 @@ const MainLayout = ({navigation, selectedTab, setSelectedTab}: {navigation: any,
                     onPress={() => setSelectedTab(constants.screens.chats)}
                   /> */}
 
-                  <TabButton
+                  {/* <TabButton
                     label={constants.screens.community}
+                    icon={community}
+                    isFocused={selectedTab == constants.screens.community}
+                    outerContainerStyle ={padColorStyle}
+                    innerContainerStyle = {padFlexStyle}
+                    onPress={() => setSelectedTab(constants.screens.community)}
+                  /> */}
+                   <TabButton
+                    label={"Events"}
                     icon={community}
                     isFocused={selectedTab == constants.screens.community}
                     outerContainerStyle ={padColorStyle}
