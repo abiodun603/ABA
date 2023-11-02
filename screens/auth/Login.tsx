@@ -66,7 +66,7 @@ const LoginScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
       // and token will be present in the store
       navigate('CustomDrawer');
     } catch (err: any) {
-      console.log(err.data)
+      console.log(err)
       if(err.status === 401){
         toast.show({
           placement: "top",
@@ -101,12 +101,20 @@ const LoginScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
           },
         })
       }
-      // toast({
-      //   status: 'error',
-      //   title: 'Error',
-      //   description: 'Oh no, there was an error!',
-      //   isClosable: true,
-      // });
+      toast.show({
+        placement: "top",
+        render: ({ id }) => {
+          return (
+            <Toast nativeID={id} action="error" variant="accent">
+              <VStack space="xs">
+                <ToastDescription>
+                 Opps!!! NetWork Error
+                </ToastDescription>
+              </VStack>
+            </Toast>
+          )
+        },
+      });
     }
   };
 
