@@ -50,12 +50,10 @@ const screenWidth = Dimensions.get("window").width
 
 const viewConfigRef = { viewAreaCoveragePercentThreshold: 200 }
 
-const RenderItems = ({event_about, event_time ,event_name, event_city, event_id}: any) => {
-  const handleViewEvent = (id: any) => {
-    console.log(id)
-  }
+const RenderItems = ({event_about, event_time ,event_name, event_city, event_id, navigation}: any) => {
   return (
-    <View className='mr-6'>
+    <View  
+      className='mr-6'>
       {/*  */}
       <View className='w-full p-4 border border-gray-400 shadow-sm rounded-md mt-8' >
         {/* Event Data */}
@@ -66,7 +64,11 @@ const RenderItems = ({event_about, event_time ,event_name, event_city, event_id}
         {/* Action */}
         <View className="flex-row items-center justify-between mt-7">
           <Text className="capitalize">{event_city}</Text>
-          <CustomButton title='View event' buttonStyle={{width: 150, height: 30, borderRadius: 6}} onPress={() =>handleViewEvent(event_id)} />
+          <CustomButton 
+            title='View event' 
+            buttonStyle={{width: 150, height: 30, borderRadius: 6}} 
+            onPress={() => navigation.navigate("EventDetails", { eventId: event_id })}
+          />
         </View>
       </View>
     </View>
@@ -148,7 +150,6 @@ const Home = ({navigation}: {navigation: any}) => {
 
   return (
     <Layout
-      // title={docs && docs[0]?.firstname || `firstname`}
       title='ABA'
       navigation={navigation}
       iconName={"bell-outline"}
@@ -170,7 +171,7 @@ const Home = ({navigation}: {navigation: any}) => {
               <FlatList
                 horizontal
                 data = {nextEventData?.docs}
-                renderItem={({ item }) => <RenderItems  event_about={item.event_about} event_time={item.event_time} event_name={item.event_name} event_city={item.event_city} event_id={item.id}/>}
+                renderItem={({ item }) => <RenderItems  event_about={item.event_about} event_time={item.event_time} event_name={item.event_name} event_city={item.event_city} event_id={item.id} navigation={navigation}/>}
                 keyExtractor={(item, index) => index.toString()}
                 showsHorizontalScrollIndicator = {false}
                 pagingEnabled
@@ -223,11 +224,11 @@ const Home = ({navigation}: {navigation: any}) => {
                 </View>
               </ImageBackground>
             </View>
-            <View className='h-40 w-32 text-white text-sm font-semibold border border-gray-400 shadow-2xl rounded-md  justify-between py-5 pb-3 pl-2 pr-4'>
+            <TouchableOpacity onPress={()=>navigation.navigate("GroupCat")} className='h-40 w-32 text-white text-sm font-semibold border border-gray-400 shadow-2xl rounded-md  justify-between py-5 pb-3 pl-2 pr-4'>
               <FontAwesome name = "users" size={30}/>
               <Text className='text-black text-sm font-semibold'>Discover more community</Text>
               <Fontisto name='arrow-right-l' size={30}  className="rotate-90  text-slate-400 self-end" />
-            </View>
+            </TouchableOpacity>
           </View>
         </View>
 

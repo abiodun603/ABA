@@ -144,10 +144,6 @@ const Contact = ({navigation}: {navigation: any}) => {
         }
           keyExtractor={item => item.id}
         />
-        {/* <EventCard  navigation={navigation}/>
-        <EventCard  navigation={navigation}/>
-        <EventCard  navigation={navigation}/>
-        <EventCard  navigation={navigation}/> */}
       </ScrollView>
     </Layout>
   )
