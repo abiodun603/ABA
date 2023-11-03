@@ -6,17 +6,20 @@ import Layout from '../../layouts/Layout';
 
 // ** Third Pary
 import { Divider } from 'native-base';
+import { Toast, ToastDescription, ToastTitle, VStack, useToast } from "@gluestack-ui/themed";
 
 // ** Icons
 import {Ionicons, MaterialIcons, FontAwesome} from "@expo/vector-icons"
+
+// ** Helpers
+import { ShortenedWord } from '../../helpers/wordShorther';
 
 //
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from '../../types';
 import { GroupCatergory } from '../../utils/dummy';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
-import { useGetCommunityQuery } from '../../stores/features/groups/groupsService';
-import { ShortenedWord } from '../../helpers/wordShorther';
+import { useGetCommunityQuery, useJoinCommunityMutation } from '../../stores/features/groups/groupsService';
 type Props = NativeStackScreenProps<RootStackParamList, "GroupJoin">;
 
 const screenWidth = Dimensions.get("window").width
@@ -45,9 +48,61 @@ const GridView = <T extends any>(props: IGridViewProps<T>) => {
 }
 
 
-const JoinCard = ({name, members}: any) => {
-  console.log(members)
+const JoinCard = ({name, members, community_id}: any) => {
+  const [joinCommunity] = useJoinCommunityMutation()
+  const toast = useToast()
 
+  const handleJoinPress = async (community_id: any) => {
+    try {
+      // Make the API call to join the community
+      const response = await joinCommunity(community_id);
+
+      // Check the response and handle success or any specific logic
+      if (response) {
+        console.log(response);
+        if(response?.error.status === 500){
+          toast.show({
+            placement: "top",
+            render: ({ id }) => {
+              return (
+                <Toast nativeID={id} action="error" variant="accent">
+                  <VStack space="xs">
+                    <ToastTitle>New Message</ToastTitle>
+                    <ToastDescription>
+                    Community with this ID does not exist
+                    </ToastDescription>
+                  </VStack>
+                </Toast>
+              )
+            },
+          })
+        }
+        // Handle success, e.g., show a success message, update UI, etc.
+      } else {
+        // Handle any other specific cases, if needed
+      }
+    } catch (err: any) {
+      // Handle errors, e.g., show an error message, log the error, etc.
+      console.log('Error joining community:', err.status);
+      if(err.error.status === 500){
+        toast.show({
+          placement: "top",
+          render: ({ id }) => {
+            return (
+              <Toast nativeID={id} action="error" variant="accent">
+                <VStack space="xs">
+                  <ToastTitle>New Message</ToastTitle>
+                  <ToastDescription>
+                  Community with this ID does not exist
+                  </ToastDescription>
+                </VStack>
+              </Toast>
+            )
+          },
+        })
+      }
+    }
+  };
   return (
     <View className = "flex-row items-center justify-between ">
       <TouchableOpacity className=' mt-4 flex-row items-center space-x-2'>
@@ -68,7 +123,7 @@ const JoinCard = ({name, members}: any) => {
         </View>
       </TouchableOpacity>
       {/*  */}
-      <TouchableOpacity className='w-fit bg-blue-500 px-3 py-1 rounded-lg'>
+      <TouchableOpacity className='w-fit bg-blue-500 px-3 py-1 rounded-lg' onPress={() => handleJoinPress(community_id)}>
         <Text className='text-white'>Join</Text>
       </TouchableOpacity>
     </View>
@@ -105,7 +160,7 @@ const GroupJoin: React.FC<Props> = ({ navigation: { navigate } }) => {
             <FlatList
               keyExtractor={item => item?.id}
               data={firstTwoCommunity} 
-              renderItem={({item}) => <JoinCard name = {item.community_name} members = {item.members} /> }
+              renderItem={({item}) => <JoinCard name = {item.community_name} members = {item.members} community_id={item.id} /> }
             />
           </View>
         </View>

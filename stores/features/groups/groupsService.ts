@@ -18,9 +18,9 @@ export const groupsApi = createApi({
         method: 'GET',
       }),
     }),
-    getNextEvent: builder.query<EventResponse, any>({
-      query: (location) => ({ 
-        url: `/events/nextevent/${location}`,
+    getMyCommunity: builder.query<EventResponse, any>({
+      query: () => ({ 
+        url: `/community/me`,
         method: 'GET',
       })
     }),
@@ -38,7 +38,7 @@ export const groupsApi = createApi({
     }),
     joinCommunity: builder.mutation<void, SaveEventRequest>({
       query: (credentials) => ({ 
-        url: `/saves`,
+        url: `/community/join`,
         method: 'POST',
         body: credentials
       })
@@ -46,4 +46,4 @@ export const groupsApi = createApi({
   })
 })
 
-export const { useGetCommunityQuery, useGetNextEventQuery, useGetEventDetailsQuery, useGetSavedEventQuery, useJoinCommunityMutation } = groupsApi
+export const { useGetCommunityQuery, useGetMyCommunityQuery, useGetEventDetailsQuery, useGetSavedEventQuery, useJoinCommunityMutation } = groupsApi
