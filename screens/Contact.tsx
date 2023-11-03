@@ -1,4 +1,4 @@
-import { Dimensions, FlatList, Image, ScrollView, Share, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Dimensions, FlatList, Image, ImageBackground, ScrollView, Share, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { FC, useEffect, useState } from 'react'
 
 // ** Constants 
@@ -242,7 +242,14 @@ const Contact = ({navigation}: {navigation: any}) => {
             data={GroupCatergory} 
             renderItem={(item) => (
               <TouchableOpacity className='mx-2 mt-4' onPress={() => navigation.navigate("GroupCat")}>
-                <View className='h-[150px] bg-slate-400 rounded-lg  justify-center items-center'></View>
+                <View className='h-[150px] bg-slate-400 rounded-lg  justify-center items-center'>
+                  <ImageBackground
+                    resizeMode="cover"
+                    imageStyle={{ borderRadius: 10}}
+                    style={{ flex: 1, width: '100%' }}
+                    source = {{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvVRjzi266UV2c8204Wa2FDqwwxkXFDU4Ybw&usqp=CAU'}}
+                  />
+                </View>
                 <Text className='text-black text-xs font-semibold mt-1'>{item}</Text>
               </TouchableOpacity>
              
