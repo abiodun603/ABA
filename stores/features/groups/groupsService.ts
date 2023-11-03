@@ -18,7 +18,7 @@ export const groupsApi = createApi({
         method: 'GET',
       }),
     }),
-    getMyCommunity: builder.query<EventResponse, any>({
+    getMyCommunity: builder.query<EventResponse, void>({
       query: () => ({ 
         url: `/community/me`,
         method: 'GET',
