@@ -22,6 +22,7 @@ export type RootStackParamList = {
   PdfPreview: undefined;
   // Groups
   Group: undefined;
+  GroupConfirmation: undefined;
   GroupCat: undefined;
   GroupJoin: undefined;
   //

@@ -168,7 +168,7 @@ if(!loadMyCommunity) {
   // console.log(nextEventData)
   const MyGroupsCard = ({name}: any) => {
     return (
-      <View className='h-40 w-32 rounded-md mr-3' style={{borderRadius: 10}}>
+      <TouchableOpacity className='h-40 w-32 rounded-md mr-3' style={{borderRadius: 10}} onPress={()=>navigation.navigate("Group")} >
         <ImageBackground
           resizeMode="cover"
           imageStyle={{ borderRadius: 10}}
@@ -190,7 +190,7 @@ if(!loadMyCommunity) {
             </Text>
           </View>
         </ImageBackground>
-      </View>
+      </TouchableOpacity>
     )
   }
 

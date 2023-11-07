@@ -39,6 +39,7 @@ import { AuthProvider } from "../contexts/AuthContext";
 import EventDetails from "../screens/events/EventDetails";
 import GroupCat from "../screens/groups/GroupCat";
 import GroupJoin from "../screens/groups/GroupJoin";
+import GroupConfirmation from "../screens/groups/GroupConfirmation";
 import Group from "../screens/groups/Group";
 
 const theme = {
@@ -74,9 +75,10 @@ export default function Navigation() {
       <Stack.Screen name="Welcome" component={Welcome} /> 
       <Stack.Screen name="ProfileNotification" component={ProfileNotification} /> 
       {/* Group */}
+      <Stack.Screen name = "Group" component={Group} />
       <Stack.Screen name = "GroupCat" component={GroupCat} />
       <Stack.Screen name = "GroupJoin" component={GroupJoin} />
-      <Stack.Screen name = "Group" component={Group} />
+      <Stack.Screen name = "GroupConfirmation" component={GroupConfirmation} />
 
       <Stack.Screen name="ProfilePreview" component={ProfilePreview} /> 
       <Stack.Screen name="EditProfile" component={EditProfile} /> 
