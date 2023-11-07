@@ -24,6 +24,12 @@ export const groupsApi = createApi({
         method: 'GET',
       })
     }),
+    getOneCommunity: builder.query<GroupsResponse, string>({
+      query: (id) => ({ 
+        url: `/community/${id}`,
+        method: 'GET',
+      })
+    }),
     getEventDetails: builder.query<EventResponse, string>({
       query: (id) => ({ 
         url: `/events/${id}`,
@@ -51,4 +57,4 @@ export const groupsApi = createApi({
   })
 })
 
-export const { useGetCommunityQuery, useGetMyCommunityQuery, useGetEventDetailsQuery, useGetSavedEventQuery, useJoinCommunityMutation } = groupsApi
+export const { useGetCommunityQuery, useGetOneCommunityQuery, useGetMyCommunityQuery, useGetEventDetailsQuery, useGetSavedEventQuery, useJoinCommunityMutation } = groupsApi

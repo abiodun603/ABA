@@ -126,10 +126,8 @@ if(!loadMyCommunity) {
   }, []);
 
   // Store Service
- 
   const fullName = data?.user?.name || ""
   const { firstName, lastName } = getFirstAndLastName(fullName);
-
 
   // Only needed if want to know the index
   const onViewRef = useRef(({changed}: {changed: any}) => {
@@ -141,7 +139,6 @@ if(!loadMyCommunity) {
   const scrollToIndex = (index: number) => {
     flatListRef.current?.scrollToIndex({animated: true, index: index})
   }
-
 
   // const {user} = useGlobalState()
   // const id = user?.id;
@@ -166,9 +163,9 @@ if(!loadMyCommunity) {
   }
 
   // console.log(nextEventData)
-  const MyGroupsCard = ({name}: any) => {
+  const MyGroupsCard = ({name, community_id}: any) => {
     return (
-      <TouchableOpacity className='h-40 w-32 rounded-md mr-3' style={{borderRadius: 10}} onPress={()=>navigation.navigate("Group")} >
+      <TouchableOpacity className='h-40 w-32 rounded-md mr-3' style={{borderRadius: 10}} onPress={()=>navigation.navigate("Group", { communityId: community_id })} >
         <ImageBackground
           resizeMode="cover"
           imageStyle={{ borderRadius: 10}}
@@ -256,7 +253,7 @@ if(!loadMyCommunity) {
                 if (item.type === 'discover-more') {
                   return <DiscoverMoreGroups />;
                 } else {
-                  return <MyGroupsCard name={item.community_name}/>;
+                  return <MyGroupsCard community_id = {item.id} name={item.community_name}/>;
                 }
               }}
             />
