@@ -42,24 +42,7 @@ export const DATA1 = [
   },
 ];
 
-export const interestTypes = [
-  {
-    id: 1,
-    name: "Emergency Preparedness"
-  },
-  {
-    id: 2,
-    name: "Life Drawing"
-  },
-  {
-    id: 3,
-    name: "Volunteering"
-  },
-  {
-    id: 4,
-    name: "Walking Tours"
-  }
-]
+export const interestTypes = ["Emergency Preparedness", "Life Drawing", "Volunteering", "Walking Tours"]
 
 export const DATA2:{
   id: string,

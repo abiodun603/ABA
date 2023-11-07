@@ -7,6 +7,11 @@ export interface SaveEventRequest {
   event: string
 }
 
+interface AttendEventRequest {
+  eventId: string
+}
+
+
 export const eventsApi = createApi({
   baseQuery,
   reducerPath: 'eventsApi',
@@ -35,6 +40,12 @@ export const eventsApi = createApi({
         method: 'GET',
       })
     }),
+    updateAttendEvent: builder.mutation<void, AttendEventRequest>({
+      query: (eventId) => ({
+        url: `/events/attend/${eventId}`,
+        method: 'PATCH',
+      }),
+    }),
     saveEvent: builder.mutation<void, SaveEventRequest>({
       query: (credentials) => ({ 
         url: `/saves`,
@@ -45,4 +56,4 @@ export const eventsApi = createApi({
   })
 })
 
-export const { useGetEventsQuery, useGetNextEventQuery, useGetEventDetailsQuery, useGetSavedEventQuery, useSaveEventMutation } = eventsApi
+export const { useGetEventsQuery, useGetNextEventQuery, useUpdateAttendEventMutation, useGetEventDetailsQuery, useGetSavedEventQuery, useSaveEventMutation } = eventsApi

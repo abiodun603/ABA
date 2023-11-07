@@ -17,5 +17,12 @@ export interface EventResponse {
   location: string
   time: string
   data: string
+  event_time: string
+  event_city: string
+  event_name: string
+  event_about: string
+  status: string
+  hosted_by: any[]
+  members: any[]
   user: EventCreator
 }

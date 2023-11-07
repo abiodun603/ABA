@@ -39,6 +39,7 @@ import { AuthProvider } from "../contexts/AuthContext";
 import EventDetails from "../screens/events/EventDetails";
 import GroupCat from "../screens/groups/GroupCat";
 import GroupJoin from "../screens/groups/GroupJoin";
+import Group from "../screens/groups/Group";
 
 const theme = {
   ...DefaultTheme,
@@ -75,6 +76,7 @@ export default function Navigation() {
       {/* Group */}
       <Stack.Screen name = "GroupCat" component={GroupCat} />
       <Stack.Screen name = "GroupJoin" component={GroupJoin} />
+      <Stack.Screen name = "Group" component={Group} />
 
       <Stack.Screen name="ProfilePreview" component={ProfilePreview} /> 
       <Stack.Screen name="EditProfile" component={EditProfile} /> 

@@ -58,10 +58,6 @@ const Contact = ({navigation}: {navigation: any}) => {
   const toggleBookMark = () => setBookMark(!bookMark)
 
   const renderEventCard = (toggleBookMark: any, bookMark: any, navigation: any) => {
-    // const [bookMark, setBookMark] = useState(false)
-  
-    // const toggleBookMark = () => setBookMark(!bookMark)
-  
     const onShare = async () => {
       const options = {
         message: "Telvida Conferences at London Texas.  i neva reach there before"
@@ -87,7 +83,7 @@ const Contact = ({navigation}: {navigation: any}) => {
       
     }
     return(
-      <TouchableOpacity onPress={() => navigation.navigate("EventDetails")} className='h-60 w-52 rounded-lg mr-3'>
+      <TouchableOpacity  className='h-60 w-52 rounded-lg mr-3'>
         <View style={{flex:1}} className='rounded-t-lg bg-blue-500'>
           <Image
             source={{
@@ -144,7 +140,7 @@ const Contact = ({navigation}: {navigation: any}) => {
         </View>
       </View>
       <Divider mt={8} thickness={1}/>
-        <View className='flex-row justify-between items-center my-4  px-4'>
+        <TouchableOpacity onPress={() => navigation.navigate("GroupCat")} className='flex-row justify-between items-center my-4  px-4'>
           <View className='flex-row  space-x-2'>
             {/* icon calander */}
             <MaterialIcons name="location-searching" size={28} />
@@ -157,7 +153,7 @@ const Contact = ({navigation}: {navigation: any}) => {
           </View>
           {/* icon */}
           <MaterialIcons name = "keyboard-arrow-right"  size={18}/>
-        </View>
+        </TouchableOpacity>
       <Divider thickness={8}/>
 
       <View className = "px-4">

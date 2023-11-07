@@ -166,7 +166,7 @@ if(!loadMyCommunity) {
   }
 
   // console.log(nextEventData)
-  const MyGroupsCard = () => {
+  const MyGroupsCard = ({name}: any) => {
     return (
       <View className='h-40 w-32 rounded-md mr-3' style={{borderRadius: 10}}>
         <ImageBackground
@@ -186,7 +186,7 @@ if(!loadMyCommunity) {
             }}
           >
             <Text style={{ color: 'white', fontSize: 14, fontWeight: 'bold' }}>
-              Creative Tech
+              <ShortenedWord word= {name} maxLength={20} />
             </Text>
           </View>
         </ImageBackground>
@@ -236,7 +236,7 @@ if(!loadMyCommunity) {
                   )
                 })}
               </View>
-            </View> ) : <Text className='mt-3 mb-6 text-sm text-ksecondary font-medium'>Opps!!! Availabe Event in close to you</Text>}
+            </View> ) : <Text className='mt-3 mb-6 text-sm text-ksecondary font-medium'>Opps!!! Availabe Event is not close to you</Text>}
         </View>
         {/* Your Groups */}
         <View className='mt-1'>
@@ -247,19 +247,6 @@ if(!loadMyCommunity) {
           </View>
           {/* Groups */}
           <View className=''>
-            {/* <FlatList
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              data={[1, 2, 3, 4, 'discover-more']} // Include 'discover-more' as an additional item
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({ item }) => {
-                if (item === 'discover-more') {
-                  return <DiscoverMoreGroups />;
-                } else {
-                  return <MyGroupsCard />;
-                }
-              }}
-            /> */}
             <FlatList
               horizontal
               showsHorizontalScrollIndicator={false}
@@ -269,7 +256,7 @@ if(!loadMyCommunity) {
                 if (item.type === 'discover-more') {
                   return <DiscoverMoreGroups />;
                 } else {
-                  return <MyGroupsCard />;
+                  return <MyGroupsCard name={item.community_name}/>;
                 }
               }}
             />
@@ -283,19 +270,20 @@ if(!loadMyCommunity) {
           </View>
           {/* Interests */}
           <View >
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{flex: 1, flexGrow: 1}}>
-              {
-                interestTypes.map((interest) => {
-                  return (
-                    <TouchableOpacity key={interest.id} onPress={() => null} className='mr-4'>
+            <FlatList
+              data={interestTypes}
+              horizontal
+              keyExtractor={(item, index) => index.toString()}
+              showsHorizontalScrollIndicator= {false}
+              renderItem={({item,index}) =>  <View>
+                    <TouchableOpacity key={index} onPress={() => null} className='mr-4'>
                       <View style={{borderRadius: 8, padding: 8 }} className='bg-gray-800'>
-                        <Text style={{ color: 'white' }}>{interest.name}</Text>
+                        <Text style={{ color: 'white' }}>{item}</Text>
                       </View>
                     </TouchableOpacity>
-                  )
-                })
-              }
-            </ScrollView>
+            </View>}
+            />
+
           </View>
         </View>
         <View className='mt-10 mb-56'>

@@ -37,12 +37,17 @@ export const groupsApi = createApi({
       })
     }),
     joinCommunity: builder.mutation<void, SaveEventRequest>({
-      query: (credentials) => ({ 
-        url: `/community/join`,
-        method: 'POST',
-        body: credentials
-      })
-    })
+      query: (credentials) => {
+        // Log the credentials to the console for debugging
+        console.log('Join community credentials:', credentials);
+    
+        return {
+          url: `/community/join`,
+          method: 'POST',
+          body: credentials
+        };
+      }
+    })    
   })
 })
 

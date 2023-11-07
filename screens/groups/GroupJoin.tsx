@@ -48,19 +48,25 @@ const GridView = <T extends any>(props: IGridViewProps<T>) => {
 }
 
 
-const JoinCard = ({name, members, community_id}: any) => {
-  const [joinCommunity] = useJoinCommunityMutation()
+const JoinCard = ({name, members, community_id, navigate}: any) => {
+  const [joinCommunity, { isLoading: isJoining }, ] = useJoinCommunityMutation()
   const toast = useToast()
 
   const handleJoinPress = async (community_id: any) => {
     try {
+      console.log(community_id)
+      const id = {
+        community_id: community_id
+      }
       // Make the API call to join the community
-      const response = await joinCommunity(community_id);
-
-      // Check the response and handle success or any specific logic
+      const response = await joinCommunity(id);
       if (response) {
-        console.log(response);
+        if(response?.data.status){
+          navigate("Group")
+        }
+       
         if(response?.error.status === 500){
+          // navigate("Group")
           toast.show({
             placement: "top",
             render: ({ id }) => {
@@ -69,15 +75,15 @@ const JoinCard = ({name, members, community_id}: any) => {
                   <VStack space="xs">
                     <ToastTitle>New Message</ToastTitle>
                     <ToastDescription>
-                    Community with this ID does not exist
+                      {response?.error?.data.error}
                     </ToastDescription>
                   </VStack>
                 </Toast>
               )
             },
           })
+          // navigate.("Group")
         }
-        // Handle success, e.g., show a success message, update UI, etc.
       } else {
         // Handle any other specific cases, if needed
       }
@@ -133,6 +139,7 @@ const JoinCard = ({name, members, community_id}: any) => {
 
 const GroupJoin: React.FC<Props> = ({ navigation: { navigate } }) => {
   const {isLoading, data} = useGetCommunityQuery()
+  console.log(data)
 
   if(isLoading){
     return <Text>Loading...</Text>;
@@ -148,7 +155,7 @@ const GroupJoin: React.FC<Props> = ({ navigation: { navigate } }) => {
   console.log(firstTwoCommunity)
   return (
     <Layout
-      title = "Group Join"
+      title = "Community Join"
     >
       <ScrollView style = {styles.container} className=' mt-4'>
         <View className='px-4'>
@@ -160,7 +167,7 @@ const GroupJoin: React.FC<Props> = ({ navigation: { navigate } }) => {
             <FlatList
               keyExtractor={item => item?.id}
               data={firstTwoCommunity} 
-              renderItem={({item}) => <JoinCard name = {item.community_name} members = {item.members} community_id={item.id} /> }
+              renderItem={({item}) => <JoinCard name = {item.community_name} members = {item.members} community_id={item.id} navigate={navigate}/> }
             />
           </View>
         </View>
@@ -188,8 +195,7 @@ const GroupJoin: React.FC<Props> = ({ navigation: { navigate } }) => {
               keyExtractor={item => item?.id}
               data={remainingCommunity}
               renderItem={({ item }) => (
-                <JoinCard name={item.community_name} members={item.members} />
-              )}
+              <JoinCard name = {item.community_name} members = {item.members} community_id={item.id} navigate={navigate}/> )}
             />
           ): null}
         </View>

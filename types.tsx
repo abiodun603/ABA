@@ -21,6 +21,7 @@ export type RootStackParamList = {
   ResetCode: undefined;
   PdfPreview: undefined;
   // Groups
+  Group: undefined;
   GroupCat: undefined;
   GroupJoin: undefined;
   //

@@ -13,17 +13,23 @@ import { RootStackParamList } from '../../types';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Divider } from 'native-base';
 import CustomButton from '../../components/CustomButton';
-import { useGetEventDetailsQuery } from '../../stores/features/event/eventService';
+import { useGetEventDetailsQuery, useUpdateAttendEventMutation } from '../../stores/features/event/eventService';
 import { ShortenedWord } from '../../helpers/wordShorther';
+import Toaster from '../../components/Toaster/Toaster';
+import { useToast } from '@gluestack-ui/themed';
 type Props = NativeStackScreenProps<RootStackParamList, "EventDetails">;
 
 
 
 
 const EventDetails: React.FC<Props>  = ({navigation, route}) => {
+  const [updateEventAttend, { isLoading: attendEventLoading, isError }] = useUpdateAttendEventMutation();
+  const toast = useToast()
+
   const { eventId } = route.params;
 
   const { isLoading, data } = useGetEventDetailsQuery(eventId);
+  console.log(data);
 
   if(isLoading){
     return <Text>Loading...</Text>;
@@ -32,9 +38,32 @@ const EventDetails: React.FC<Props>  = ({navigation, route}) => {
   if (!data) {
     return <Text>No data available.</Text>; // Display a message when there is no data
   }
+
+  const handleAttendEvent = () => {
+    // Make the PATCH request
+    updateEventAttend(eventId)
+    .unwrap()
+    .then((data) => {
+      // Handle success
+      console.log('Event attendance updated:', data);
+      toast.show({
+        placement: 'top',
+        render: ({id}) => <Toaster id={id} type="success" message="Thank you!!!. Your sit have been reserved" />
+      })
+    })
+    .catch((error) => {
+      // Handle error
+      toast.show({
+        placement: 'top',
+        render: ({id}) => <Toaster id={id} type="error" message={error?.data.error} />
+      })
+      // console.error('Error updating event attendance:', error);
+    });
+
+  }
   return (
     <Layout
-      title = "Event"
+      title = "Event Details"
     >
       <View style={{flex: 1}}>
         <ScrollView>
@@ -82,7 +111,7 @@ const EventDetails: React.FC<Props>  = ({navigation, route}) => {
               </View>
               <View>
                 <Text className='text-sm line-4 font-bold '>Telvida Tech</Text>
-                <Text className='text-sm font-normal text-gray-600 capitalize'>{data.status}</Text>
+                <Text className='text-sm font-normal text-gray-600 capitalize'>{data?.status}</Text>
               </View>
             </View>
 
@@ -92,7 +121,7 @@ const EventDetails: React.FC<Props>  = ({navigation, route}) => {
 
               <View>
                 <Text className='mt-2 text-gray-700 text-xs font-medium'>
-                  A MODERN EXPLORATION OF AFRICAN MUSIC THAT ADDS A NEW LAYER OF VIRTUAL INTERACTION THROUGH VIDEO GAMES. Explore an afrofuturistic metaverse experience inspired by 70s Afro Rock music.
+                  {data?.event_about || ""}
                 </Text>
 
                 <View className='mt-3'>
@@ -111,10 +140,10 @@ const EventDetails: React.FC<Props>  = ({navigation, route}) => {
           <View className='px-5'>
             <View className = "flex-row mt-3">
               <View className='w-1/2'>
-                <Text>Hosting(0)</Text>
+                <Text>Hosting({data?.hosted_by.length || 0})</Text>
               </View>
               <View className='w-1/2'>
-                <Text>Going(0)</Text>
+                <Text>Going({data?.members.length || 0})</Text>
               </View>
             </View>
 
@@ -127,7 +156,7 @@ const EventDetails: React.FC<Props>  = ({navigation, route}) => {
               <View className = "flex-row items-center space-x-3">
                 {/* Icon */}
                 <FontAwesome name = "tag" size={26} />
-                <Text className = "text-sm text-black font-semibold">13 members attending for the first time</Text>
+                <Text className = "text-sm text-black font-semibold">{`${data?.members.length || 0} members attending for the first time`}</Text>
               </View>
               <View className = "flex-row items-center space-x-3">
                 {/* Icon */}
@@ -194,7 +223,7 @@ const EventDetails: React.FC<Props>  = ({navigation, route}) => {
         </ScrollView>
         <View className='fixed w-full h-24  flex-row items-center justify-between px-4 bg-gray-800 bottom-0 left-0 right-0'>
           <Text className='text-white font-semibold'>Free</Text>
-          <CustomButton title='Attend' buttonStyle={{width: 100, borderRadius: 8}}/>
+          <CustomButton title='Attend' onPress={handleAttendEvent} buttonStyle={{width: 100, borderRadius: 8}}/>
         </View>
       </View>
     </Layout>
