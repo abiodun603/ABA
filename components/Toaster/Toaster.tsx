@@ -1,7 +1,7 @@
 import React from 'react';
 import { Toast, ToastDescription, ToastTitle, VStack } from "@gluestack-ui/themed";
 
-function Toaster({id, message, type }: any) {
+function Toaster({id, message, type = "error" }: any) {
   return (
     <Toast nativeID={id} action={type} variant="accent">
       <VStack space="xs">

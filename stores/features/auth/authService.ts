@@ -41,6 +41,13 @@ export interface ProfileRequest {
 export const authApi = createApi({
   baseQuery,
   endpoints: (builder) => ({
+    signup: builder.mutation<UserResponse, LoginRequest>({
+      query: (credentials) => ({
+        url: '/users',
+        method: 'POST',
+        body: credentials,
+      }),
+    }),
     login: builder.mutation<UserResponse, LoginRequest>({
       query: (credentials) => ({
         url: '/users/login',
@@ -48,6 +55,7 @@ export const authApi = createApi({
         body: credentials,
       }),
     }),
+
     getProfile: builder.query<ProfileResponse, string>({
       query: (id) => ({
         url: `/personal_information/${id}`,
@@ -64,4 +72,4 @@ export const authApi = createApi({
   }),
 })
 
-export const { useLoginMutation, useUpdateProfileMutation, useGetProfileQuery } = authApi
+export const { useLoginMutation, useSignupMutation,  useUpdateProfileMutation, useGetProfileQuery } = authApi

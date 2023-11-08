@@ -81,6 +81,7 @@ const Input: React.FC<InputProps> = ({
               placeholder={placeholder}
               style={{ color: Colors.primary, flex: 1 }}
               value={field.value}
+              // editable={false}
             />
             {suffixIcon && (
               <MaterialCommunityIcons

@@ -20,25 +20,82 @@ import { styled } from "nativewind";
 
 // ** Third Party
 import { FormProvider, useForm } from "react-hook-form";
-
-const defaultValues = {
-  email: '',
-}
-
-interface UserData {
-  email: string
-}
+import { SelectList } from 'react-native-dropdown-select-list';
+import { useSignupMutation } from "../../stores/features/auth/authService";
+import { useToast } from "@gluestack-ui/themed";
+import Toaster from "../../components/Toaster/Toaster";
 
 type Props = NativeStackScreenProps<RootStackParamList, "CreateAccount">;
 const StyledView = styled(View)
 
+const data = [
+  {key:'1', value:'Select your gender', disabled:true},
+  {key:'male', value:'Male'},
+  {key:'female', value:'Female'},
+]
+
+
+const defaultValues = {
+  email: '',
+  password: '',
+  name: '',
+}
+
+interface UserData {
+  email: string;
+  password: string;
+  name: string;
+}
+
+
 const Create: React.FC<Props> = ({ navigation: { navigate } }) => {
   const methods = useForm({defaultValues});
+  const [selected, setSelected] = React.useState("");
+  const [signup, { isLoading }] = useSignupMutation();
 
-  const handleLogin = (data: UserData) => {
+  const toast = useToast()
+
+
+  const handleSignup = async (data: UserData) => {
     // Handle login logic here
-    console.log(data);
-  }
+    const signupData = {
+      email: data.email,
+      password: data.password,
+      name: data.name,
+      gender: selected
+    }
+    try {
+      const user = await signup(signupData).unwrap().then((res) => console.log(res));
+      console.log(user);
+      toast.show({
+        placement: "top",
+        render: ({ id }) => <Toaster id = {id} message="Error Signing up" type="success"  />
+      })
+      // Being that the result is handled in extraReducers in authSlice,
+      // we know that we're authenticated after this, so the user
+      // and token will be present in the store
+      navigate('Login');
+    } catch (err: any) {
+      console.log(err)
+      if(err.status === 401){
+        toast.show({
+          placement: "top",
+          render: ({ id }) => <Toaster id = {id} message="Error Signing up"   />
+        })
+      }
+      if(err.status === 500){
+        toast.show({
+          placement: "top",
+          render: ({ id }) => <Toaster id = {id} message="Error Signing up"   />
+        })
+      }
+      toast.show({
+        placement: "top",
+        render: ({ id }) => <Toaster id = {id} message="Error Signing up"   />
+      });
+    }
+  };
+
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -53,8 +110,8 @@ const Create: React.FC<Props> = ({ navigation: { navigate } }) => {
         {/* Email Address set up */}
         <AuthHeader 
           rightNavigation = "Sign in"
-          head={`Enter your ${'\n'}email address`}
-          description="Enter your email to get started"
+          head={`Enter your ${'\n'}Information Details`}
+          description="Enter your name to get started"
           rightNavPress={() => navigate("Login")}
         />
 
@@ -76,6 +133,14 @@ const Create: React.FC<Props> = ({ navigation: { navigate } }) => {
           <View style={{marginVertical: 20}} className="grow" >
             {/* Email Address set up */}
             <Input
+              label="Fullname"
+              placeholder="Enter your name"
+              name="name"
+              rules={{
+                required: 'Name is required',
+              }}
+            />
+            <Input
               label="Email"
               placeholder="Enter email address"
               name="email"
@@ -87,6 +152,25 @@ const Create: React.FC<Props> = ({ navigation: { navigate } }) => {
                 }
               }}
             />
+            <Input
+              name="password"
+              label="Password"
+              placeholder="Enter password"
+              password
+              passwordIcon
+            />
+
+            <View className='flex flex-col mb-5'>
+              {/* <Text className=' font-normal text-sm text-black'>Gender</Text> */}
+              <SelectList 
+                setSelected={(val: React.SetStateAction<string>) => setSelected(val)} 
+                data={data} 
+                save="value"
+                boxStyles={{borderRadius:4, borderColor: "#80747B", height:56}}
+                search={false} 
+                placeholder='Select your gender'
+              />
+            </View>
 
 
           {/* Passwords  set up */}
@@ -103,7 +187,7 @@ const Create: React.FC<Props> = ({ navigation: { navigate } }) => {
           <View>
             <View style={{ backgroundColor: "red"}} className="bg-red-800" />
               {/* Email Address set up */}
-              <Button title="Continue" onPress={() => navigate("SetPassword")} />
+              <Button title="Sign up" isLoading={isLoading} onPress={methods.handleSubmit(handleSignup)} />
               {/* Password set up */}
                             {/* <Button title="Sign Up" onPress={() => navigate("CustomDrawer")} /> */}
               { /* Verification set up */}

@@ -10,7 +10,7 @@ import { COLORS, FONTS, SIZES } from '../assets'
 
 // ** Image
 import home from "../assets/icons/home.png"
-import chat from "../assets/icons/chat.png"
+import chat from "../assets/images/icons/search-regular.png"
 import community from "../assets/icons/people.png"
 import profile from "../assets/icons/profile.png"
 
@@ -68,7 +68,6 @@ const TabButton = ({label, icon, isFocused,onPress, outerContainerStyle, innerCo
                 />
               </View>
               
-
               {/* {isFocused &&  */}
                 <Text
                   numberOfLines = {1}
@@ -86,11 +85,7 @@ const TabButton = ({label, icon, isFocused,onPress, outerContainerStyle, innerCo
         </TouchableWithoutFeedback>
     )
    
- }
-// const curr__user = {
-//     display__name : "Olatunji Abiodun",
-//     user__image : require("../assets/images/profile/about1.jpeg")
-// }
+}
 
 const MainLayout = ({navigation, selectedTab, setSelectedTab}: {navigation: any, selectedTab: any, setSelectedTab: any}) => {
     const flatListRef = React.useRef<any>(null)
