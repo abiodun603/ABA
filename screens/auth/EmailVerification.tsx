@@ -58,19 +58,19 @@ const EmailVerification: React.FC<Props> = ({ navigation: { navigate } }) => {
     setShowPicker(!showPicker)
   }
 
-  const onChange = ({type}, selectedDate) => {
-    if (type == 'set'){
-      const currentDate = selectedDate;
-      setDateOfBirth(currentDate)
+  // const onChange = ({type}, selectedDate) => {
+  //   if (type == 'set'){
+  //     const currentDate = selectedDate;
+  //     setDateOfBirth(currentDate)
       
-      if (Platform.OS === 'android') {
-        toggleDatePicker();
-        setDateOfBirth(currentDate.toDateString());
-      }
-    } else {
-      toggleDatePicker()
-    }
-  }
+  //     if (Platform.OS === 'android') {
+  //       toggleDatePicker();
+  //       setDateOfBirth(currentDate.toDateString());
+  //     }
+  //   } else {
+  //     toggleDatePicker()
+  //   }
+  // }
   return (
     <SafeAreaView style={{flex: 1}}>
       <ScrollView 
@@ -122,7 +122,7 @@ const EmailVerification: React.FC<Props> = ({ navigation: { navigate } }) => {
            
             )}
              */}
-            {
+            {/* {
               showPicker && (
                 <DateTimePicker
                   mode="date"
@@ -132,7 +132,7 @@ const EmailVerification: React.FC<Props> = ({ navigation: { navigate } }) => {
                 />
               )
             }
-           
+            */}
 
             {/* <Text className="text-center text-[#6E5868] text-[16px] font-medium">Didn't get confirmation code? <Text className="text-black underline">Resend</Text></Text> */}
           </View>

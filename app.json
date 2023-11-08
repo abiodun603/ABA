@@ -21,10 +21,11 @@
       "supportsTablet": true,
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "We need your location for some feature"
-      }
+      },
+      "bundleIdentifier": "com.abiodun.telvida.aba"
     },
     "android": {
-        "permissions": [
+      "permissions": [
         "ACCESS_FINE_LOCATION",
         "ACCESS_COARSE_LOCATION"
       ],
@@ -39,7 +40,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "7aff42d9-b101-40cf-b721-d772bbca0e21"
+        "projectId": "fa4a7ea2-b60c-411f-a9f0-53494c149683"
       }
     }
   }
