@@ -8,7 +8,7 @@ export interface SaveEventRequest {
 }
 
 interface AttendEventRequest {
-  eventId: string
+  eventId: any
 }
 
 

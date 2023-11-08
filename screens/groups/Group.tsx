@@ -1,6 +1,5 @@
 import { Image, ImageBackground, Share, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Box, Divider } from 'native-base';
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons"
 import Entypo from "@expo/vector-icons/Entypo"
@@ -17,8 +16,16 @@ import { FlatList } from 'react-native';
 import { Avatar, AvatarFallbackText, AvatarGroup, AvatarImage } from '@gluestack-ui/themed';
 import { useGetOneCommunityQuery } from '../../stores/features/groups/groupsService';
 
+
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+
 type Props = NativeStackScreenProps<RootStackParamList, "Group">;
 const StyledView = styled(View)
+
+// Define the type for your route parameters
+type RouteParams = {
+  communityId: string; // Replace 'string' with the correct type for communityId
+};
 
 const renderEventCard = (toggleBookMark: any, bookMark: any, navigation: any) => {
   const onShare = async () => {
@@ -104,8 +111,7 @@ const Group: React.FC<Props> = ({ navigation: { navigate } , route}) => {
   const [bookMark, setBookMark] = useState(false)
   const toggleBookMark = () => setBookMark(!bookMark)
   // 
-  const { communityId } = route.params;
-
+const { communityId } = route.params as unknown  as RouteParams;;
   const { isLoading, data } = useGetOneCommunityQuery(communityId);
   console.log(data);
 

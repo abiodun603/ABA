@@ -59,7 +59,7 @@ const JoinCard = ({name, members, community_id, navigate}: any) => {
         community_id: community_id
       }
       // Make the API call to join the community
-      const response = await joinCommunity(id);
+      const response: any = await joinCommunity(id);
       if (response) {
         if(response?.data.status){
           navigate("Group")

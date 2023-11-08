@@ -17,6 +17,11 @@ import { useGetEventDetailsQuery, useUpdateAttendEventMutation } from '../../sto
 import { ShortenedWord } from '../../helpers/wordShorther';
 import Toaster from '../../components/Toaster/Toaster';
 import { useToast } from '@gluestack-ui/themed';
+
+// Define the type for your route parameters
+type RouteParams = {
+  eventId: any; // Replace 'string' with the correct type for communityId
+};
 type Props = NativeStackScreenProps<RootStackParamList, "EventDetails">;
 
 
@@ -26,7 +31,7 @@ const EventDetails: React.FC<Props>  = ({navigation, route}) => {
   const [updateEventAttend, { isLoading: attendEventLoading, isError }] = useUpdateAttendEventMutation();
   const toast = useToast()
 
-  const { eventId } = route.params;
+  const { eventId } = route.params as unknown  as RouteParams;;;
 
   const { isLoading, data } = useGetEventDetailsQuery(eventId);
   console.log(data);

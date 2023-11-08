@@ -11,3 +11,9 @@ export interface GroupsResponse {
   data: string
   user: GroupsCreator
 }
+
+export interface GroupsDetailsResponse {
+  community_name: string;
+  members: any[]
+  
+}

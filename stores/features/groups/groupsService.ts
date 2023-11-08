@@ -1,11 +1,15 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { baseQuery } from '../../../configs/authConfig'
 import type { EventResponse } from '../../models/events.model'
-import { GroupsResponse } from '../../models/groups.mdel'
+import { GroupsDetailsResponse, GroupsResponse } from '../../models/groups.mdel'
 
 
 export interface SaveEventRequest {
   event: string
+}
+
+interface JoinEventRequest {
+  community_id: any
 }
 
 export const groupsApi = createApi({
@@ -24,7 +28,7 @@ export const groupsApi = createApi({
         method: 'GET',
       })
     }),
-    getOneCommunity: builder.query<GroupsResponse, string>({
+    getOneCommunity: builder.query<GroupsDetailsResponse, string>({
       query: (id) => ({ 
         url: `/community/${id}`,
         method: 'GET',
@@ -42,7 +46,7 @@ export const groupsApi = createApi({
         method: 'GET',
       })
     }),
-    joinCommunity: builder.mutation<void, SaveEventRequest>({
+    joinCommunity: builder.mutation<any, JoinEventRequest>({
       query: (credentials) => {
         // Log the credentials to the console for debugging
         console.log('Join community credentials:', credentials);

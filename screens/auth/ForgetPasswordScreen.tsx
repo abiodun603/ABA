@@ -53,9 +53,9 @@ const ForgetPassword: React.FC<Props> = ({ navigation: { navigate } }) => {
 
   const handleForgetPassword = async (data: UserData) => {
     const { email,  } = data
-    auth.forgetPass({ email }, () => {
+    // auth.forgetPass({ email }, () => {
       
-    })
+    // })
     navigate("ResetCode")
   };
 
