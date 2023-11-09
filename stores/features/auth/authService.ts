@@ -38,6 +38,11 @@ export interface ProfileRequest {
   username: string
 }
 
+interface OtpRequest {
+  otp: string;
+  email: string;
+}
+
 export const authApi = createApi({
   baseQuery,
   endpoints: (builder) => ({
@@ -55,7 +60,13 @@ export const authApi = createApi({
         body: credentials,
       }),
     }),
-
+    otp: builder.mutation<any, OtpRequest>({
+      query: (credentials) => ({
+        url: `/users/verify/${credentials.email}`,
+        method: 'POST',
+        body: {otp: credentials.otp},
+      }),
+    }),
     getProfile: builder.query<ProfileResponse, string>({
       query: (id) => ({
         url: `/personal_information/${id}`,
@@ -72,4 +83,4 @@ export const authApi = createApi({
   }),
 })
 
-export const { useLoginMutation, useSignupMutation,  useUpdateProfileMutation, useGetProfileQuery } = authApi
+export const { useLoginMutation, useOtpMutation, useSignupMutation,  useUpdateProfileMutation, useGetProfileQuery } = authApi

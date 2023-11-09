@@ -65,16 +65,20 @@ const Create: React.FC<Props> = ({ navigation: { navigate } }) => {
       gender: selected
     }
     try {
-      const user = await signup(signupData).unwrap().then((res) => console.log(res));
-      console.log(user);
-      toast.show({
-        placement: "top",
-        render: ({ id }) => <Toaster id = {id} message="Error Signing up" type="success"  />
-      })
-      // Being that the result is handled in extraReducers in authSlice,
-      // we know that we're authenticated after this, so the user
-      // and token will be present in the store
-      navigate('Login');
+      await signup(signupData).unwrap().then((res: any) => {
+        const userEmail = res?.doc.email
+        console.log(res)
+        toast.show({
+          placement: "top",
+          render: ({ id }) => <Toaster id = {id} message="User Created Successfully" type="success"  />
+        })
+        methods.reset()
+        // Being that the result is handled in extraReducers in authSlice,
+        // we know that we're authenticated after this, so the user
+        // and token will be present in the store
+        navigate("OtpScreen", { email: userEmail} as { email: any });
+      });
+    
     } catch (err: any) {
       console.log(err)
       if(err.status === 401){

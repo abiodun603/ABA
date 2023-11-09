@@ -53,6 +53,7 @@ const JoinCard = ({name, members, community_id, navigate}: any) => {
   const toast = useToast()
 
   const handleJoinPress = async (community_id: any) => {
+    console.log(community_id)
     try {
       console.log(community_id)
       const id = {
@@ -61,12 +62,15 @@ const JoinCard = ({name, members, community_id, navigate}: any) => {
       // Make the API call to join the community
       const response: any = await joinCommunity(id);
       if (response) {
+        console.log(response)
         if(response?.data.status){
-          navigate("Group")
+          navigate("GroupConfirmation")
         }
        
-        if(response?.error.status === 500){
+        if(response?.error.status == 500){
           // navigate("Group")
+          console.log("toast me ")
+
           toast.show({
             placement: "top",
             render: ({ id }) => {
@@ -82,15 +86,17 @@ const JoinCard = ({name, members, community_id, navigate}: any) => {
               )
             },
           })
+          return;
           // navigate.("Group")
         }
+        return;
       } else {
         // Handle any other specific cases, if needed
       }
     } catch (err: any) {
       // Handle errors, e.g., show an error message, log the error, etc.
-      console.log('Error joining community:', err.status);
-      if(err.error.status === 500){
+      console.log('Error joining community:', err);
+      // if(err?.error?.status === 500){
         toast.show({
           placement: "top",
           render: ({ id }) => {
@@ -99,14 +105,14 @@ const JoinCard = ({name, members, community_id, navigate}: any) => {
                 <VStack space="xs">
                   <ToastTitle>New Message</ToastTitle>
                   <ToastDescription>
-                  Community with this ID does not exist
+                    You already join this community
                   </ToastDescription>
                 </VStack>
               </Toast>
             )
           },
         })
-      }
+      // }
     }
   };
   return (

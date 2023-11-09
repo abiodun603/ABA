@@ -30,22 +30,68 @@ import Button from "../../components/CustomButton";
 
 // ** Types
 import { RootStackParamList } from "../../types";
+import { useOtpMutation } from "../../stores/features/auth/authService";
+import { useToast } from "@gluestack-ui/themed";
+import Toaster from "../../components/Toaster/Toaster";
 type Props = NativeStackScreenProps<RootStackParamList, "OtpScreen">;
-
+// Define the type for your route parameters
+type RouteParams = {
+  email: any;
+  code: any // Replace 'string' with the correct type for communityId
+};
 const defaultValues = {
-  email: '',
+  code: '',
 }
 
 interface UserData {
   code: string
 }
 
-const OtpScreen: React.FC<Props> = ({ navigation: { navigate }}) => {
+const OtpScreen: React.FC<Props> = ({ navigation: { navigate }, route}) => {
+  const { email } = route.params as unknown  as RouteParams;
   const methods = useForm({defaultValues});
+  const [otp, { isLoading }] = useOtpMutation();
+  const toast = useToast()
 
-  const handleSubmit = (data: UserData) => {
-    // Handle login logic here
-    console.log(data);
+
+  const handleOtp = async (data: UserData) => {
+    const crendentials = {
+      email: email,
+      otp: data.code
+    }
+   console.log(crendentials)
+   try {
+    await otp(crendentials).unwrap().then((res: any) => {
+      console.log(res)
+      toast.show({
+        placement: "top",
+        render: ({ id }) => <Toaster id = {id} message="Otp Authenticated successfully" type="success"  />
+      })
+      // Being that the result is handled in extraReducers in authSlice,
+      // we know that we're authenticated after this, so the user
+      // and token will be present in the store
+      navigate("Login");
+    });
+  
+  } catch (err: any) {
+    console.log(err)
+    if(err.status === 401){
+      toast.show({
+        placement: "top",
+        render: ({ id }) => <Toaster id = {id} message="Error Signing up"   />
+      })
+    }
+    if(err.status === 500){
+      toast.show({
+        placement: "top",
+        render: ({ id }) => <Toaster id = {id} message="OTP validation failed"  />
+      })
+    }
+    toast.show({
+      placement: "top",
+      render: ({ id }) => <Toaster id = {id} message="Error Signing up"   />
+    });
+  }
   }
 
   return (
@@ -59,7 +105,7 @@ const OtpScreen: React.FC<Props> = ({ navigation: { navigate }}) => {
         {/* ====== ======== */}
         <Header 
           title="Check your inbox"
-          description="We sent a reset code to you."
+          description="We sent an OTP code to you."
         />
         {/* ==== ======= */}
         <FormProvider {...methods}>
@@ -67,15 +113,15 @@ const OtpScreen: React.FC<Props> = ({ navigation: { navigate }}) => {
           <View style={{marginVertical: 20}}>
             <Input
               name="code"
-              label="Reset Code"
-              placeholder="Enter your reset code"
+              label="Otp code"
+              placeholder="Enter your otp code"
               rules={{
                 required: 'Code is required',
               }}
             />
 
             <View style={{marginTop: Spacing*2}} />
-            <Button title="Proceed" onPress={() => navigate('ResetPassword')} />
+            <Button title="Confirm" isLoading={isLoading} onPress={methods.handleSubmit(handleOtp)} />
           </View>
         {/* ===== ======= */}
         </FormProvider>

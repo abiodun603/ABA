@@ -111,7 +111,7 @@ const Group: React.FC<Props> = ({ navigation: { navigate } , route}) => {
   const [bookMark, setBookMark] = useState(false)
   const toggleBookMark = () => setBookMark(!bookMark)
   // 
-const { communityId } = route.params as unknown  as RouteParams;;
+const { communityId } = route.params as unknown  as RouteParams;
   const { isLoading, data } = useGetOneCommunityQuery(communityId);
   console.log(data);
 

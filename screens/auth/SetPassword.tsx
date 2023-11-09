@@ -82,7 +82,7 @@ const SetPassword: React.FC<Props> = ({ navigation: { navigate } }) => {
           <View style={{marginVertical: 20}} className="grow" >
             {/* Email Address set up */}
             <Input
-            name="password"
+              name="password"
               label="Password"
               placeholder="Enter password"
               password

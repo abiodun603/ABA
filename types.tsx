@@ -26,7 +26,7 @@ export type RootStackParamList = {
   GroupCat: undefined;
   GroupJoin: undefined;
   //
-  OtpScreen: undefined;
+  OtpScreen: any;
   ResetPassword: undefined;
   ResetSuccess: undefined;
   ProfileNotification: undefined;
