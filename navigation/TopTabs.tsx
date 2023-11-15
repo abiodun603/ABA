@@ -1,10 +1,5 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import React from 'react';
-import { Colors } from '../constants';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../types';
-//
-type Props = NativeStackScreenProps<RootStackParamList, "TopNavPanel">;
 const Tab = createMaterialTopTabNavigator();
 
 interface TabItem {

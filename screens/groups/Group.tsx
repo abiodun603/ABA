@@ -13,11 +13,15 @@ import {Ionicons, MaterialIcons, FontAwesome} from "@expo/vector-icons"
 // ** Helpers
 import { ShortenedWord } from '../../helpers/wordShorther';
 import { FlatList } from 'react-native';
-import { Avatar, AvatarFallbackText, AvatarGroup, AvatarImage } from '@gluestack-ui/themed';
-import { useGetOneCommunityQuery } from '../../stores/features/groups/groupsService';
+import { Avatar, AvatarFallbackText, AvatarGroup, AvatarImage, useToast } from '@gluestack-ui/themed';
+import { useGetJoinedCommunityQuery, useGetOneCommunityQuery, useLeaveCommunityMutation } from '../../stores/features/groups/groupsService';
 
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import BottomSheet from '../../components/bottom-sheet/BottomSheet';
+import CustomButton from '../../components/CustomButton';
+import { Alert } from 'react-native';
+import Toaster from '../../components/Toaster/Toaster';
 
 type Props = NativeStackScreenProps<RootStackParamList, "Group">;
 const StyledView = styled(View)
@@ -109,11 +113,18 @@ const renderEventCard = (toggleBookMark: any, bookMark: any, navigation: any) =>
 
 const Group: React.FC<Props> = ({ navigation: { navigate } , route}) => {
   const [bookMark, setBookMark] = useState(false)
+  const [show, setShow] = useState(false)
+
   const toggleBookMark = () => setBookMark(!bookMark)
   // 
-const { communityId } = route.params as unknown  as RouteParams;
+  const toast = useToast()
+
+  const { communityId } = route.params as unknown  as RouteParams;
   const { isLoading, data } = useGetOneCommunityQuery(communityId);
-  console.log(data);
+  const [leaveCommunity] = useLeaveCommunityMutation()
+  const {  data: isJoinedCommunity } = useGetJoinedCommunityQuery(communityId);
+
+  console.log(isJoinedCommunity)
 
   if(isLoading){
     return <Text>Loading...</Text>;
@@ -123,10 +134,51 @@ const { communityId } = route.params as unknown  as RouteParams;
     return <Text>No data available.</Text>; // Display a message when there is no data
   }
 
+  console.log(isJoinedCommunity)
+
+  const handleLeaveGroup = () => {
+    setShow(false);
+    const formData = {
+      community_id: communityId 
+    }
+    Alert.alert(
+      'Leave Group',
+      'Are you sure you want to leave this group?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'OK',
+          onPress: () => {
+            leaveCommunity(formData)
+            .unwrap()
+            .then((data) => {
+              // Handle success
+              console.log('res:', data);
+            })
+            .catch((error) => {
+              // Handle error
+              toast.show({
+                placement: 'top',
+                render: ({id}) => <Toaster id={id} type="error" message={error?.data.errors[0].message} />
+              })
+              console.error(error);
+            });
+          },
+        },
+      ],
+      // { cancelable: false }
+    ); 
+}
 
   return (
     <Layout
       title = "Group Details"
+      iconName="dots-horizontal"
+      onPress={()=> setShow(true)}
+
   >
     <View style={styles.container}>
       <View className='px-5'>
@@ -147,7 +199,13 @@ const { communityId } = route.params as unknown  as RouteParams;
           <Text className='text-black text-xs font-bold mt-3'>{data?.members.length} Members</Text>
           <Text className='text-gray text-xs font-normal'>Lagos, Nigeria Public group</Text>
         </View>
-       
+        {
+          !isJoinedCommunity?.flag?
+          <View className='mt-5'>
+            <CustomButton title='Join Group'  />
+          </View> : null
+        }
+      
         <View className='mt-5'>
           <View className="flex-row items-center justify-between mb-3">
             {/*  */}
@@ -165,6 +223,20 @@ const { communityId } = route.params as unknown  as RouteParams;
           </View> 
         </View>
       </View>
+      {/* BottomSheet component */}
+      <BottomSheet
+        show={show}
+        onDismiss={() => {
+          setShow(false);
+        }}
+        height={0.15}
+
+        enableBackdropDismiss
+      >
+        <View>
+          <CustomButton title='Leave group' onPress={handleLeaveGroup} />
+        </View>
+      </BottomSheet>
     </View>
   </Layout>
   )

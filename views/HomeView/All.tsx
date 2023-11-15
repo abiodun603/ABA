@@ -5,7 +5,7 @@ import { EventCard } from '../../screens/Community'
 const All = () => {
   return (
     <View>
-      <EventCard/>
+      <Text style={{color: "black"}}>See me</Text>
     </View>
   )
 }

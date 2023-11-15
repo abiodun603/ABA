@@ -3,6 +3,7 @@ import { baseQuery } from '../../../configs/authConfig'
 
 export interface User {
   id: string
+  name: string
   first_name: string
   last_name: string
   email: string
@@ -36,6 +37,7 @@ export interface ProfileResponse {
 export interface ProfileRequest {
   firstname: string
   username: string
+  id: string
 }
 
 interface OtpRequest {
@@ -45,6 +47,7 @@ interface OtpRequest {
 
 export const authApi = createApi({
   baseQuery,
+  tagTypes: ["Profile"],
   endpoints: (builder) => ({
     signup: builder.mutation<UserResponse, LoginRequest>({
       query: (credentials) => ({
@@ -71,14 +74,16 @@ export const authApi = createApi({
       query: (id) => ({
         url: `/personal_information/${id}`,
         method: 'GET'
-      })
-    }),
-    updateProfile: builder.mutation<void, ProfileRequest>({
-      query: (credentials) => ({
-        url: `/personal_information`,
-        method: 'PATCH',
-        body: credentials,
       }),
+      providesTags: ["Profile"]
+    }),
+    updateProfile: builder.mutation<void, Partial<ProfileRequest> & Pick<ProfileRequest, 'id'>>({
+      query: ({id, ...patch}) => ({
+        url: `/users/${id}`,
+        method: 'PATCH',
+        body: patch,
+      }),
+      invalidatesTags: ["Profile"]
     })
   }),
 })

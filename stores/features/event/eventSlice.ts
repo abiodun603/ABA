@@ -4,6 +4,7 @@ import type { RootState } from '../../store'
 
 type EventState = {
   location: string
+  cords: any
 }
 
 const eventSlice = createSlice({
@@ -11,9 +12,10 @@ const eventSlice = createSlice({
   initialState: { location: "" } as EventState,
   reducers: {
     setEventLocation: (state, action) => {
-      const { location } = action.payload;
+      const { location, cords } = action.payload;
       state.location = location;
-    },
+      state.cords = cords
+    }
   }
 })
 

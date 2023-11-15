@@ -35,10 +35,7 @@ type Props = NativeStackScreenProps<RootStackParamList, "EditProfile">;
 const StyledView = styled(View)
 
 const defaultValues = {
-  firstname: '',
-  username: '',
-  email: '',
-  phone: ''
+  name: '',
 }
 
 
@@ -55,15 +52,14 @@ const EditProfile: React.FC<Props> = ({ navigation: { navigate } }) => {
   const toast = useToast()
 
 
-  
+  console.log(profile, user)
 
 
-  const handleUpdate = async(data: ProfileRequest) => {
+  const handleUpdate = async(data: any) =>{
     // Handle login logic here
     const formData = {
-      id: user?.id,
-      firstname: data.firstname,
-      username: data.username
+      id: user.id,
+      name: data.name,
     }
     console.log(formData)
 
@@ -104,14 +100,14 @@ const EditProfile: React.FC<Props> = ({ navigation: { navigate } }) => {
 
   // Populate the form fields with the profile data when it's available
   useEffect(() => {
-    if (profile) {
+    if (user) {
       // Set the default values of the form fields using setValue
-      setValue('firstname', profile[0]?.firstname || ''); // Set the default value to an empty string if the property is undefined
-      setValue('username', profile[0]?.username || '');
-      setValue('email', user?.email || '');
-      setValue('phone', 'No phone number');
+      setValue('name', user.name || ''); // Set the default value to an empty string if the property is undefined
+      // setValue('username', user.username || '');
+      // setValue('email', user?.email || '');
+      // setValue('phone', 'No phone number');
     }
-  }, [profile, setValue]);
+  }, [user, setValue]);
 
   return (
     <Layout
@@ -135,11 +131,11 @@ const EditProfile: React.FC<Props> = ({ navigation: { navigate } }) => {
         <View className='flex flex-col '>
           <Divider className='my-8'/>
           <Input
-            name='firstname'
+            name='name'
             label="Full Name"
-            placeholder="Timothy Hilda"
+            placeholder=""
           />
-          <Input
+          {/* <Input
             name='username'
             label="Display Name"
             placeholder="Advocate001"
@@ -154,7 +150,7 @@ const EditProfile: React.FC<Props> = ({ navigation: { navigate } }) => {
             name='phone'
             label="Phone"
             placeholder="+23490897656"
-          />
+          /> */}
         </View>
         <CustomButton 
           title="Update" 

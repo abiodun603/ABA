@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View , TouchableOpacity, Dimensions, ImageBackground} from 'react-native'
-import React from 'react'
+import React, { useMemo, useState } from 'react'
 
 // ** Layout
 import Layout from '../../layouts/Layout';
@@ -14,16 +14,35 @@ import {Ionicons, MaterialIcons, FontAwesome} from "@expo/vector-icons"
 // ** Helpers
 import { ShortenedWord } from '../../helpers/wordShorther';
 
+// ** Components
+import { SelectList, MultipleSelectList } from 'react-native-dropdown-select-list';
+
 //
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from '../../types';
 import { GroupCatergory } from '../../utils/dummy';
-import { FlatList, ScrollView } from 'react-native-gesture-handler';
-import { useGetCommunityQuery, useJoinCommunityMutation } from '../../stores/features/groups/groupsService';
+import { FlatList, ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { useCreateCommunityMutation, useGetCommunityQuery, useJoinCommunityMutation } from '../../stores/features/groups/groupsService';
+import Input from '../../components/Input';
+import BottomSheet from '../../components/bottom-sheet/BottomSheet';
+import { FormProvider, useForm } from 'react-hook-form';
+import CustomButton from '../../components/CustomButton';
+import { useGetUsersQuery } from '../../stores/features/users/UsersService';
+import Toaster from '../../components/Toaster/Toaster';
 type Props = NativeStackScreenProps<RootStackParamList, "GroupJoin">;
 
 const screenWidth = Dimensions.get("window").width
 
+
+const status = [
+  {key:'1', value:'Select status', disabled:true},
+  {key:'private', value:'Private'},
+  {key:'public', value:'Public'},
+]
+
+const members = [
+  {key:'1', value:'Select members', disabled:true},
+]
 interface IGridViewProps<T> {
   data: T[];
   renderItem(iem: T): JSX.Element;
@@ -67,10 +86,7 @@ const JoinCard = ({name, members, community_id, navigate}: any) => {
           navigate("GroupConfirmation")
         }
        
-        if(response?.error.status == 500){
-          // navigate("Group")
-          console.log("toast me ")
-
+        if(response?.error?.status === 500){
           toast.show({
             placement: "top",
             render: ({ id }) => {
@@ -96,23 +112,25 @@ const JoinCard = ({name, members, community_id, navigate}: any) => {
     } catch (err: any) {
       // Handle errors, e.g., show an error message, log the error, etc.
       console.log('Error joining community:', err);
-      // if(err?.error?.status === 500){
-        toast.show({
-          placement: "top",
-          render: ({ id }) => {
-            return (
-              <Toast nativeID={id} action="error" variant="accent">
-                <VStack space="xs">
-                  <ToastTitle>New Message</ToastTitle>
-                  <ToastDescription>
-                    You already join this community
-                  </ToastDescription>
-                </VStack>
-              </Toast>
-            )
-          },
-        })
-      // }
+      if(err){
+        // if(err?.error?.status === 500){
+          toast.show({
+            placement: "top",
+            render: ({ id }) => {
+              return (
+                <Toast nativeID={id} action="error" variant="accent">
+                  <VStack space="xs">
+                    <ToastTitle>New Message</ToastTitle>
+                    <ToastDescription>
+                      You already join this community
+                    </ToastDescription>
+                  </VStack>
+                </Toast>
+              )
+            },
+          })
+        // }
+      }
     }
   };
   return (
@@ -144,7 +162,31 @@ const JoinCard = ({name, members, community_id, navigate}: any) => {
 
 
 const GroupJoin: React.FC<Props> = ({ navigation: { navigate } }) => {
+  const [show, setShow ] = useState(false) 
+  const [selectedStatus, setSelectedStatus] = useState("");
+  const [selectedMembers, setSelectedMembers] = useState<any[]>([])
+
+  const methods = useForm({});
+
   const {isLoading, data} = useGetCommunityQuery()
+  const {data: getAllUsers} = useGetUsersQuery()
+  const [createCommunity, {isLoading: createCommunityLoading}] = useCreateCommunityMutation()
+
+  const toast = useToast()
+
+  // Function
+  const newArray = useMemo(() => {
+    return (getAllUsers?.docs || []).map(
+      (item: { id: string; name: string }) => ({
+        key: item.id,
+        value: item.name,
+        disabled: false,
+      })
+    );
+  }, [getAllUsers?.docs]);
+
+  // Combine arrays using spread operator
+  members.push(...newArray);    
   console.log(data)
 
   if(isLoading){
@@ -158,10 +200,44 @@ const GroupJoin: React.FC<Props> = ({ navigation: { navigate } }) => {
   const firstTwoCommunity = data?.docs?.slice(0, 2);
   const remainingCommunity = data?.docs?.slice(2);
 
-  console.log(firstTwoCommunity)
+  const handleCreateCommunity = (data: any) => {
+    const formData = {
+      community_name: data.community_name,
+      community_description: data.community_description,
+      status: selectedStatus.toLowerCase(),
+      members: selectedMembers
+    }
+    methods.reset();
+
+    createCommunity(formData)
+    .unwrap()
+    .then((data) => {
+      // Handle success
+      console.log('res:', data);
+      toast.show({
+        placement: 'top',
+        render: ({id}) => <Toaster id={id} type="success" message="Thank you!!!. Community Created" />
+      })
+      setShow(false)
+
+    })
+    .catch((error) => {
+      // Handle error
+      toast.show({
+        placement: 'top',
+        render: ({id}) => <Toaster id={id} type="error" message={error?.data.errors[0].message} />
+      })
+      setShow(false)
+
+      console.error(error);
+    });
+  }
+  
   return (
     <Layout
-      title = "Community Join"
+      title = {show ? "Create new Community" : "Community Join"}
+      iconName={!show && "plus"}
+      onPress={()=> setShow(true)}
     >
       <ScrollView style = {styles.container} className=' mt-4'>
         <View className='px-4'>
@@ -184,12 +260,12 @@ const GroupJoin: React.FC<Props> = ({ navigation: { navigate } }) => {
             <View className='flex-row  space-x-2'>
               {/* icon calander */}
               <MaterialIcons name="location-searching" size={28} />
-              <View className=''>
+              <TouchableWithoutFeedback onPress={() => setShow(true)} className=''>
                 {/* day / month / year */}
-                <Text className='text-sm text-gray-800 font-bold'>Start a new group</Text>
+                <Text className='text-sm text-gray-800 font-bold'>Start a new community</Text>
                 {/* time */}
                 <Text className='text-xs text-gray-700 font-medium'>Organise your own events</Text>
-              </View>
+              </TouchableWithoutFeedback>
             </View>
             {/* icon */}
             <MaterialIcons name = "keyboard-arrow-right"  size={18}/>
@@ -234,6 +310,65 @@ const GroupJoin: React.FC<Props> = ({ navigation: { navigate } }) => {
           {/* <Text className=''>No Photo yet !!!</Text> */}
         </View>
           {/* <Text className=''>No Photo yet !!!</Text> */}
+
+         {/* BottomSheet component */}
+         <BottomSheet
+          show={show}
+          onDismiss={() => {
+            setShow(false);
+          }}
+          height={0.9}
+
+          enableBackdropDismiss
+        >
+          <FormProvider {...methods}>
+            <ScrollView showsVerticalScrollIndicator={false}>
+              {/* <Text className='font-medium text-2xl text-black '>Create a new events</Text> */}
+              <View className='mt-4'>
+                <Input
+                  name='community_name'
+                  label="Community name"
+                  placeholder="Enter community name"
+                />
+                <Input
+                  name='community_description'
+                  label="Community description"
+                  placeholder="Enter community description"
+                />
+                <View className='flex flex-col mb-5'>
+                  {/* <Text className=' font-normal text-sm text-black'>Gender</Text> */}
+                  <MultipleSelectList 
+                    setSelected={(val: React.SetStateAction<any[]>) => setSelectedMembers(val)} 
+                    data={members} 
+                    save="key"
+                    boxStyles={{borderRadius:4, borderColor: "#80747B", paddingLeft: 10}}
+                    search={false} 
+
+                    placeholder='Select community members'
+                  />
+                </View>
+                <View className='flex flex-col mb-5'>
+                  <SelectList 
+                    setSelected={(val: React.SetStateAction<string>) => setSelectedStatus(val)} 
+                    data={status} 
+                    save="value"
+                    boxStyles={{borderRadius:4, borderColor: "#80747B", height:56, paddingLeft: 10}}
+                    search={false} 
+                    placeholder='Select community status'
+                    
+                  />
+                </View>
+                <View className='mb-20'>
+                  <CustomButton
+                  title="Submit" 
+                  isLoading={createCommunityLoading}
+                  onPress={methods.handleSubmit(handleCreateCommunity)}              
+                  />
+                </View>
+              </View>
+            </ScrollView>
+          </FormProvider>
+        </BottomSheet>
       </ScrollView>
     </Layout>
   )

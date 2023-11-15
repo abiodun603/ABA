@@ -75,7 +75,7 @@ const Events: React.FC<Props> = ({ navigation: { navigate } }) => {
     <View style={styles.container}>
       {/* search button */}
       <View style={styles.inputContainer}>
-        <TextInput
+        {/* <TextInput
           placeholder='Search Events'
           placeholderTextColor="#4E444B" 
           style={{color: '#4E444B', width: '90%'}}
@@ -83,7 +83,7 @@ const Events: React.FC<Props> = ({ navigation: { navigate } }) => {
         <Ionicons
           style = {{ fontSize: FontSize.large, color: '#4E444B'}}
           name = "search"
-        />
+        /> */}
       </View>  
       <View className='mt-6' />
       {/* Events */}

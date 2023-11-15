@@ -7,16 +7,18 @@ import {Ionicons, MaterialIcons, FontAwesome} from "@expo/vector-icons"
 // ** Layout
 import Layout from '../../layouts/Layout';
 
-//
+// ** Third Party
+import MapView, { Marker } from 'react-native-maps'
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from '../../types';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Divider } from 'native-base';
 import CustomButton from '../../components/CustomButton';
-import { useGetEventDetailsQuery, useUpdateAttendEventMutation } from '../../stores/features/event/eventService';
+import { useGetEventDetailsQuery, useGetJoinedEventQuery, useLeaveEventMutation, useUpdateAttendEventMutation } from '../../stores/features/event/eventService';
 import { ShortenedWord } from '../../helpers/wordShorther';
 import Toaster from '../../components/Toaster/Toaster';
 import { useToast } from '@gluestack-ui/themed';
+import useLocation from '../../hooks/useLocation';
 
 // Define the type for your route parameters
 type RouteParams = {
@@ -29,12 +31,19 @@ type Props = NativeStackScreenProps<RootStackParamList, "EventDetails">;
 
 const EventDetails: React.FC<Props>  = ({navigation, route}) => {
   const [updateEventAttend, { isLoading: attendEventLoading, isError }] = useUpdateAttendEventMutation();
+  const [leaveEvent, { isLoading: isLeaveEventLoading }] = useLeaveEventMutation();
+
   const toast = useToast()
+  const {  cords } = useLocation()
+  console.log(cords)
+  
 
   const { eventId } = route.params as unknown  as RouteParams;;;
 
   const { isLoading, data } = useGetEventDetailsQuery(eventId);
-  console.log(data);
+  const {  data: isJoinedEvent } = useGetJoinedEventQuery(eventId);
+
+  console.log(isJoinedEvent);
 
   if(isLoading){
     return <Text>Loading...</Text>;
@@ -45,11 +54,9 @@ const EventDetails: React.FC<Props>  = ({navigation, route}) => {
   }
 
   const handleAttendEvent = () => {
-    // Make the PATCH request
     updateEventAttend(eventId)
     .unwrap()
     .then((data) => {
-      // Handle success
       console.log('Event attendance updated:', data);
       toast.show({
         placement: 'top',
@@ -57,15 +64,39 @@ const EventDetails: React.FC<Props>  = ({navigation, route}) => {
       })
     })
     .catch((error) => {
-      // Handle error
       toast.show({
         placement: 'top',
         render: ({id}) => <Toaster id={id} type="error" message={error?.data.error} />
       })
-      // console.error('Error updating event attendance:', error);
     });
-
   }
+
+  const handleLeaveEvent = () => {
+    leaveEvent(eventId)
+    .unwrap()
+    .then((data) => {
+      console.log(data)
+      toast.show({
+        placement: 'top',
+        render: ({id}) => <Toaster id={id} type="success" message="Opps!!! You left this event" />
+      })
+    })
+    .catch((error) => {
+      console.log(error)
+      toast.show({
+        placement: 'top',
+        render: ({id}) => <Toaster id={id} type="error" message={error?.data.error} />
+      })
+    });
+  }
+
+  const mapRegion = {
+    latitude : cords?.coords?.latitude,
+    longitude: cords?.coords?.longitude,
+    latitudeDelta: 0.0922, // You can adjust this value based on the desired zoom level
+    longitudeDelta: 0.0421,
+  }
+
   return (
     <Layout
       title = "Event Details"
@@ -74,8 +105,10 @@ const EventDetails: React.FC<Props>  = ({navigation, route}) => {
         <ScrollView>
           <View className='px-5'>
             {/* Image */}
-            <View className='h-40 bg-blue-900 rounded-lg flex items-center justify-center mt-5'>
-              <Text className='text-white text-center'>Image Banner Goes Here...</Text>
+            <View className='h-40  rounded-lg flex items-center justify-center mt-5'>
+              <MapView region={mapRegion} style = {{height: 160, width: "100%",}} >
+                <Marker coordinate={mapRegion} title='marker' />
+              </MapView>
             </View>
             <Text className='text-black text-lg font-bold mt-3'><ShortenedWord word={data?.event_name} maxLength={24} /></Text>
 
@@ -228,7 +261,11 @@ const EventDetails: React.FC<Props>  = ({navigation, route}) => {
         </ScrollView>
         <View className='fixed w-full h-24  flex-row items-center justify-between px-4 bg-gray-800 bottom-0 left-0 right-0'>
           <Text className='text-white font-semibold'>Free</Text>
-          <CustomButton title='Attend' onPress={handleAttendEvent} buttonStyle={{width: 100, borderRadius: 8}}/>
+          {
+            !isJoinedEvent?.flag ?
+              <CustomButton title='Attend' onPress={handleAttendEvent} buttonStyle={{width: 100, borderRadius: 8}} isLoading={attendEventLoading} /> : 
+              <CustomButton title='Leave Event' onPress={handleLeaveEvent} buttonStyle={{width: 100, borderRadius: 8}} isLoading={isLeaveEventLoading} />
+          }
         </View>
       </View>
     </Layout>

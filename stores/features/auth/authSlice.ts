@@ -4,14 +4,14 @@ import type { RootState } from '../../store'
 import { Profile, User, authApi } from './authService'
 
 type AuthState = {
-  user: User | null
+  user: User 
   token: string | null
   profile: Profile| null
 }
 
 const slice = createSlice({
   name: 'auth',
-  initialState: { user: null, token: null, profile: null } as AuthState,
+  initialState: { user: {}, token: null, profile: null } as AuthState,
   reducers: {},
   extraReducers: (builder) => {
     builder.addMatcher(

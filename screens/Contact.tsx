@@ -21,6 +21,8 @@ import { GroupCatergory } from '../utils/dummy'
 
 // ** Hooks
 import useGlobalState from '../hooks/global.state'
+import MapView, { Marker } from 'react-native-maps'
+import useLocation from '../hooks/useLocation'
 
 interface IEventCardProps {
   navigation?: any;
@@ -56,6 +58,7 @@ const Contact = ({navigation}: {navigation: any}) => {
   const [show, setShow ] = useState(false) 
   const [bookMark, setBookMark] = useState(false)
   const toggleBookMark = () => setBookMark(!bookMark)
+  const {  cords } = useLocation()
 
   const renderEventCard = (toggleBookMark: any, bookMark: any, navigation: any) => {
     const onShare = async () => {
@@ -111,7 +114,12 @@ const Contact = ({navigation}: {navigation: any}) => {
     )
   }
 
-
+  const mapRegion = {
+    latitude : cords?.coords?.latitude,
+    longitude: cords?.coords?.longitude,
+    latitudeDelta: 0.0922, // You can adjust this value based on the desired zoom level
+    longitudeDelta: 0.0421,
+  }
 
   return (
     <Layout
@@ -124,8 +132,10 @@ const Contact = ({navigation}: {navigation: any}) => {
       <ScrollView style={styles.container}>
       <View className='px-5'>
         {/* Image */}
-        <View className='h-40 bg-blue-900 rounded-lg flex items-center justify-center'>
-          <Text className='text-white text-center'>Maps goes here...</Text>
+        <View className='h-40  rounded-lg flex items-center justify-center mt-5'>
+          <MapView region={mapRegion} style = {{height: 160, width: "100%",}} >
+            <Marker coordinate={mapRegion} title='marker' />
+          </MapView>
         </View>
         <Text className='text-black text-sm font-bold my-3'>Discover events by date</Text>
 

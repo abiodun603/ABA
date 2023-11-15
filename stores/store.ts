@@ -10,6 +10,7 @@ import { eventsApi } from './features/event/eventService';
 import { resourcesApi } from './features/resources/resourcesService';
 import { profileApi } from './features/profile/profileService';
 import { groupsApi } from './features/groups/groupsService';
+import { usersApi } from './features/users/UsersService'
 
 const store = configureStore({
   reducer: {
@@ -19,6 +20,7 @@ const store = configureStore({
       [eventsApi.reducerPath]: eventsApi.reducer, 
       [resourcesApi.reducerPath]: resourcesApi.reducer,   
       [groupsApi.reducerPath]: groupsApi.reducer,
+      [usersApi.reducerPath]: usersApi.reducer,
       contact: contactReducer,
       findContact: findContactReducer,
       auth: authReducer,
@@ -30,12 +32,14 @@ const store = configureStore({
     const resourcesApiMiddleware = resourcesApi.middleware;
     const profileApiMiddleware = profileApi.middleware;
     const groupsApiMiddleware = groupsApi.middleware;
+    const usersApiMiddleware = usersApi.middleware;
     return getDefaultMiddleware()
       .concat(authApiMiddleware)
       .concat(eventsApiMiddleware)
       .concat(resourcesApiMiddleware)
       .concat(profileApiMiddleware)
       .concat(groupsApiMiddleware)
+      .concat(usersApiMiddleware)
   },
 });
 

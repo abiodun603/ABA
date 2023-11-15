@@ -6,9 +6,10 @@ export interface Profile {
   location:   string
   short_bio:  string
   roles:      string
+  id:         string
 }
 
 export interface ProfileResponse {
-  docs: Profile
+  docs: Profile[];
   user: Profile
 }

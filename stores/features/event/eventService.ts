@@ -1,10 +1,10 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { baseQuery } from '../../../configs/authConfig'
-import type { EventResponse } from '../../models/events.model'
+import type { EventRequest, EventResponse } from '../../models/events.model'
 
 
 export interface SaveEventRequest {
-  event: string
+  event_id: string
 }
 
 interface AttendEventRequest {
@@ -15,10 +15,18 @@ interface AttendEventRequest {
 export const eventsApi = createApi({
   baseQuery,
   reducerPath: 'eventsApi',
+  tagTypes: ["Event"],
   endpoints: (builder) => ({
     getEvents: builder.query<EventResponse, void>({
       query: () => ({
         url: '/events',
+        method: 'GET',
+      }),
+      providesTags: ["Event"]
+    }),
+    getEventTypes: builder.query<EventResponse, void>({
+      query: () => ({
+        url: '/eventTypes',
         method: 'GET',
       }),
     }),
@@ -32,19 +40,42 @@ export const eventsApi = createApi({
       query: (id) => ({ 
         url: `/events/${id}`,
         method: 'GET',
-      })
+      }),
+      providesTags: ["Event"]
     }),
     getSavedEvent: builder.query<EventResponse, void>({
       query: () => ({ 
-        url: "/saves/event",
+        url: "/events/save",
         method: 'GET',
       })
     }),
+    getJoinedEvent: builder.query<any, void>({
+      query: (id) => ({ 
+        url: `/events/getJoinedEventBoolean/${id}`,
+        method: 'GET',
+      }),
+      providesTags: ["Event"]
+    }),
+    createEvent: builder.mutation<void, EventRequest>({
+      query: (credentials) => ({ 
+        url: `/events`,
+        method: 'POST',
+        body: credentials
+      })
+    }), 
     updateAttendEvent: builder.mutation<void, AttendEventRequest>({
       query: (eventId) => ({
         url: `/events/attend/${eventId}`,
         method: 'PATCH',
       }),
+      invalidatesTags: ["Event"]
+    }),
+    leaveEvent: builder.mutation<void, number>({
+      query: (id) => ({
+        url: `/events/leave/${id}`,
+        method: 'PATCH',
+      }),
+      invalidatesTags: ["Event"]
     }),
     saveEvent: builder.mutation<void, SaveEventRequest>({
       query: (credentials) => ({ 
@@ -56,4 +87,4 @@ export const eventsApi = createApi({
   })
 })
 
-export const { useGetEventsQuery, useGetNextEventQuery, useUpdateAttendEventMutation, useGetEventDetailsQuery, useGetSavedEventQuery, useSaveEventMutation } = eventsApi
+export const { useGetEventsQuery, useGetNextEventQuery, useUpdateAttendEventMutation, useGetEventDetailsQuery, useGetJoinedEventQuery, useGetSavedEventQuery, useSaveEventMutation, useGetEventTypesQuery, useCreateEventMutation, useLeaveEventMutation} = eventsApi

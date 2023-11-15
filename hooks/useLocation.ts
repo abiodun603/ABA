@@ -3,9 +3,9 @@ import { useSelector } from 'react-redux';
 import { useAppSelector } from './useTypedSelector';
 
 const useLocation = () => {
-  const { location } = useAppSelector((state) => state.event);
+  const { location, cords} = useAppSelector((state) => state.event);
 
-  return { location };
+  return { location,  cords};
 };
 
 export default useLocation;

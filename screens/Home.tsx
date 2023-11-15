@@ -46,10 +46,19 @@ import { Platform } from 'react-native';
 import fetchCityFromCoordinates from '../services/fetchCityFromCoordinates';
 import { setEventLocation } from '../stores/features/event/eventSlice';
 import { useGetMyCommunityQuery } from '../stores/features/groups/groupsService';
+// import Past from './savedItems/Past';
 
 const screenWidth = Dimensions.get("window").width
 
 const viewConfigRef = { viewAreaCoveragePercentThreshold: 200 }
+
+
+const TabData = [
+  { name: "All", component: Past },
+  { name: "Going", component: Going },
+  { name: "Saved", component: Saved },
+  { name: "Past", component: Past },
+];
 
 const RenderItems = ({event_about, event_time ,event_name, event_city, event_id, navigation}: any) => {
   return (
@@ -83,20 +92,18 @@ const Home = ({navigation}: {navigation: any}) => {
   const dispatch = useAppDispatch();
   const {location: city} = useLocation()
   const[currentIndex, setCurrentIndex] = useState(0);
-  const {isFetching, data} = useGetProfileMeQuery()
-  const {isLoading, data: nextEventData, isSuccess} = useGetNextEventQuery(city)
+  const { data} = useGetProfileMeQuery()
+  const { data: nextEventData, isSuccess} = useGetNextEventQuery(city)
   const {isLoading: loadMyCommunity, data: myCommunity} = useGetMyCommunityQuery()
 
   console.log( loadMyCommunity, myCommunity)
 
-// Create a new array that includes the data items and "Discover More"
-let dataWithDiscoverMore: any[] = []
-if(!loadMyCommunity) {
-  dataWithDiscoverMore = [...myCommunity?.docs, { type: 'discover-more' }];
-}
-  const [location, setLocation] = useState<Location.LocationObject | null>(null);
+  // Create a new array that includes the data items and "Discover More"
+  let dataWithDiscoverMore: any[] = []
+  if(!loadMyCommunity) {
+    dataWithDiscoverMore = [...myCommunity?.docs, { type: 'discover-more' }];
+  }
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [currentCity, setCurrentCity] = useState<string | null>(null); // State for the current city
 
 
   useEffect(() => {
@@ -113,15 +120,15 @@ if(!loadMyCommunity) {
       }
 
       const userLocation = await Location.getCurrentPositionAsync({});
-      setLocation(userLocation);
 
       // Fetch the city based on coordinates
       const city:string = await fetchCityFromCoordinates(userLocation.coords.latitude, userLocation.coords.longitude);
       const data = {
         location: city,
+        cords: userLocation
       }
       dispatch(setEventLocation(data));
-      setCurrentCity(city);
+      console.log(userLocation)
     })();
   }, []);
 
@@ -144,13 +151,6 @@ if(!loadMyCommunity) {
   // const id = user?.id;
   // const {data} = useGetProfileQuery(id)
   // const docs = data?.docs;
-
-  const TabData = [
-    { name: "All", component: All },
-    { name: "Going", component: Going },
-    { name: "Saved", component: Saved },
-    { name: "Past", component: Past },
-  ];
 
   const DiscoverMoreGroups = () => {
     return (
@@ -259,10 +259,10 @@ if(!loadMyCommunity) {
             />
           </View>
         </View>
-
+        
         <View className='mt-8' >
           <View className="flex-row items-center justify-between mb-3">
-            <Text className="text-black text-sm font-semibold">Your Interests</Text>
+            <Text className="text-black text-sm font-semibold">Your Resources</Text>
             <Text className="text-ksecondary text-sm opacity-50 font-normal">Edit</Text>
           </View>
           {/* Interests */}
@@ -283,14 +283,16 @@ if(!loadMyCommunity) {
 
           </View>
         </View>
-        <View className='mt-10 mb-56'>
-          <View className="flex-row items-center justify-between mb-3">
-            {/*  */}
-            <Text className="text-black text-sm font-semibold">Your calendar</Text>
-          </View>
-          {/* Groups */}
-          <View style={{ flex: 1, flexDirection: "row" }} className=''>
-            <TopNavPanel tabs={TabData} /> 
+        <View>
+          <View className='mt-10 mb-10'>
+            <View className="flex-row items-center justify-between mb-3">
+              {/*  */}
+              <Text className="text-black text-sm font-semibold">Your calendar</Text>
+            </View>
+            {/* Groups */}
+            <View style={{ flex: 1 }}>
+              <TopNavPanel tabs={TabData} /> 
+            </View>
           </View>
         </View>
       </ScrollView>

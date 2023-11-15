@@ -173,10 +173,9 @@ const Create: React.FC<Props> = ({ navigation: { navigate } }) => {
                 boxStyles={{borderRadius:4, borderColor: "#80747B", height:56}}
                 search={false} 
                 placeholder='Select your gender'
+                
               />
             </View>
-
-
           {/* Passwords  set up */}
           {/* <Input
               label="Confirmation code"

@@ -2,6 +2,13 @@ interface GroupsCreator {
   email: string
 }
 
+export interface GroupRequest {
+  community_name: string
+  community_description: string
+  status: string
+  members: string[] 
+}
+
 export interface GroupsResponse {
   docs: any
   title: string

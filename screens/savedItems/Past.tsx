@@ -1,18 +1,21 @@
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, TextInput, ScrollView } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, TextInput, ImageBackground} from 'react-native'
+import React from 'react'
 
-// ** Constants 
+// ** Constants
 import FontSize from '../../constants/FontSize';
 import { Colors } from '../../constants';
 import Font from '../../constants/Font';
 
+// ** Third Pary
+import Ionicons from "@expo/vector-icons/Ionicons"
+import MaterialIcons from "@expo/vector-icons/MaterialIcons"
 
-// ** Store, Hooks
-import { useGetSavedEventQuery } from '../../stores/features/event/eventService';
-
-// ** Helpers
+// ** Store, Features
+import { useGetSavedResourcesQuery } from '../../stores/features/resources/resourcesService';
+import { ScrollView } from 'react-native';
 import { ShortenedWord } from '../../helpers/wordShorther';
-import { ImageBackground } from 'react-native';
+import { useGetPastEventQuery } from '../../stores/features/groups/groupsService';
+
 
 
 interface ICardProps {
@@ -24,11 +27,10 @@ interface ICardProps {
 }
 
 
-
 export const EventCard = ({event_about, event_time ,event_name, event_city, event_id, members, navigation}: any) => {
   return(
     <ScrollView style= {{width: "100%"}} className='border-b border-gray-200 mt-6 px-4'>
-      <TouchableOpacity 
+      <TouchableOpacity
         // onPress={() => navigation.navigate("EventDetails", { eventId: event_id })}
         // onPress={() =>handeViewEvent(event_id)}
         className='mb-3'>
@@ -65,32 +67,35 @@ export const EventCard = ({event_about, event_time ,event_name, event_city, even
 }
 
 
-const Event = () => {
-  const {data, isLoading} = useGetSavedEventQuery()
-  console.log(data, isLoading)
+const Past = () => {
+  const {data, isLoading} = useGetPastEventQuery()
+  console.log(data)
+
   return (
     <View style={styles.container}> 
+      {/* <View style={styles.inputContainer}>
+        <TextInput 
+          placeholder='Search Resources'
+          placeholderTextColor="#4E444B" 
+          style={{color: '#4E444B', width: '90%'}}
+        /> 
+        <Ionicons
+          style = {{ fontSize: FontSize.large, color: '#4E444B'}}
+          name = "search"
+        />
+      </View>      */}
       <FlatList
-        data={data?.docs  || []}
+        data={data?.docs}
         keyExtractor={item => item.id.toString()}
-        showsVerticalScrollIndicator = {false}
         renderItem={
-          ({item}) => 
-            <EventCard 
-              event_about={item?.event_id?.event_about} 
-              event_time={item?.event_id?.event_time} 
-              event_name={item?.event_id?.event_name} 
-              event_city={item?.event_id?.event_city} 
-              event_id={item?.event_id?.id} 
-              members = {item?.event_id?.members}
-            />
+          ({item}) => <EventCard event_about={item?.event_about} event_time={item?.event_time} event_name={item?.event_name} event_city={item?.event_city} event_id={item?.id} members = {item?.members}/>
         }
       />
     </View>
   )
 }
 
-export default Event
+export default Past
 
 
 const styles = StyleSheet.create({

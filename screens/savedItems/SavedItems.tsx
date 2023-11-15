@@ -5,10 +5,10 @@ import React from 'react'
 import Layout from '../../layouts/Layout'
 import TopNavPanel from '../../navigation/TopTabs';
 import Event from './Event';
-import Recieved from './Recieved';
+import Past from './Past';
 
 const TabData = [
-  { name: "Recieved", component: Recieved },
+  { name: "Past", component: Past },
   { name: "Events", component: Event },
 ];
 
