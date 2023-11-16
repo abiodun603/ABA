@@ -3,6 +3,7 @@ import {
   SafeAreaView,
   ScrollView,
   Text,
+  TouchableWithoutFeedback,
   View,
 } from "react-native";
 import React from "react";
@@ -31,9 +32,9 @@ const IdentifySuccess: React.FC<Props> = ({ navigation: { navigate } }) => {
       >
         {/* ====== ======== */}
         <View className="h-[80px]">
-          <View className="w-6 h-6 rounded-full border border-[#4E444B] justify-center items-center">
+          <TouchableWithoutFeedback onPress={() => navigate("Login")} className="w-6 h-6 rounded-full border border-[#4E444B] justify-center items-center">
             <Entypo name="cross" size={18} color={"#4E444B"} />
-          </View>
+          </TouchableWithoutFeedback>
           
         </View>
         {/* ====== ======== */}
@@ -50,7 +51,7 @@ const IdentifySuccess: React.FC<Props> = ({ navigation: { navigate } }) => {
         </View>
         <View>
         <View style={{ backgroundColor: "red"}} className="bg-red-800" />
-          <Button title="Go to Home" onPress={() => navigate("CustomDrawer")} />
+          <Button title="Go to Home" onPress={() => navigate("Login")} />
         </View>
       </ScrollView>
     </SafeAreaView>

@@ -1,20 +1,23 @@
-import React, { FC, useEffect, useRef, useState } from 'react'
-import { RootStackParamList } from "../../types";
+import { StyleSheet, Text, View } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import {StyleSheet, Text, View } from 'react-native';
 import Layout from '../../layouts/Layout';
-import FontSize from '../../constants/FontSize';
-import Font from '../../constants/Font';
-import Colors from '../../constants/Colors';
+import { RootStackParamList } from '../../types';
+import { KeyboardAvoidingView } from 'native-base';
+
+// ** Utils
+import socket from '../../utils/socket'
+
 import ChatTab from '../../components/ChatTab';
-import { useAppSelector } from '../../hooks/useTypedSelector';
-import socket from '../../utils/socket';
 import useGlobalState from '../../hooks/global.state';
-import { FlatList, Row } from 'native-base';
-import { KeyboardAvoidingView } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { useAppSelector } from '../../hooks/useTypedSelector';
+import { Colors } from '../../constants';
+import Font from '../../constants/Font';
+import FontSize from '../../constants/FontSize';
 import { formatTimestampToTime } from '../../helpers/timeConverter';
-type Props = NativeStackScreenProps<RootStackParamList, "ViewMessage">;
+import { FlatList } from 'react-native';
+import { ScrollView } from 'react-native';
+type Props = NativeStackScreenProps<RootStackParamList, "Chat">;
 
 type IChatIdProps = {
   message: string
@@ -34,7 +37,7 @@ interface IMessageCardProps {
 }
 const MessageCard = ({message, time, chatId}: {message: string, time: any, chatId: string}) => {
   const {user} = useGlobalState();
-  const [containerWidth, setContainerWidth] = useState(null);
+  const [containerWidth, setContainerWidth] = useState<any>(null);
   const contentRef = useRef<View | null>(null);
   useEffect(() => {
     if (contentRef.current) {
@@ -47,7 +50,7 @@ const MessageCard = ({message, time, chatId}: {message: string, time: any, chatI
   // console.log(getFindContactId, chatId)
   return (
     <View style={user?.id === chatId ? [styles.cardContainer, styles.rightChat, { width: containerWidth }]: [styles.cardContainer, , styles.leftChat, { width: containerWidth }]}>
-      <Text style={user?.id === chatId ? [styles.messageText]: {color: "#FFFFFF"}}>
+      <Text style={styles.messageText}>
         {message} 
       </Text>
       <Text style={[styles.time]} className="absolute -bottom-4 right-2">{formatTimestampToTime(time)}</Text>
@@ -55,18 +58,28 @@ const MessageCard = ({message, time, chatId}: {message: string, time: any, chatI
   )
 }
 
-const ViewMessage: React.FC<Props> = ({ navigation: { navigate } }) => {
+const Chat: React.FC<Props> = ({ navigation: { navigate } }) => {
   const [message, setMessage] = useState('');
-  const [chats, setChats] = useState<IMessageCardProps[] | null >(null);
   const [messagesRecieved, setMessagesReceived] = useState<any[]>([]);
-  const flatListRef = useRef(null);  
-  // const messagesColumnRef = useRef<HTMLDivElement | null>(null);
 
-  const getFindContactId = useAppSelector(state => state.findContact.id)
-  const getContactEmail = useAppSelector(state => state.findContact.email)
-  const getContactId = useAppSelector(state => state.findContact.contactId)
-  const {user} = useGlobalState();
-  console.log(getContactEmail, getFindContactId)
+  const flatListRef = useRef<FlatList<any>>(null);
+  
+   const {user} = useGlobalState()
+  const getChatId = useAppSelector(state => state.chatMember.chatId);
+  const getMemberEmail= useAppSelector(state => state.chatMember.email);
+  const getMemberId = useAppSelector(state => state.chatMember.memberId);
+
+  const handleSendMessage = () => {
+    const data = {
+      chatId: getChatId,
+      currentUserId: user?.id,
+      recipientId: getMemberId,
+      message: message
+    }
+
+    // socket.em
+    socket.emit("sendMessage", data)
+  }
 
   // Runs whenever a socket event is recieved from the server
   useEffect(() => {
@@ -90,11 +103,12 @@ const ViewMessage: React.FC<Props> = ({ navigation: { navigate } }) => {
       // socket.disconnect();
     };
   }, [socket]); 
+  
 
   // Add this
   useEffect(() => {
     const data = {
-      chatId: getFindContactId
+      chatId: getChatId
     }
     socket.emit('recieveMessage', data)
     socket.on("getAllMessageByChatId", (data) => {
@@ -114,7 +128,7 @@ const ViewMessage: React.FC<Props> = ({ navigation: { navigate } }) => {
       socket.off('recieveMessage')
       socket.off('getAllMessageByChatId')
     }
-  }, [socket])
+  }, [socket]);
 
   useEffect(() => {
     // Scroll to the end of the list when messages are added or changed
@@ -124,27 +138,10 @@ const ViewMessage: React.FC<Props> = ({ navigation: { navigate } }) => {
   }, [messagesRecieved]);
 
 
-  
-  
-
-  const handleSendMessage = () => {
-    const data = {
-      chatId: getFindContactId,
-      currentUserId: user?.id,
-      recipientId: getContactId,
-      message: message
-    }
-
-    // socket.em
-    socket.emit("sendMessage", data)
-  }
-  console.log(messagesRecieved)
-  console.log(user?.id);
   return (
-    <Layout 
-      title = {`${getContactEmail}`}
-      onPress={()=> navigate("NewMessage")}
-      extraOneIcon="call-outline"
+    <Layout
+      title = "Chats"
+      iconName="dots-horizontal"
     >
       <KeyboardAvoidingView style={styles.container}>
         <View style={{flex: 1}}>
@@ -152,16 +149,16 @@ const ViewMessage: React.FC<Props> = ({ navigation: { navigate } }) => {
             {
               messagesRecieved && messagesRecieved.length > 0 ? 
               <FlatList
-              ref={flatListRef}
-              data={messagesRecieved}
-              keyExtractor={(item, index) => item?.id}
-              renderItem={({ item }) => (
-                <MessageCard  message={item.message} time={item.time} chatId= {item.chatId} />
-              )}
-              onContentSizeChange={() => {
-                flatListRef.current?.scrollToEnd({ animated: true });
-              }}
-            />
+                ref={flatListRef}
+                data={messagesRecieved}
+                keyExtractor={(item, index) => item?.id}
+                renderItem={({ item }) => (
+                  <MessageCard  message={item.message} time={item.time} chatId= {item.chatId} />
+                )}
+                onContentSizeChange={() => {
+                  flatListRef.current?.scrollToEnd({ animated: true });
+                }}
+              />
               :  <Text className='text-center mt-6 '>No message yet</Text>
             } 
         </View>
@@ -171,16 +168,18 @@ const ViewMessage: React.FC<Props> = ({ navigation: { navigate } }) => {
   )
 }
 
-export default ViewMessage
+export default Chat
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 20,
+    position: 'relative',
   },
   time: {
     fontSize: 10,
     fontFamily: Font['inter-regular'],
+    color: Colors.gray,
     marginBottom: 25
   },
 
@@ -189,6 +188,7 @@ const styles = StyleSheet.create({
     position: "relative",
     flexDirection: "row",
     alignItems: "center",
+    backgroundColor: "#F5E5F5",
     borderTopRightRadius: FontSize.base,
     borderBottomLeftRadius: FontSize.base,
     borderBottomRightRadius: FontSize.base,
@@ -197,7 +197,6 @@ const styles = StyleSheet.create({
   },
   leftChat: {
   alignSelf: "flex-start",
-  backgroundColor: "#470F48",
   paddingRight: 60,
   paddingLeft: 20,
   paddingVertical: 10,
@@ -206,7 +205,6 @@ const styles = StyleSheet.create({
   rightChat: {
     alignSelf: "flex-end",
     paddingRight: 60,
-    backgroundColor: "#F5E5F5",
     paddingLeft: 20,
     paddingVertical: 10,
     maxWidth: 200
@@ -217,3 +215,4 @@ const styles = StyleSheet.create({
     fontSize: FontSize.small
   },
 })
+

@@ -4,7 +4,7 @@ import { baseQuery } from '../../../configs/authConfig'
 export interface User {
   id: string
   name: string
-  first_name: string
+  firstname: string
   last_name: string
   email: string
 }

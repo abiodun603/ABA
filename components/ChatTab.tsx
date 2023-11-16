@@ -18,14 +18,14 @@ const ChatTab: FC<IChatTabProps> = ({message, setMessage, onPress}) => {
   
 
   return (
-      <View style={styles.chatInputFieldContainer} className='mb-10'>
-        <TouchableOpacity
+      <View style={styles.chatInputFieldContainer} className='mb-10 space-x-4'>
+        {/* <TouchableOpacity
             onPress={() => null}
           >
           <MaterialCommunityIcons name='plus' color={Colors.gray} size={30}/>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         {/* ===== INPUT FIELD ===== */}
-        <View style={{flexGrow: 1}} className='mx-5' >
+        <View  className='w-[95%]' >
           <TextInput
             placeholder='Text message'
             mode="outlined"
@@ -49,12 +49,12 @@ export default ChatTab
 
 const styles = StyleSheet.create({
   chatInputFieldContainer:{
-    width: w*1,
+    width: "100%",
     // position: 'absolute', 
     // bottom: 0, 
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    // justifyContent: 'center',
     backgroundColor: '#FFFFFF',
     paddingHorizontal: 20
   }

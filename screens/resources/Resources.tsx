@@ -18,14 +18,12 @@ import Ionicons from "@expo/vector-icons/Ionicons"
 import Layout from '../../layouts/Layout';
 
 // ** Components
-import CustomButton from '../../components/CustomButton';
 
 //
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useGetSavedResourcesQuery } from '../../stores/features/resources/resourcesService';
 import { ShortenedWord } from '../../helpers/wordShorther';
 type Props = NativeStackScreenProps<RootStackParamList, "Resources">;
-const StyledView = styled(View)
 
 interface ICardProps {
   id: string ;

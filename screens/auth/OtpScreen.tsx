@@ -70,7 +70,7 @@ const OtpScreen: React.FC<Props> = ({ navigation: { navigate }, route}) => {
       // Being that the result is handled in extraReducers in authSlice,
       // we know that we're authenticated after this, so the user
       // and token will be present in the store
-      navigate("Login");
+      navigate("IdentifySuccess");
     });
   
   } catch (err: any) {

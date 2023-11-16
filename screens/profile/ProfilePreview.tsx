@@ -11,7 +11,7 @@ import { RootStackParamList } from "../../types";
 
 // ** Third Party
 import { styled } from 'nativewind';
-import { Box, Divider } from 'native-base';
+import {  Divider } from 'native-base';
 
 // ** Layout
 import Layout from '../../layouts/Layout';
@@ -29,7 +29,7 @@ const StyledView = styled(View)
 
 
 const ProfilePreview: React.FC<Props> = ({ navigation: { navigate } }) => {
-  const {profile, user} = useGlobalState()
+  const { user} = useGlobalState()
   console.log(user)
   return (
     <Layout
@@ -41,12 +41,12 @@ const ProfilePreview: React.FC<Props> = ({ navigation: { navigate } }) => {
 
       </View>
       {/* name */}
-      <Text className='text-kblack font-normal text-[22px] mt-3'>{profile && profile[0].firstname}</Text>
+      <Text className='text-kblack font-normal text-[22px] mt-3'>{user?.name || ""}</Text>
       <Divider className='mt-2'/>
 
       {/* username */}
       <View className='mt-6 space-y-1'>
-        <Text className='text-kdesc text-[11px] text-medium'>@{profile && profile[0].username}</Text>
+        {/* <Text className='text-kdesc text-[11px] text-medium'>@{profile && profile[0].username}</Text> */}
         <Text className='text-kblack text-sm font-normal'>{user && user.email}</Text>
         <Text className='text-kgreen text-[11px] font-normal'>Active</Text>
       </View>

@@ -34,9 +34,7 @@ const EventDetails: React.FC<Props>  = ({navigation, route}) => {
   const [leaveEvent, { isLoading: isLeaveEventLoading }] = useLeaveEventMutation();
 
   const toast = useToast()
-  const {  cords } = useLocation()
-  console.log(cords)
-  
+  const {  cords } = useLocation()  
 
   const { eventId } = route.params as unknown  as RouteParams;;;
 

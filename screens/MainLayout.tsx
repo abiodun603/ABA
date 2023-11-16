@@ -24,7 +24,7 @@ import { setSelectedTab } from '../stores/tab/tabAction'
 // ** Components
 import Colors from '../constants/Colors'
 import Home from './Home'
-import Messages from './messages/Messages'
+// import Messages from './messages/Messages'
 import Community from './Community'
 import Profile from './Profile'
 import Contact from './Contact';
@@ -256,7 +256,7 @@ const MainLayout = ({navigation, selectedTab, setSelectedTab}: {navigation: any,
                     >
                       {item.label === constants.screens.home && <Home navigation={navigation}/>}
                       {item.label == constants.screens.contact && <Contact navigation={navigation}/>}
-                      {item.label == constants.screens.chats && <Messages navigation={navigation}/>}
+                      {/* {item.label == constants.screens.chats && <Messages navigation={navigation}/>} */}
                       {item.label == constants.screens.community && <Community navigation={navigation}/>}
                       {item.label == constants.screens.profile && <Profile navigation={navigation}/>}
                     </View>

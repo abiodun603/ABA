@@ -46,6 +46,13 @@ export const groupsApi = createApi({
       }),
       providesTags: ["Community"]
     }),
+    getCommunityMembers: builder.query<any, string>({
+      query: (id) => ({ 
+        url: `/community/members/${id}`,
+        method: 'GET',
+      }),
+      providesTags: ["Community"]
+    }),
     leaveCommunity: builder.mutation<void, GetOneCommunityRequest>({
       query: (credentials) => ({ 
         url: `/community/leave`,
@@ -91,4 +98,4 @@ export const groupsApi = createApi({
   })
 })
 
-export const { useGetCommunityQuery, useGetOneCommunityQuery, useGetMyCommunityQuery, useGetEventDetailsQuery, useGetSavedEventQuery, useJoinCommunityMutation, useCreateCommunityMutation, useLeaveCommunityMutation, useGetPastEventQuery, useGetJoinedCommunityQuery } = groupsApi
+export const {useGetCommunityMembersQuery, useGetCommunityQuery, useGetOneCommunityQuery, useGetMyCommunityQuery, useGetEventDetailsQuery, useGetSavedEventQuery, useJoinCommunityMutation, useCreateCommunityMutation, useLeaveCommunityMutation, useGetPastEventQuery, useGetJoinedCommunityQuery } = groupsApi

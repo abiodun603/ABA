@@ -23,8 +23,6 @@ import { connect } from 'react-redux'
 import { ShortenedWord } from '../helpers/wordShorther';
 
 // ** Components
-import { CustomMenu } from '../components/Menu/Menu'
-import { useGetProfileQuery } from '../stores/features/auth/authService'
 import useGlobalState from '../hooks/global.state'
 import CustomButton from '../components/CustomButton'
 import { interestTypes } from '../utils/dummy'
@@ -46,6 +44,7 @@ import { Platform } from 'react-native';
 import fetchCityFromCoordinates from '../services/fetchCityFromCoordinates';
 import { setEventLocation } from '../stores/features/event/eventSlice';
 import { useGetMyCommunityQuery } from '../stores/features/groups/groupsService';
+import socket from '../utils/socket';
 // import Past from './savedItems/Past';
 
 const screenWidth = Dimensions.get("window").width
@@ -94,6 +93,7 @@ const Home = ({navigation}: {navigation: any}) => {
   const[currentIndex, setCurrentIndex] = useState(0);
   const { data} = useGetProfileMeQuery()
   const { data: nextEventData, isSuccess} = useGetNextEventQuery(city)
+  const {user} = useGlobalState()
   const {isLoading: loadMyCommunity, data: myCommunity} = useGetMyCommunityQuery()
 
   console.log( loadMyCommunity, myCommunity)
@@ -131,6 +131,24 @@ const Home = ({navigation}: {navigation: any}) => {
       console.log(userLocation)
     })();
   }, []);
+
+  useEffect(() => {
+    // Fetch contacts when the component mounts
+    const addSocketId = () => {
+      const data = {
+        current_user : user?.id
+      }
+      console.log(data);
+      socket.emit("addUser", data);
+    };
+    addSocketId();
+   console.log("i just fired")
+    // Clean up the socket listener when the component unmounts
+    return () => {
+      socket.off("addUser");
+      socket.disconnect();
+    };
+  }, []); 
 
   // Store Service
   const fullName = data?.user?.name || ""

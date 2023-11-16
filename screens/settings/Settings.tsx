@@ -11,24 +11,10 @@ import { RootStackParamList } from "../../types";
 
 // ** Third Party
 import { styled } from 'nativewind';
-import { Divider } from 'native-base';
 import Entypo from "@expo/vector-icons/Entypo"
-
-// name file user-plus
-import Feather from "@expo/vector-icons/Feather"
-//name globe
-import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons"
-//name shield-key-outline web web-clock
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons"
-// name note
-import Octicons from "@expo/vector-icons/Octicons"
-
 
 // ** Layout
 import Layout from '../../layouts/Layout';
-
-// ** Components
-import CustomButton from '../../components/CustomButton';
 
 //
 import { NativeStackScreenProps } from "@react-navigation/native-stack";

@@ -10,8 +10,6 @@ import OtpScreen from "../screens/auth/OtpScreen";
 import ResetPassword from "../screens/auth/ResetPasswordScreen";
 import ResetSuccess from "../screens/auth/ResetSuccess";
 import CustomDrawer from "./CustomDrawer";
-import ViewMessage from "../screens/messages/ViewMessage";
-import NewMessage from "../screens/messages/NewMessage";
 import Welcome from "../screens/onboard/Welcome";
 import AccountOption from "../screens/auth/AccountOption";
 import ResetCode from "../screens/auth/ResetCode";
@@ -30,7 +28,6 @@ import CommunityInvites from "../screens/community/CommunityInvites";
 import SetPassword from "../screens/auth/SetPassword";
 import EmailVerification from "../screens/auth/EmailVerification";
 import Preview from "../screens/pdf/Preview";
-import Messages from "../screens/messages/Messages";
 import Notification from "../screens/notification/Notification";
 import Identification from "../screens/auth/Identification";
 import Role from "../screens/identification/Role";
@@ -41,6 +38,8 @@ import GroupCat from "../screens/groups/GroupCat";
 import GroupJoin from "../screens/groups/GroupJoin";
 import GroupConfirmation from "../screens/groups/GroupConfirmation";
 import Group from "../screens/groups/Group";
+import Members from "../screens/chat/Members";
+import Chat from "../screens/chat/Chat";
 
 const theme = {
   ...DefaultTheme,
@@ -74,6 +73,9 @@ export default function Navigation() {
     >
       <Stack.Screen name="Welcome" component={Welcome} /> 
       <Stack.Screen name="ProfileNotification" component={ProfileNotification} /> 
+      {/* Chat */}
+      <Stack.Screen name="Members" component={Members} />  
+      <Stack.Screen name="Chat" component={Chat} />
       {/* Group */}
       <Stack.Screen name = "Group" component={Group} />
       <Stack.Screen name = "GroupCat" component={GroupCat} />
@@ -106,11 +108,7 @@ export default function Navigation() {
       <Stack.Screen name="Notification" component={Notification}/>
       <Stack.Screen name="Identification" component={Identification}/>
       {/* <Stack.Screen name="TopNavPanel" component={TopNavPanel}/> */}
-
-
-      <Stack.Screen name="CustomDrawer" component={CustomDrawer} />  
-      <Stack.Screen name="ViewMessage" component={ViewMessage} />  
-      <Stack.Screen name="NewMessage" component={NewMessage} />   
+      <Stack.Screen name="CustomDrawer" component={CustomDrawer} />   
     </Stack.Navigator>
   );
 }

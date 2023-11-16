@@ -1,5 +1,5 @@
-import { Button, Dimensions, FlatList, ImageBackground, ScrollView, Share, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useMemo, useState } from 'react'
+import {  Dimensions, FlatList, ImageBackground, ScrollView, Share, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useMemo, useState } from 'react'
 
 // ** Constants 
 import Colors from '../constants/Colors'
@@ -32,15 +32,6 @@ import Toaster from '../components/Toaster/Toaster'
 import { useCreateEventMutation, useGetEventsQuery, useGetEventTypesQuery, useSaveEventMutation } from '../stores/features/event/eventService'
 import { useGetUsersQuery } from '../stores/features/users/UsersService'
 import { useToast } from '@gluestack-ui/themed'
-import { EventRequest, EventResponse } from '../stores/models/events.model'
-
-
-const windowHeight = Dimensions.get('window').height;
-const windowWidth = Dimensions.get('window').width
-interface IEventCardProps {
-  navigation?: any;
-}
-
 
 
 const data = [

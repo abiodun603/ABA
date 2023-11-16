@@ -4,7 +4,7 @@ import { authApi } from './features/auth/authService';
 import authReducer from './features/auth/authSlice'
 import eventReducer from './features/event/eventSlice'
 import contactReducer from './features/contacts/contactSlice'
-import findContactReducer from './features/findContact/findContactSlice'
+import chatMemberReducer from './features/chatMember/chatMemberDetail'
 import tabReducer from './tab/tabReducer';
 import { eventsApi } from './features/event/eventService';
 import { resourcesApi } from './features/resources/resourcesService';
@@ -22,7 +22,7 @@ const store = configureStore({
       [groupsApi.reducerPath]: groupsApi.reducer,
       [usersApi.reducerPath]: usersApi.reducer,
       contact: contactReducer,
-      findContact: findContactReducer,
+      chatMember: chatMemberReducer,
       auth: authReducer,
       tabReducer: tabReducer,
   },

@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, TextInput, ImageBackground} from 'react-native'
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, ImageBackground} from 'react-native'
 import React from 'react'
 
 // ** Constants
@@ -6,26 +6,11 @@ import FontSize from '../../constants/FontSize';
 import { Colors } from '../../constants';
 import Font from '../../constants/Font';
 
-// ** Third Pary
-import Ionicons from "@expo/vector-icons/Ionicons"
-import MaterialIcons from "@expo/vector-icons/MaterialIcons"
 
 // ** Store, Features
-import { useGetSavedResourcesQuery } from '../../stores/features/resources/resourcesService';
 import { ScrollView } from 'react-native';
 import { ShortenedWord } from '../../helpers/wordShorther';
 import { useGetPastEventQuery } from '../../stores/features/groups/groupsService';
-
-
-
-interface ICardProps {
-  id: string ;
-  email: string;
-  resource: string
-  filename?: string
-  onPress?: ()=>void;
-}
-
 
 export const EventCard = ({event_about, event_time ,event_name, event_city, event_id, members, navigation}: any) => {
   return(

@@ -1,5 +1,5 @@
-import { Dimensions, FlatList, Image, ImageBackground, ScrollView, Share, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { FC, useEffect, useState } from 'react'
+import { FlatList, Image, ImageBackground, ScrollView, Share, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useState } from 'react'
 
 // ** Constants 
 import Colors from '../constants/Colors'
@@ -23,10 +23,6 @@ import { GroupCatergory } from '../utils/dummy'
 import useGlobalState from '../hooks/global.state'
 import MapView, { Marker } from 'react-native-maps'
 import useLocation from '../hooks/useLocation'
-
-interface IEventCardProps {
-  navigation?: any;
-}
 
 const eventsDays =  ["Today", "Tomorrow", "This weekend", "Choose date", "All upcoming"]
 

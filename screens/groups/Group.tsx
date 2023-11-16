@@ -14,7 +14,7 @@ import {Ionicons, MaterialIcons, FontAwesome} from "@expo/vector-icons"
 import { ShortenedWord } from '../../helpers/wordShorther';
 import { FlatList } from 'react-native';
 import { Avatar, AvatarFallbackText, AvatarGroup, AvatarImage, useToast } from '@gluestack-ui/themed';
-import { useGetJoinedCommunityQuery, useGetOneCommunityQuery, useLeaveCommunityMutation } from '../../stores/features/groups/groupsService';
+import { useGetCommunityMembersQuery, useGetJoinedCommunityQuery, useGetOneCommunityQuery, useLeaveCommunityMutation } from '../../stores/features/groups/groupsService';
 
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -22,6 +22,7 @@ import BottomSheet from '../../components/bottom-sheet/BottomSheet';
 import CustomButton from '../../components/CustomButton';
 import { Alert } from 'react-native';
 import Toaster from '../../components/Toaster/Toaster';
+import { ScrollView } from 'react-native-gesture-handler';
 
 type Props = NativeStackScreenProps<RootStackParamList, "Group">;
 const StyledView = styled(View)
@@ -123,8 +124,9 @@ const Group: React.FC<Props> = ({ navigation: { navigate } , route}) => {
   const { isLoading, data } = useGetOneCommunityQuery(communityId);
   const [leaveCommunity] = useLeaveCommunityMutation()
   const {  data: isJoinedCommunity } = useGetJoinedCommunityQuery(communityId);
+  const { data: getCommunityMembers} =  useGetCommunityMembersQuery(communityId)
 
-  console.log(isJoinedCommunity)
+  // console.log(isJoinedCommunity)
 
   if(isLoading){
     return <Text>Loading...</Text>;
@@ -195,6 +197,21 @@ const Group: React.FC<Props> = ({ navigation: { navigate } , route}) => {
           <Text className='text-black text-xs font-normal mt-3'>Part of {data?.community_name} (117 groups)</Text>
           <Text className='text-gray-800 text-lg font-bold mt-2'>MCTNAIJA-TechUSERGROUP</Text>
         </View>
+        <TouchableOpacity 
+          onPress={()=> navigate("Members", {communityId})}>
+          <FlatList
+            data={getCommunityMembers?.docs || []}
+            horizontal
+            showsHorizontalScrollIndicator = {false}
+            keyExtractor={(item: any, index: { toString: () => any; }) => index.toString()}
+            renderItem={({ item }: any) => 
+              <View className='w-10 mr-1 mt-3 h-10 rounded-full border border-black bg-blue-400 items-center justify-center'>
+                <Text>{(item.name || '').charAt(0).toUpperCase()}</Text>
+              </View>
+          }
+          />
+        </TouchableOpacity>
+      
         <View>
           <Text className='text-black text-xs font-bold mt-3'>{data?.members.length} Members</Text>
           <Text className='text-gray text-xs font-normal'>Lagos, Nigeria Public group</Text>

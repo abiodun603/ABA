@@ -52,9 +52,9 @@ const ResetCode: React.FC<Props> = ({ navigation: { navigate } }) => {
 
   const handleResetCode = async (data: UserData) => {
     const { otp,  } = data
-    auth.otp({ otp }, () => {
+    // auth.otp({ otp }, () => {
       
-    })
+    // })
     navigate("ResetPassword")
   };
 
