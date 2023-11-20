@@ -13,7 +13,7 @@ import { useGetSavedEventQuery } from '../../stores/features/event/eventService'
 // ** Helpers
 import { ShortenedWord } from '../../helpers/wordShorther';
 import { ImageBackground } from 'react-native';
-
+import { useNavigation } from '@react-navigation/native';
 
 interface ICardProps {
   id: string ;
@@ -29,7 +29,7 @@ export const EventCard = ({event_about, event_time ,event_name, event_city, even
   return(
     <ScrollView style= {{width: "100%"}} className='border-b border-gray-200 mt-6 px-4'>
       <TouchableOpacity 
-        // onPress={() => navigation.navigate("EventDetails", { eventId: event_id })}
+        onPress={() => navigation.navigate("EventDetails", { eventId: event_id })}
         // onPress={() =>handeViewEvent(event_id)}
         className='mb-3'>
           <View className='flex-row ' >
@@ -67,6 +67,7 @@ export const EventCard = ({event_about, event_time ,event_name, event_city, even
 
 const Event = () => {
   const {data, isLoading} = useGetSavedEventQuery()
+  const navigation = useNavigation();
   console.log(data, isLoading)
   return (
     <View style={styles.container}> 
@@ -83,6 +84,7 @@ const Event = () => {
               event_city={item?.event_id?.event_city} 
               event_id={item?.event_id?.id} 
               members = {item?.event_id?.members}
+              navigation={navigation}
             />
         }
       />

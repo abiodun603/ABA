@@ -116,22 +116,8 @@ const Create: React.FC<Props> = ({ navigation: { navigate } }) => {
           rightNavigation = "Sign in"
           head={`Enter your ${'\n'}Information Details`}
           description="Enter your name to get started"
-          rightNavPress={() => navigate("Login")}
+          rightNavPress={() =>  console.log("Click me")}
         />
-
-        {/* Password  set up */}
-        {/* <AuthHeader 
-          rightNavigation = "Sign in"
-          head={`Setup your ${'\n'}Password`}
-          description="Secure your account by creating a password"
-        /> */}
-          
-        {/* Email Verificaiton  set up */}
-        {/* <AuthHeader 
-          head={`Email Verification`}
-          description="Secure your account by creating a password"
-        /> */}
-
         <FormProvider {...methods}>
           {/* ====== ======== */}
           <View style={{marginVertical: 20}} className="grow" >
@@ -176,32 +162,15 @@ const Create: React.FC<Props> = ({ navigation: { navigate } }) => {
                 
               />
             </View>
-          {/* Passwords  set up */}
-          {/* <Input
-              label="Confirmation code"
-              placeholder="Enter confirmation code"
-              passwordIcon
-            />
-            <Text style={styles.text1}>
-              Didn’t get confirmation code? 
-              <Text style={[styles.text2, {textDecorationLine: "underline"}]}>{" "}Resend</Text>
-            </Text> */}
           </View>
           <View>
             <View style={{ backgroundColor: "red"}} className="bg-red-800" />
               {/* Email Address set up */}
               <Button title="Sign up" isLoading={isLoading} onPress={methods.handleSubmit(handleSignup)} />
-              {/* Password set up */}
-                            {/* <Button title="Sign Up" onPress={() => navigate("CustomDrawer")} /> */}
-              { /* Verification set up */}
-                        {/* <Button title="Submit" onPress={() => navigate("CustomDrawer")} /> */}
-
-
-            <Text style={styles.text1}>
-              By continuing, you agree to One Reach’s{'\n'} 
-              <Text style={styles.text2}>Terms & Conditions</Text> and <Text style={styles.text2}>Privacy Policy.</Text>
-            </Text>
-
+              <Text style={styles.text1}>
+                By continuing, you agree to One Reach’s{'\n'} 
+                <Text style={styles.text2}>Terms & Conditions</Text> and <Text style={styles.text2}>Privacy Policy.</Text>
+              </Text>
           </View>
         </FormProvider>
       </ScrollView>

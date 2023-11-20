@@ -38,7 +38,7 @@ const GridView = <T extends any>(props: IGridViewProps<T>) => {
 const GroupCat: React.FC<Props> = ({ navigation: { navigate } }) => {
   return (
     <Layout
-      title = "Groups"
+      title = "Community"
     >
      <View className='px-4 mt-4'>
         <View className="flex-row items-center justify-between mb-1 ">

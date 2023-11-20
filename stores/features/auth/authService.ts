@@ -70,6 +70,13 @@ export const authApi = createApi({
         body: {otp: credentials.otp},
       }),
     }),
+    otpResend: builder.mutation<any, OtpRequest>({
+      query: (credentials) => ({
+        url: `/users/resend`,
+        method: 'POST',
+        body: credentials,
+      }),
+    }),
     getProfile: builder.query<ProfileResponse, string>({
       query: (id) => ({
         url: `/personal_information/${id}`,
@@ -88,4 +95,4 @@ export const authApi = createApi({
   }),
 })
 
-export const { useLoginMutation, useOtpMutation, useSignupMutation,  useUpdateProfileMutation, useGetProfileQuery } = authApi
+export const { useOtpResendMutation, useLoginMutation, useOtpMutation, useSignupMutation,  useUpdateProfileMutation, useGetProfileQuery } = authApi

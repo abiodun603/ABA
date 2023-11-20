@@ -18,7 +18,7 @@ import { SelectList, MultipleSelectList } from 'react-native-dropdown-select-lis
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 // ** Helpers
-import { formatTimestampToTime } from '../helpers/timeConverter'
+import { formatTimestampToTime, formatTimestampToTimeWithMidday } from '../helpers/timeConverter'
 import { formatDate } from '../helpers/formatDate'
 import { ShortenedWord } from '../helpers/wordShorther'
 
@@ -32,6 +32,7 @@ import Toaster from '../components/Toaster/Toaster'
 import { useCreateEventMutation, useGetEventsQuery, useGetEventTypesQuery, useSaveEventMutation } from '../stores/features/event/eventService'
 import { useGetUsersQuery } from '../stores/features/users/UsersService'
 import { useToast } from '@gluestack-ui/themed'
+import { getTimeZone } from '../helpers/timeZoneformat'
 
 
 const data = [
@@ -109,12 +110,12 @@ export const EventCard = ({event_about, event_time ,event_name, event_city, even
     saveEvent(formData)
     .unwrap()
     .then((data) => {
-      // // Handle success
-      // console.log('res:', data);
-      // toast.show({
-      //   placement: 'top',
-      //   render: ({id}) => <Toaster id={id} type="success" message="Thank you!!!. Community Created" />
-      // })
+      // Handle success
+      console.log('res:', data);
+      toast.show({
+        placement: 'top',
+        render: ({id}) => <Toaster id={id} type="success" message="Thank you!!!. Event have been saved" />
+      })
     })
     .catch((error) => {
       // Handle error
@@ -285,7 +286,7 @@ const Contact = ({navigation}: {navigation: any}) => {
       event_city: data.event_city,
       event_date: date1,
       event_types: selectedEventType,
-      event_time: `${time1} - ${time2}`,
+      event_time: `${formatTimestampToTimeWithMidday(time1)} - ${formatTimestampToTimeWithMidday(time2)} ${getTimeZone(date1)}`,
       event_address: data.event_address,
       event_tags: [{"tag":"event"},{"tag":"chster"}],
       hosted_by: selectedHost,
@@ -293,7 +294,7 @@ const Contact = ({navigation}: {navigation: any}) => {
       status: selectedStatus.toLowerCase(),
     }
 
-    console.log(formData, selectedEventType);
+    // console.log(formData, date1);
     createEvent(formData)
     .unwrap()
     .then((data) => {

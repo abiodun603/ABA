@@ -13,8 +13,8 @@ import {Ionicons, MaterialIcons, FontAwesome} from "@expo/vector-icons"
 // ** Helpers
 import { ShortenedWord } from '../../helpers/wordShorther';
 import { FlatList } from 'react-native';
-import { Avatar, AvatarFallbackText, AvatarGroup, AvatarImage, useToast } from '@gluestack-ui/themed';
-import { useGetCommunityMembersQuery, useGetJoinedCommunityQuery, useGetOneCommunityQuery, useLeaveCommunityMutation } from '../../stores/features/groups/groupsService';
+import { Avatar, AvatarFallbackText, AvatarGroup, AvatarImage, Toast, ToastDescription, ToastTitle, VStack, useToast } from '@gluestack-ui/themed';
+import { useGetCommunityMembersQuery, useGetJoinedCommunityQuery, useGetOneCommunityQuery, useJoinCommunityMutation, useLeaveCommunityMutation } from '../../stores/features/groups/groupsService';
 
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -125,6 +125,8 @@ const Group: React.FC<Props> = ({ navigation: { navigate } , route}) => {
   const [leaveCommunity] = useLeaveCommunityMutation()
   const {  data: isJoinedCommunity } = useGetJoinedCommunityQuery(communityId);
   const { data: getCommunityMembers} =  useGetCommunityMembersQuery(communityId)
+  const [joinCommunity, { isLoading: isJoining }, ] = useJoinCommunityMutation()
+
 
   // console.log(isJoinedCommunity)
 
@@ -173,7 +175,68 @@ const Group: React.FC<Props> = ({ navigation: { navigate } , route}) => {
       ],
       // { cancelable: false }
     ); 
-}
+  }
+
+  const handleJoinPress = async () => {
+    try {
+      const id = {
+        community_id: communityId
+      }
+      // Make the API call to join the community
+      const response: any = await joinCommunity(id);
+      if (response) {
+        console.log(response)
+        // if(response?.data.status){
+        //   navigate("GroupConfirmation")
+        // }
+       
+        if(response?.error?.status === 500){
+          toast.show({
+            placement: "top",
+            render: ({ id }) => {
+              return (
+                <Toast nativeID={id} action="error" variant="accent">
+                  <VStack space="xs">
+                    <ToastTitle>New Message</ToastTitle>
+                    <ToastDescription>
+                      {response?.error?.data.error}
+                    </ToastDescription>
+                  </VStack>
+                </Toast>
+              )
+            },
+          })
+          return;
+          // navigate.("Group")
+        }
+        return;
+      } else {
+        // Handle any other specific cases, if needed
+      }
+    } catch (err: any) {
+      // Handle errors, e.g., show an error message, log the error, etc.
+      console.log('Error joining community:', err);
+      if(err){
+        // if(err?.error?.status === 500){
+          toast.show({
+            placement: "top",
+            render: ({ id }) => {
+              return (
+                <Toast nativeID={id} action="error" variant="accent">
+                  <VStack space="xs">
+                    <ToastTitle>New Message</ToastTitle>
+                    <ToastDescription>
+                      You already join this community
+                    </ToastDescription>
+                  </VStack>
+                </Toast>
+              )
+            },
+          })
+        // }
+      }
+    }
+  };
 
   return (
     <Layout
@@ -195,7 +258,7 @@ const Group: React.FC<Props> = ({ navigation: { navigate } , route}) => {
             />
           </View>
           <Text className='text-black text-xs font-normal mt-3'>Part of {data?.community_name} (117 groups)</Text>
-          <Text className='text-gray-800 text-lg font-bold mt-2'>MCTNAIJA-TechUSERGROUP</Text>
+          <Text className='text-gray-800 text-lg font-bold mt-2 uppercase'>{data?.community_name}-community</Text>
         </View>
         <TouchableOpacity 
           onPress={()=> navigate("Members", {communityId})}>
@@ -219,7 +282,7 @@ const Group: React.FC<Props> = ({ navigation: { navigate } , route}) => {
         {
           !isJoinedCommunity?.flag?
           <View className='mt-5'>
-            <CustomButton title='Join Group'  />
+            <CustomButton title='Join Community' isLoading={isJoining}  onPress={handleJoinPress}/>
           </View> : null
         }
       

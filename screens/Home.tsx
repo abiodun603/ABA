@@ -281,11 +281,11 @@ const Home = ({navigation}: {navigation: any}) => {
         <View className='mt-8' >
           <View className="flex-row items-center justify-between mb-3">
             <Text className="text-black text-sm font-semibold">Your Resources</Text>
-            <Text className="text-ksecondary text-sm opacity-50 font-normal">Edit</Text>
+            <Text className="text-ksecondary text-sm opacity-50 font-normal">See all</Text>
           </View>
           {/* Interests */}
           <View >
-            <FlatList
+            {/* <FlatList
               data={interestTypes}
               horizontal
               keyExtractor={(item, index) => index.toString()}
@@ -297,8 +297,8 @@ const Home = ({navigation}: {navigation: any}) => {
                       </View>
                     </TouchableOpacity>
             </View>}
-            />
-
+            /> */}
+            <Text className='mt-1  text-sm text-ksecondary font-medium'>Opps!!! No Resource Available</Text>          
           </View>
         </View>
         <View>

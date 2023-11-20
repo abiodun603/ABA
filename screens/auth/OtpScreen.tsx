@@ -30,7 +30,7 @@ import Button from "../../components/CustomButton";
 
 // ** Types
 import { RootStackParamList } from "../../types";
-import { useOtpMutation } from "../../stores/features/auth/authService";
+import { useOtpMutation, useOtpResendMutation } from "../../stores/features/auth/authService";
 import { useToast } from "@gluestack-ui/themed";
 import Toaster from "../../components/Toaster/Toaster";
 type Props = NativeStackScreenProps<RootStackParamList, "OtpScreen">;
@@ -51,6 +51,7 @@ const OtpScreen: React.FC<Props> = ({ navigation: { navigate }, route}) => {
   const { email } = route.params as unknown  as RouteParams;
   const methods = useForm({defaultValues});
   const [otp, { isLoading }] = useOtpMutation();
+  const [otpResend] = useOtpResendMutation();
   const toast = useToast()
 
 
@@ -94,6 +95,41 @@ const OtpScreen: React.FC<Props> = ({ navigation: { navigate }, route}) => {
   }
   }
 
+  const handleResend = async () => {
+    const data = {
+      email: email
+    }
+    console.log(data)
+    try{
+      await otpResend(data)
+      .unwrap().then((res: any) => {
+        console.log(res)
+        toast.show({
+          placement: "top",
+          render: ({ id }) => <Toaster id = {id} message="Otp Resent successfully" type="success"  />
+        })
+      });
+    }catch (err: any) {
+      console.log(err)
+      if(err.status === 401){
+        toast.show({
+          placement: "top",
+          render: ({ id }) => <Toaster id = {id} message="Error "   />
+        })
+      }
+      if(err.status === 500){
+        toast.show({
+          placement: "top",
+          render: ({ id }) => <Toaster id = {id} message="OTP validation failed"  />
+        })
+      }
+      toast.show({
+        placement: "top",
+        render: ({ id }) => <Toaster id = {id} message="Error "   />
+      });
+    }
+  }
+
   return (
     <SafeAreaView>
       <ScrollView 
@@ -125,7 +161,9 @@ const OtpScreen: React.FC<Props> = ({ navigation: { navigate }, route}) => {
           </View>
         {/* ===== ======= */}
         </FormProvider>
-        <Text style={styles.text3}>Didn’t receive a code?<Text style={styles.text4} > Click to resend</Text>.</Text>
+        <TouchableOpacity onPress={handleResend}>
+          <Text style={styles.text3}>Didn’t receive a code?<Text style={styles.text4} > Click to resend</Text>.</Text>
+        </TouchableOpacity>
 
         {/* ===== ======== */}
         <TouchableOpacity onPress={() => navigate("Login")} style={{marginTop: Spacing, flexDirection: "row", justifyContent: "center", alignItems: "center"}}>

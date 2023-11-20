@@ -61,7 +61,8 @@ export const eventsApi = createApi({
         url: `/events`,
         method: 'POST',
         body: credentials
-      })
+      }),
+      invalidatesTags: ["Event"]
     }), 
     updateAttendEvent: builder.mutation<void, AttendEventRequest>({
       query: (eventId) => ({

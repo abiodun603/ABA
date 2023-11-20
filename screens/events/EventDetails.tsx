@@ -146,7 +146,7 @@ const EventDetails: React.FC<Props>  = ({navigation, route}) => {
                 <Text className='text-white'>Logo</Text>
               </View>
               <View>
-                <Text className='text-sm line-4 font-bold '>Telvida Tech</Text>
+                <Text className='text-sm line-4 font-bold '><ShortenedWord word={data?.event_name} maxLength={6} /></Text>
                 <Text className='text-sm font-normal text-gray-600 capitalize'>{data?.status}</Text>
               </View>
             </View>
