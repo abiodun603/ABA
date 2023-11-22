@@ -34,6 +34,10 @@ export interface ProfileResponse {
   profile: Profile
 }
 
+export interface forgetPasswordRequest {
+  email: string
+}
+
 export interface ProfileRequest {
   firstname: string
   username: string
@@ -59,6 +63,13 @@ export const authApi = createApi({
     login: builder.mutation<UserResponse, LoginRequest>({
       query: (credentials) => ({
         url: '/users/login',
+        method: 'POST',
+        body: credentials,
+      }),
+    }),
+    forgetPassword: builder.mutation<UserResponse, forgetPasswordRequest>({
+      query: (credentials) => ({
+        url: '/users/forgotPassword',
         method: 'POST',
         body: credentials,
       }),
@@ -95,4 +106,4 @@ export const authApi = createApi({
   }),
 })
 
-export const { useOtpResendMutation, useLoginMutation, useOtpMutation, useSignupMutation,  useUpdateProfileMutation, useGetProfileQuery } = authApi
+export const { useOtpResendMutation, useForgetPasswordMutation, useLoginMutation, useOtpMutation, useSignupMutation,  useUpdateProfileMutation, useGetProfileQuery } = authApi

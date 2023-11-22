@@ -30,6 +30,9 @@ import { useAuth } from "../../hooks/useAuth";
 // ** Component
 import Input from "../../components/Input";
 import Button from "../../components/CustomButton";
+import { useForgetPasswordMutation } from "../../stores/features/auth/authService";
+import { useToast } from "@gluestack-ui/themed";
+import Toaster from "../../components/Toaster/Toaster";
 
 
 
@@ -47,16 +50,51 @@ const defaultValues = {
 const ForgetPassword: React.FC<Props> = ({ navigation: { navigate } }) => {
   const [toggleCheckBox, setToggleCheckBox] = useState(false)
   const methods = useForm({defaultValues});
+  const [forgetPassword, { isLoading }] = useForgetPasswordMutation();
+
+  const toast = useToast()
 
    // ** Hooks
    const auth = useAuth()
 
   const handleForgetPassword = async (data: UserData) => {
-    const { email,  } = data
-    // auth.forgetPass({ email }, () => {
-      
-    // })
-    navigate("ResetCode")
+    const formData = {
+      email: data.email,
+    }
+    try {
+      await forgetPassword(formData).unwrap().then((res: any) => {
+        const userEmail = res?.doc.email
+        console.log(res)
+        // toast.show({
+        //   placement: "top",
+        //   render: ({ id }) => <Toaster id = {id} message="" type="success"  />
+        // })
+        methods.reset()
+        // Being that the result is handled in extraReducers in authSlice,
+        // we know that we're authenticated after this, so the user
+        // and token will be present in the store
+        navigate("OtpScreen", { email: userEmail} as { email: any });
+      });
+    
+    } catch (err: any) {
+      console.log(err)
+      if(err.status === 401){
+        toast.show({
+          placement: "top",
+          render: ({ id }) => <Toaster id = {id} message="Error Signing up"   />
+        })
+      }
+      if(err.status === 500){
+        toast.show({
+          placement: "top",
+          render: ({ id }) => <Toaster id = {id} message="Error Signing up"   />
+        })
+      }
+      toast.show({
+        placement: "top",
+        render: ({ id }) => <Toaster id = {id} message="Error Signing up"   />
+      });
+    }
   };
 
   return (
