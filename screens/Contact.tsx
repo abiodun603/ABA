@@ -23,7 +23,7 @@ import { GroupCatergory } from '../utils/dummy'
 import useGlobalState from '../hooks/global.state'
 import MapView, { Marker } from 'react-native-maps'
 import useLocation from '../hooks/useLocation'
-import { useGetPopularEventsQuery } from '../stores/features/event/eventService'
+import { useGetEventsByCatTypeQuery, useGetPopularEventsQuery } from '../stores/features/event/eventService'
 import { ShortenedWord } from '../helpers/wordShorther'
 
 const eventsDays =  ["Today", "Tomorrow", "This weekend", "Choose date", "All upcoming"]
@@ -58,15 +58,19 @@ const Contact = ({navigation}: {navigation: any}) => {
   const toggleBookMark = () => setBookMark(!bookMark)
   const {  cords } = useLocation()
   const {isLoading: isPopularEventsLoading, data: getPopularEvents} = useGetPopularEventsQuery()
+  const {isLoading: isEventsByCatTypeLoading, data: getEventsByCatType} = useGetEventsByCatTypeQuery()
 
-  console.log(getPopularEvents)
-  if(isPopularEventsLoading){
+  console.log(getEventsByCatType)
+
+  if(isPopularEventsLoading && isEventsByCatTypeLoading){
     return <Text>Loading...</Text>;
   }
 
-  if (!getPopularEvents) {
+  if (!getPopularEvents && !getEventsByCatType) {
     return <Text>No data available.</Text>; // Display a message when there is no data
   }
+  // const categories = Object.keys(getEventsByCatType.docs || {});
+
 
   const renderEventCard = (event_id: string,about: string, name: string, time: string, city: any,  toggleBookMark: any, bookMark: any, navigation: any) => {
     const onShare = async () => {
@@ -188,20 +192,24 @@ const Contact = ({navigation}: {navigation: any}) => {
               showsHorizontalScrollIndicator = {false}
             />
           </View> 
-        {/* </View>
-        <View className='mt-3'>
-          <Text className='text-black text-xs font-bold my-2'>Movements</Text>
-          <View>
-            <FlatList
-              horizontal
-              data = {[1, 2, 3, 4]}
-              renderItem={() => renderEventCard(toggleBookMark, bookMark, navigation)}
-              keyExtractor={(item, index) => index.toString()}
-              showsHorizontalScrollIndicator = {false}
-            />
-          </View> 
         </View>
-        <View className='mt-3'>
+        <View>
+        {getEventsByCatType?.docs &&
+          Object.keys(getEventsByCatType?.docs).map((category, index) => (
+            <View key={index} className='mt-3'>
+              <Text className='text-black text-xs font-bold my-2 capitalize'>{category}</Text>
+              <FlatList
+                horizontal
+                data={getEventsByCatType?.docs[category] || []}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item }) => renderEventCard(item.id, item.event_about, item.event_name, item.event_time, item.event_city, toggleBookMark, bookMark, navigation)}
+                showsHorizontalScrollIndicator={false}
+              />
+            </View>
+          ))}
+        </View>
+       
+        {/* <View className='mt-3'>
           <Text className='text-black text-xs font-bold my-2'>Tech</Text>
           <View>
             <FlatList
@@ -223,8 +231,8 @@ const Contact = ({navigation}: {navigation: any}) => {
               keyExtractor={(item, index) => index.toString()}
               showsHorizontalScrollIndicator = {false}
             />
-          </View> */}
-        </View> 
+          </View>
+        </View>  */}
           
       </View>
 

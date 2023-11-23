@@ -30,6 +30,12 @@ export const eventsApi = createApi({
         method: 'GET',
       })
     }),
+    getEventsByCatType: builder.query<EventResponse, void>({
+      query: () => ({
+        url: '/events/sortByEventType',
+        method: 'GET',
+      })
+    }),
     getEventTypes: builder.query<EventResponse, void>({
       query: () => ({
         url: '/eventTypes',
@@ -104,4 +110,4 @@ export const eventsApi = createApi({
   })
 })
 
-export const { useGetEventsQuery, useGetPopularEventsQuery, useUnSaveEventMutation, useGetNextEventQuery, useUpdateAttendEventMutation, useGetEventDetailsQuery, useGetJoinedEventQuery, useGetSavedEventQuery, useSaveEventMutation, useGetEventTypesQuery, useCreateEventMutation, useLeaveEventMutation} = eventsApi
+export const { useGetEventsQuery, useGetEventsByCatTypeQuery, useGetPopularEventsQuery, useUnSaveEventMutation, useGetNextEventQuery, useUpdateAttendEventMutation, useGetEventDetailsQuery, useGetJoinedEventQuery, useGetSavedEventQuery, useSaveEventMutation, useGetEventTypesQuery, useCreateEventMutation, useLeaveEventMutation} = eventsApi
