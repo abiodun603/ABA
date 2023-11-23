@@ -24,7 +24,7 @@ export type RootStackParamList = {
   Group: undefined;
   GroupConfirmation: undefined;
   GroupCat: undefined;
-  GroupJoin: undefined;
+  GroupJoin: any;
   //Chats
   Members: any;
   Chat: any;

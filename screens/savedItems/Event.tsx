@@ -30,7 +30,7 @@ interface ICardProps {
 
 
 export const EventCard = ({event_about, event_time ,event_name, event_city, event_id, members, navigation}: any) => {
-  const [bookMark, setBookMark] = useState(false)
+  const [bookMark, setBookMark] = useState(true)
 
   const [unSaveEvent] = useUnSaveEventMutation()
   const toast = useToast()

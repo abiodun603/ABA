@@ -15,7 +15,7 @@ interface AttendEventRequest {
 export const eventsApi = createApi({
   baseQuery,
   reducerPath: 'eventsApi',
-  tagTypes: ["Event"],
+  tagTypes: ["Event", "SaveEvent"],
   endpoints: (builder) => ({
     getEvents: builder.query<EventResponse, void>({
       query: () => ({
@@ -47,7 +47,8 @@ export const eventsApi = createApi({
       query: () => ({ 
         url: "/events/save",
         method: 'GET',
-      })
+      }),
+      providesTags: ["SaveEvent"]
     }),
     getJoinedEvent: builder.query<any, void>({
       query: (id) => ({ 
@@ -84,13 +85,14 @@ export const eventsApi = createApi({
         method: 'POST',
         body: credentials
       }),
-      invalidatesTags: ["Event"]
+      invalidatesTags: ["SaveEvent"]
     }),
     unSaveEvent: builder.mutation<void, any>({
       query: (id) => ({ 
         url: `/events/unsave/${id}`,
         method: 'DELETE',
-      })
+      }),
+      invalidatesTags: ["SaveEvent"]
     })
   })
 })

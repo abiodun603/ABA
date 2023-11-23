@@ -24,6 +24,20 @@ export const groupsApi = createApi({
       }),
       providesTags: ["Community"],
     }),
+    getCategory: builder.query<GroupsResponse, void>({
+      query: () => ({
+        url: '/category',
+        method: 'GET',
+      }),
+      providesTags: ["Community"],
+    }),
+    getCategoryById: builder.query<GroupsResponse, any>({
+      query: (id) => ({
+        url: `/community/${id}`,
+        method: 'GET',
+      }),
+      providesTags: ["Community"],
+    }),
     createCommunity: builder.mutation<void, GroupRequest>({
       query: (credentials) => ({ 
         url: `/community`,
@@ -98,4 +112,4 @@ export const groupsApi = createApi({
   })
 })
 
-export const {useGetCommunityMembersQuery, useGetCommunityQuery, useGetOneCommunityQuery, useGetMyCommunityQuery, useGetEventDetailsQuery, useGetSavedEventQuery, useJoinCommunityMutation, useCreateCommunityMutation, useLeaveCommunityMutation, useGetPastEventQuery, useGetJoinedCommunityQuery } = groupsApi
+export const {useGetCommunityMembersQuery, useGetCategoryByIdQuery, useGetCategoryQuery, useGetCommunityQuery, useGetOneCommunityQuery, useGetMyCommunityQuery, useGetEventDetailsQuery, useGetSavedEventQuery, useJoinCommunityMutation, useCreateCommunityMutation, useLeaveCommunityMutation, useGetPastEventQuery, useGetJoinedCommunityQuery } = groupsApi

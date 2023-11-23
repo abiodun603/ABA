@@ -10,6 +10,7 @@ import { RootStackParamList } from '../../types';
 import { GroupCatergory } from '../../utils/dummy';
 import { TouchableOpacity } from 'react-native';
 import { ImageBackground } from 'react-native';
+import { useGetCategoryQuery } from '../../stores/features/groups/groupsService';
 type Props = NativeStackScreenProps<RootStackParamList, "GroupCat">;
 
 interface IGridViewProps<T> {
@@ -36,6 +37,18 @@ const GridView = <T extends any>(props: IGridViewProps<T>) => {
 }
 
 const GroupCat: React.FC<Props> = ({ navigation: { navigate } }) => {
+  const {data, isLoading} = useGetCategoryQuery()
+
+  if(isLoading){
+    return <Text>Loading...</Text>;
+  }
+
+  if (!data?.docs) {
+    return <Text>No data available.</Text>; // Display a message when there is no data
+  }
+
+  console.log(data)
+
   return (
     <Layout
       title = "Community"
@@ -47,9 +60,9 @@ const GroupCat: React.FC<Props> = ({ navigation: { navigate } }) => {
         </View>
         <View>
           <GridView 
-            data={GroupCatergory} 
-            renderItem={(item) => (
-              <TouchableOpacity className=' mt-4 flex-row items-center space-x-2' onPress={() => navigate("GroupJoin")}>
+            data={data?.docs} 
+            renderItem={(item: any) => (
+              <TouchableOpacity className=' mt-4 flex-row items-center space-x-2' onPress={() => navigate("GroupJoin", {id: item.id })}>
                 <View className='h-[80px] w-[80px] rounded-lg  justify-center items-center'>
                   <ImageBackground
                     resizeMode="cover"
@@ -58,7 +71,7 @@ const GroupCat: React.FC<Props> = ({ navigation: { navigate } }) => {
                     source = {{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvVRjzi266UV2c8204Wa2FDqwwxkXFDU4Ybw&usqp=CAU'}}
                   />
                 </View>
-                <Text className='text-black text-xs font-semibold mt-1'>{item}</Text>
+                <Text className='text-black text-xs font-semibold mt-1'>{item?.category_name}</Text>
               </TouchableOpacity>
              
             )}

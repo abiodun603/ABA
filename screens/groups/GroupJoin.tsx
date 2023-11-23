@@ -22,7 +22,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from '../../types';
 import { GroupCatergory } from '../../utils/dummy';
 import { FlatList, ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import { useCreateCommunityMutation, useGetCommunityQuery, useJoinCommunityMutation } from '../../stores/features/groups/groupsService';
+import { useCreateCommunityMutation, useGetCategoryByIdQuery, useGetCommunityQuery, useJoinCommunityMutation } from '../../stores/features/groups/groupsService';
 import Input from '../../components/Input';
 import BottomSheet from '../../components/bottom-sheet/BottomSheet';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -30,7 +30,10 @@ import CustomButton from '../../components/CustomButton';
 import { useGetUsersQuery } from '../../stores/features/users/UsersService';
 import Toaster from '../../components/Toaster/Toaster';
 type Props = NativeStackScreenProps<RootStackParamList, "GroupJoin">;
-
+// Define the type for your route parameters
+type RouteParams = {
+  id: any;
+};
 const screenWidth = Dimensions.get("window").width
 
 
@@ -161,14 +164,15 @@ const JoinCard = ({name, members, community_id, navigate}: any) => {
 }
 
 
-const GroupJoin: React.FC<Props> = ({ navigation: { navigate } }) => {
+const GroupJoin: React.FC<Props> = ({ navigation: { navigate } , route}) => {
+  const { id} = route.params as unknown  as RouteParams;
   const [show, setShow ] = useState(false) 
   const [selectedStatus, setSelectedStatus] = useState("");
   const [selectedMembers, setSelectedMembers] = useState<any[]>([])
 
   const methods = useForm({});
 
-  const {isLoading, data} = useGetCommunityQuery()
+  const {isLoading, data} = useGetCategoryByIdQuery(id)
   const {data: getAllUsers} = useGetUsersQuery()
   const [createCommunity, {isLoading: createCommunityLoading}] = useCreateCommunityMutation()
 
