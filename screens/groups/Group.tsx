@@ -123,14 +123,14 @@ const Group: React.FC<Props> = ({ navigation: { navigate } , route}) => {
   const { communityId } = route.params as unknown  as RouteParams;
   const { isLoading, data } = useGetOneCommunityQuery(communityId);
   const [leaveCommunity] = useLeaveCommunityMutation()
-  const {  data: isJoinedCommunity } = useGetJoinedCommunityQuery(communityId);
-  const { data: getCommunityMembers} =  useGetCommunityMembersQuery(communityId)
+  const {  data: isJoinedCommunity, isLoading: isJoinedCommunityLoading } = useGetJoinedCommunityQuery(communityId);
+  const { data: getCommunityMembers, isLoading: isCommunityMembersLoading}  =  useGetCommunityMembersQuery(communityId)
   const [joinCommunity, { isLoading: isJoining }, ] = useJoinCommunityMutation()
 
 
   // console.log(isJoinedCommunity)
 
-  if(isLoading){
+  if(isLoading && isJoinedCommunityLoading && isCommunityMembersLoading){
     return <Text>Loading...</Text>;
   }
 
@@ -138,7 +138,7 @@ const Group: React.FC<Props> = ({ navigation: { navigate } , route}) => {
     return <Text>No data available.</Text>; // Display a message when there is no data
   }
 
-  console.log(isJoinedCommunity)
+  console.log(getCommunityMembers)
 
   const handleLeaveGroup = () => {
     setShow(false);
@@ -276,7 +276,7 @@ const Group: React.FC<Props> = ({ navigation: { navigate } , route}) => {
         </TouchableOpacity>
       
         <View>
-          <Text className='text-black text-xs font-bold mt-3'>{data?.members.length} Members</Text>
+          <Text className='text-black text-xs font-bold mt-3'>{getCommunityMembers?.docs?.length || 0} Members</Text>
           <Text className='text-gray text-xs font-normal'>Lagos, Nigeria Public group</Text>
         </View>
         {

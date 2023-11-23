@@ -24,6 +24,12 @@ export const eventsApi = createApi({
       }),
       providesTags: ["Event"]
     }),
+    getPopularEvents: builder.query<EventResponse, void>({
+      query: () => ({
+        url: '/events/popular',
+        method: 'GET',
+      })
+    }),
     getEventTypes: builder.query<EventResponse, void>({
       query: () => ({
         url: '/eventTypes',
@@ -93,8 +99,9 @@ export const eventsApi = createApi({
         method: 'DELETE',
       }),
       invalidatesTags: ["SaveEvent"]
-    })
+    }),
+  
   })
 })
 
-export const { useGetEventsQuery, useUnSaveEventMutation, useGetNextEventQuery, useUpdateAttendEventMutation, useGetEventDetailsQuery, useGetJoinedEventQuery, useGetSavedEventQuery, useSaveEventMutation, useGetEventTypesQuery, useCreateEventMutation, useLeaveEventMutation} = eventsApi
+export const { useGetEventsQuery, useGetPopularEventsQuery, useUnSaveEventMutation, useGetNextEventQuery, useUpdateAttendEventMutation, useGetEventDetailsQuery, useGetJoinedEventQuery, useGetSavedEventQuery, useSaveEventMutation, useGetEventTypesQuery, useCreateEventMutation, useLeaveEventMutation} = eventsApi

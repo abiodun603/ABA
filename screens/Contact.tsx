@@ -23,6 +23,8 @@ import { GroupCatergory } from '../utils/dummy'
 import useGlobalState from '../hooks/global.state'
 import MapView, { Marker } from 'react-native-maps'
 import useLocation from '../hooks/useLocation'
+import { useGetPopularEventsQuery } from '../stores/features/event/eventService'
+import { ShortenedWord } from '../helpers/wordShorther'
 
 const eventsDays =  ["Today", "Tomorrow", "This weekend", "Choose date", "All upcoming"]
 
@@ -55,8 +57,18 @@ const Contact = ({navigation}: {navigation: any}) => {
   const [bookMark, setBookMark] = useState(false)
   const toggleBookMark = () => setBookMark(!bookMark)
   const {  cords } = useLocation()
+  const {isLoading: isPopularEventsLoading, data: getPopularEvents} = useGetPopularEventsQuery()
 
-  const renderEventCard = (toggleBookMark: any, bookMark: any, navigation: any) => {
+  console.log(getPopularEvents)
+  if(isPopularEventsLoading){
+    return <Text>Loading...</Text>;
+  }
+
+  if (!getPopularEvents) {
+    return <Text>No data available.</Text>; // Display a message when there is no data
+  }
+
+  const renderEventCard = (event_id: string,about: string, name: string, time: string, city: any,  toggleBookMark: any, bookMark: any, navigation: any) => {
     const onShare = async () => {
       const options = {
         message: "Telvida Conferences at London Texas.  i neva reach there before"
@@ -82,8 +94,8 @@ const Contact = ({navigation}: {navigation: any}) => {
       
     }
     return(
-      <TouchableOpacity  className='h-60 w-52 rounded-lg mr-3'>
-        <View style={{flex:1}} className='rounded-t-lg bg-blue-500'>
+      <TouchableOpacity  className='h-60 w-56 rounded-lg mr-3' onPress={() => navigation.navigate("EventDetails", { eventId: event_id })}>
+         <View style={{flex:1}} className='rounded-t-lg bg-blue-500'>
           <Image
             source={{
               uri: 'https://reactnative.dev/img/tiny_logo.png',
@@ -91,15 +103,15 @@ const Contact = ({navigation}: {navigation: any}) => {
             className='w-full'
           />
         </View>
-        <View style={{flex:1}} className='rounded-b-lg bg-gray-100 p-2 '>
+        <View style={{flex:1}} className='rounded-b-lg bg-gray-100 p-2 justify-between'>
           <View className=''>
-            <Text className='text-yellow-500 text-xs font-bold'>SAT, 21 OCT 10:00</Text>
+            <Text className='text-yellow-500 text-xs font-bold'><ShortenedWord word={time} maxLength={27}/></Text>
             {/* Event Description */}
-            <Text className='text-xs text-black opacity-80 font-bold mt-2' numberOfLines={2} ellipsizeMode="tail">Azure Community Con23: Exploring Innovative and Az...</Text>
-            <Text className='text-gray-500 text-xs font-normal mt-1'>Nigeria Microsoft Azure Meetup...</Text>
+            <Text className='text-xs text-black opacity-80 font-bold mt-2 h-' numberOfLines={2} ellipsizeMode="tail">{name}</Text>
+            <Text className='text-gray-500 text-xs font-normal mt-1 ' ><ShortenedWord word={about} maxLength={27}/></Text>
           </View>
           <View className="flex-row items-center justify-between mt-2">
-            <Text>Lagos</Text>
+            <Text className="capitalize">{city}</Text>
             <View className='flex-row items-center'>
                <Ionicons name='share-outline' size={20} onPress={onShare}/> 
               {!bookMark ? <Ionicons name='bookmark-outline' size={18} onPress={toggleBookMark}  /> :  <Ionicons name='bookmark' size={18} color="#d82727"/>}
@@ -170,13 +182,13 @@ const Contact = ({navigation}: {navigation: any}) => {
           <View>
             <FlatList
               horizontal
-              data = {[1, 2, 3, 4]}
-              renderItem={() => renderEventCard(toggleBookMark, bookMark, navigation)}
+              data = {getPopularEvents?.docs || []}
               keyExtractor={(item, index) => index.toString()}
+              renderItem={({item}) => renderEventCard(item.id, item.event_about, item.event_name, item.event_time, item.event_city, toggleBookMark, bookMark, navigation)}
               showsHorizontalScrollIndicator = {false}
             />
           </View> 
-        </View>
+        {/* </View>
         <View className='mt-3'>
           <Text className='text-black text-xs font-bold my-2'>Movements</Text>
           <View>
@@ -211,8 +223,8 @@ const Contact = ({navigation}: {navigation: any}) => {
               keyExtractor={(item, index) => index.toString()}
               showsHorizontalScrollIndicator = {false}
             />
-          </View> 
-        </View>
+          </View> */}
+        </View> 
           
       </View>
 
