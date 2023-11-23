@@ -83,9 +83,16 @@ export const eventsApi = createApi({
         url: `/saves`,
         method: 'POST',
         body: credentials
+      }),
+      invalidatesTags: ["Event"]
+    }),
+    unSaveEvent: builder.mutation<void, any>({
+      query: (id) => ({ 
+        url: `/events/unsave/${id}`,
+        method: 'DELETE',
       })
     })
   })
 })
 
-export const { useGetEventsQuery, useGetNextEventQuery, useUpdateAttendEventMutation, useGetEventDetailsQuery, useGetJoinedEventQuery, useGetSavedEventQuery, useSaveEventMutation, useGetEventTypesQuery, useCreateEventMutation, useLeaveEventMutation} = eventsApi
+export const { useGetEventsQuery, useUnSaveEventMutation, useGetNextEventQuery, useUpdateAttendEventMutation, useGetEventDetailsQuery, useGetJoinedEventQuery, useGetSavedEventQuery, useSaveEventMutation, useGetEventTypesQuery, useCreateEventMutation, useLeaveEventMutation} = eventsApi

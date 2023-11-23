@@ -30,7 +30,7 @@ export type RootStackParamList = {
   Chat: any;
   //
   OtpScreen: any;
-  ResetPassword: undefined;
+  ResetPassword: any;
   ResetSuccess: undefined;
   ProfileNotification: undefined;
   ProfilePreview: undefined;

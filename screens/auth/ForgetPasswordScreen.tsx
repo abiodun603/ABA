@@ -63,8 +63,12 @@ const ForgetPassword: React.FC<Props> = ({ navigation: { navigate } }) => {
     }
     try {
       await forgetPassword(formData).unwrap().then((res: any) => {
-        const userEmail = res?.doc.email
+       
         console.log(res)
+        if(res?.status){
+          const userEmail = res?.data.email
+          navigate("OtpScreen", { email: userEmail, routeNav: "forgetPassword"} as { email: any });
+        }
         // toast.show({
         //   placement: "top",
         //   render: ({ id }) => <Toaster id = {id} message="" type="success"  />
@@ -73,7 +77,6 @@ const ForgetPassword: React.FC<Props> = ({ navigation: { navigate } }) => {
         // Being that the result is handled in extraReducers in authSlice,
         // we know that we're authenticated after this, so the user
         // and token will be present in the store
-        navigate("OtpScreen", { email: userEmail} as { email: any });
       });
     
     } catch (err: any) {
@@ -133,6 +136,7 @@ code."
             <View style={{ backgroundColor: "red"}} className="bg-red-800" />
               <Button 
                 title="Send reset code" 
+                isLoading={isLoading}
                 onPress={methods.handleSubmit(handleForgetPassword)}               />
               {/* <Button title="Send reset code" onPress={() => navigate("ResetCode")} /> */}
             </View>

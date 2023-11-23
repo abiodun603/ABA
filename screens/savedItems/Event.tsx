@@ -6,14 +6,18 @@ import FontSize from '../../constants/FontSize';
 import { Colors } from '../../constants';
 import Font from '../../constants/Font';
 
+// ** Icons
+import { Ionicons } from '@expo/vector-icons'; 
 
 // ** Store, Hooks
-import { useGetSavedEventQuery } from '../../stores/features/event/eventService';
+import { useGetSavedEventQuery, useUnSaveEventMutation } from '../../stores/features/event/eventService';
 
 // ** Helpers
 import { ShortenedWord } from '../../helpers/wordShorther';
 import { ImageBackground } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useToast } from '@gluestack-ui/themed';
+import Toaster from '../../components/Toaster/Toaster';
 
 interface ICardProps {
   id: string ;
@@ -26,6 +30,35 @@ interface ICardProps {
 
 
 export const EventCard = ({event_about, event_time ,event_name, event_city, event_id, members, navigation}: any) => {
+  const [bookMark, setBookMark] = useState(false)
+
+  const [unSaveEvent] = useUnSaveEventMutation()
+  const toast = useToast()
+
+  // Fucnc
+  const toggleBookMark = async() => {
+    console.log(event_id)
+    try{
+      await unSaveEvent(event_id)
+      .unwrap()
+      .then((data) => {
+        console.log('res:', data);
+        // toast.show({
+        //   placement: 'top',
+        //   render: ({id}) => <Toaster id={id} type="success" message="Event removed !!!" />
+        // })
+      })
+    }catch(error: any) {
+      // Handle error
+      toast.show({
+        placement: 'top',
+        render: ({id}) => <Toaster id={id} type="error" message={error?.data.errors[0].message} />
+      })
+      setBookMark(false)
+    };
+    setBookMark(!bookMark)
+  }
+
   return(
     <ScrollView style= {{width: "100%"}} className='border-b border-gray-200 mt-6 px-4'>
       <TouchableOpacity 
@@ -54,8 +87,8 @@ export const EventCard = ({event_about, event_time ,event_name, event_city, even
           <View className="flex-row items-center justify-between mt-3">
             <Text >{members?.length || "0"} going <Text className='capitalize'>{event_city}</Text></Text>
             <View className='flex-row'>
-              {/* <Ionicons name='share-outline' size={23} onPress={onShare}/> 
-              {!bookMark ? <Ionicons name='bookmark-outline' size={22} onPress={toggleBookMark} /> :  <Ionicons name='bookmark' size={22} color="#d82727" onPress={toggleBookMark}/>} */}
+              {/* <Ionicons name='share-outline' size={23} onPress={onShare}/>  */}
+              {!bookMark ? <Ionicons  name='bookmark-outline' size={22} onPress={toggleBookMark} /> :  <Ionicons name='bookmark' size={22} color="#d82727" onPress={toggleBookMark}/>}
             </View>
           </View>
       </TouchableOpacity>

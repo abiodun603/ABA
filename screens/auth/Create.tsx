@@ -76,7 +76,7 @@ const Create: React.FC<Props> = ({ navigation: { navigate } }) => {
         // Being that the result is handled in extraReducers in authSlice,
         // we know that we're authenticated after this, so the user
         // and token will be present in the store
-        navigate("OtpScreen", { email: userEmail} as { email: any });
+        navigate("OtpScreen", { email: userEmail, routeNav: "createAccount"} as { email: any, routeNav: any });
       });
     
     } catch (err: any) {

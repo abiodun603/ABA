@@ -38,6 +38,13 @@ export interface forgetPasswordRequest {
   email: string
 }
 
+export interface resetPasswordRequest {
+  email: string,
+  password: string,
+  otp: string
+}
+
+
 export interface ProfileRequest {
   firstname: string
   username: string
@@ -74,6 +81,13 @@ export const authApi = createApi({
         body: credentials,
       }),
     }),
+    resetPassword: builder.mutation<UserResponse, resetPasswordRequest>({
+      query: (credentials) => ({
+        url: '/users/resetPassword',
+        method: 'POST',
+        body: credentials,
+      }),
+    }),
     otp: builder.mutation<any, OtpRequest>({
       query: (credentials) => ({
         url: `/users/verify/${credentials.email}`,
@@ -106,4 +120,4 @@ export const authApi = createApi({
   }),
 })
 
-export const { useOtpResendMutation, useForgetPasswordMutation, useLoginMutation, useOtpMutation, useSignupMutation,  useUpdateProfileMutation, useGetProfileQuery } = authApi
+export const { useOtpResendMutation, useResetPasswordMutation, useForgetPasswordMutation, useLoginMutation, useOtpMutation, useSignupMutation,  useUpdateProfileMutation, useGetProfileQuery } = authApi

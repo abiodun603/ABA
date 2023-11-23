@@ -37,6 +37,7 @@ type Props = NativeStackScreenProps<RootStackParamList, "OtpScreen">;
 // Define the type for your route parameters
 type RouteParams = {
   email: any;
+  routeNav: any;
   code: any // Replace 'string' with the correct type for communityId
 };
 const defaultValues = {
@@ -48,7 +49,7 @@ interface UserData {
 }
 
 const OtpScreen: React.FC<Props> = ({ navigation: { navigate }, route}) => {
-  const { email } = route.params as unknown  as RouteParams;
+  const { email , routeNav} = route.params as unknown  as RouteParams;
   const methods = useForm({defaultValues});
   const [otp, { isLoading }] = useOtpMutation();
   const [otpResend] = useOtpResendMutation();
@@ -56,11 +57,11 @@ const OtpScreen: React.FC<Props> = ({ navigation: { navigate }, route}) => {
 
 
   const handleOtp = async (data: UserData) => {
+    const otpCode = data.code
     const crendentials = {
       email: email,
       otp: data.code
     }
-   console.log(crendentials)
    try {
     await otp(crendentials).unwrap().then((res: any) => {
       console.log(res)
@@ -71,7 +72,11 @@ const OtpScreen: React.FC<Props> = ({ navigation: { navigate }, route}) => {
       // Being that the result is handled in extraReducers in authSlice,
       // we know that we're authenticated after this, so the user
       // and token will be present in the store
-      navigate("IdentifySuccess");
+      if(routeNav === "forgetPassword"){
+        navigate("ResetPassword", { email: email, otp: otpCode, routeNav: "forgetPassword" } as unknown as { email: any, otpCode: string,  routeNav: string});
+      }else{
+        navigate("IdentifySuccess");
+      }
     });
   
   } catch (err: any) {
