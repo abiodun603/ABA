@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 // ** Icons
 import { Entypo, FontAwesome } from '@expo/vector-icons'; 
@@ -11,7 +11,7 @@ import { RootStackParamList } from '../../types';
 import { FlatList } from 'react-native';
 import { TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { useGetEventsQuery } from '../../stores/features/event/eventService';
+import { useGetEventsQuery, useGetSortUpcomingEventQuery, useLazyGetSortUpcomingEventQuery } from '../../stores/features/event/eventService';
 import { EventCard } from '../Events';
 import BottomSheet from '../../components/bottom-sheet/BottomSheet';
 import { RadioButton } from 'react-native-paper';
@@ -34,17 +34,37 @@ const FilterState = ({children}: {children: React.ReactNode}) => {
 const EventFilter: React.FC<Props> = ({navigation}: {navigation: any}) => {
   const [date, setDate] = useState("Date")
   const [show, setShow ] = useState(false) 
-  const [value, setValue] = React.useState('first');
+  const [value, setValue] = React.useState('upcoming');
 
-  const {data: getAllEvents, isError, isLoading} = useGetEventsQuery()
+  const [getSortUpcomingEvent, results] = useLazyGetSortUpcomingEventQuery()
+  // const { data: getAllEvents, isError, isLoading, refetch: refetchEvents } = useGetSortUpcomingEventQuery(value, {
+  //   skip: !value,
+  // });
 
-  if(isLoading){
-    return <Text>Loading...</Text>;
-  }
+  // if(isLoading){
+  //   return <Text>Loading...</Text>;
+  // }
 
-  if (!getAllEvents) {
-    return <Text>No data available.</Text>; // Display a message when there is no data
-  }
+  // if (!getAllEvents) {
+  //   return <Text>No data available.</Text>; // Display a message when there is no data
+  // }
+
+  const handleDateSorting = async(value: string) => {
+    console.log(value);
+    await getSortUpcomingEvent(value);
+    // Access the loading state from the results
+    const { isLoading } = results;
+    console.log('Loading state:', isLoading);
+  };
+
+  useEffect(() => {
+    getSortUpcomingEvent(value);
+
+  }, [getSortUpcomingEvent]);
+
+  console.log(results)
+
+  console.log(value);
   return (
     <Layout
       title = ""
@@ -88,7 +108,7 @@ const EventFilter: React.FC<Props> = ({navigation}: {navigation: any}) => {
 
         {/*  */}
         <FlatList
-          data={getAllEvents.docs || []}
+          data={results?.data?.docs || []}
           contentContainerStyle = {{marginTop: 10}}
           renderItem={({item}) => <EventCard event_about={item.event_about} event_time={item.event_time} event_name={item.event_name} event_city={item.event_city} event_id={item.id} navigation={navigation} members = {item.members}/>}
           keyExtractor={item => item.id}
@@ -106,11 +126,11 @@ const EventFilter: React.FC<Props> = ({navigation}: {navigation: any}) => {
           <Text className='text-lg font-bold text-black'>Dates</Text>
           <RadioButton.Group onValueChange={value => setValue(value)} value={value}>
             {filterByDate.map((filter: any) => (
-              <RadioButton.Item key={filter.id} label={filter.name} value={filter.id.toString()} />
+              <RadioButton.Item key={filter.id} label={filter.name} labelStyle={{textTransform: "capitalize"}} value={filter.name.toString()}   style={{}}/>
             ))}
           </RadioButton.Group>
           <View className='mt-10'>
-            <CustomButton title='Apply' onPress={() => null} />
+            <CustomButton title='Apply' onPress={() => handleDateSorting(value)} />
           </View>
         </View>
       </BottomSheet>

@@ -92,23 +92,23 @@ export const DATA2:{
 export const filterByDate: any = [
   {
     id: 1,
-    name: "Starting soon",
+    name: "upcoming",
   },
   {
     id: 2,
-    name: "Today",
+    name: "today",
   },
   {
     id: 3,
-    name: "Tomorrow",
+    name: "tommorrow",
   },
   {
     id: 4,
-    name: "This weekend",
+    name: "yesterday",
   },
   {
     id: 5,
-    name: "Next week",
+    name: "next week",
   }
 ]
 
