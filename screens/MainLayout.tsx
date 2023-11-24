@@ -25,14 +25,11 @@ import { setSelectedTab } from '../stores/tab/tabAction'
 import Colors from '../constants/Colors'
 import Home from './Home'
 // import Messages from './messages/Messages'
-import Community from './Community'
+import Community from './Events'
 import Profile from './Profile'
-import Contact from './Contact';
+import Contact from './Explore';
 
 // ** Images
-
-
-
 const TabButton = ({label, icon, isFocused,onPress, outerContainerStyle, innerContainerStyle}: {label: string, icon: any,isFocused: boolean, onPress: () => void, outerContainerStyle: any,  innerContainerStyle: any}) => {
     return (
         <TouchableWithoutFeedback
@@ -41,8 +38,6 @@ const TabButton = ({label, icon, isFocused,onPress, outerContainerStyle, innerCo
           <Animated.View
             style={[{
               flex: 1,
-              // alignItems: "center",
-              // justifyContent: "center",
               height: 50,
               borderRadius: 25,
               paddingHorizontal: 15,
@@ -50,7 +45,6 @@ const TabButton = ({label, icon, isFocused,onPress, outerContainerStyle, innerCo
           >
             <Animated.View
               style={[{
-                // flexDirection: "col",
                 alignItems: "center",
                 justifyContent: "center",
               }, innerContainerStyle]}
@@ -91,7 +85,6 @@ const MainLayout = ({navigation, selectedTab, setSelectedTab}: {navigation: any,
     const flatListRef = React.useRef<any>(null)
     
     // Reanimated Shared Value
-
     const homeTabFlex = useSharedValue(1)
     const homeTabColor = useSharedValue(COLORS.white)
     const messagesTabFlex = useSharedValue(1)
@@ -169,26 +162,36 @@ const MainLayout = ({navigation, selectedTab, setSelectedTab}: {navigation: any,
         setSelectedTab(constants.screens.home)
     }, [])
 
+    const tabIndices = {
+      [constants.screens.home]: 0,
+      [constants.screens.contact]: 1,
+      [constants.screens.chats]: 2,
+      [constants.screens.community]: 3,
+      [constants.screens.profile]: 4,
+    };
+
     React.useEffect(() =>{
+      const tabIndex = tabIndices[selectedTab];
+      if (tabIndex !== undefined) {
         if(selectedTab == constants.screens.home) {
-            flatListRef?.current?.scrollToIndex({
-                index: 0,
-                animated: false
-            })
-            homeTabFlex.value = withTiming(4 , {duration: 500})
-            homeTabColor.value = withTiming(Colors.transparent, {duration: 500})
-        }else {
-            homeTabFlex.value = withTiming(1 , {duration: 500})
-            homeTabColor.value = withTiming(COLORS.white, {duration: 500})
-        }
-        
-        if(selectedTab == constants.screens.contact) {
           flatListRef?.current?.scrollToIndex({
-              index: 1,
+              index: 0,
               animated: false
           })
-          contactTabFlex.value = withTiming(4 , {duration: 500})
-          contactTabColor.value = withTiming(Colors.transparent, {duration: 500})
+        homeTabFlex.value = withTiming(4 , {duration: 500})
+        homeTabColor.value = withTiming(Colors.transparent, {duration: 500})
+        }else {
+          homeTabFlex.value = withTiming(1 , {duration: 500})
+          homeTabColor.value = withTiming(COLORS.white, {duration: 500})
+        }
+      
+      if(selectedTab == constants.screens.contact) {
+        flatListRef?.current?.scrollToIndex({
+            index: 1,
+            animated: false
+        })
+        contactTabFlex.value = withTiming(4 , {duration: 500})
+        contactTabColor.value = withTiming(Colors.transparent, {duration: 500})
         }else {
           contactTabFlex.value = withTiming(1 , {duration: 500})
           contactTabColor.value = withTiming(COLORS.white, {duration: 500})
@@ -204,7 +207,6 @@ const MainLayout = ({navigation, selectedTab, setSelectedTab}: {navigation: any,
         }else {
             messagesTabFlex.value = withTiming(1 , {duration: 500})
             messagesTabColor.value = withTiming(COLORS.white, {duration: 500})
-            
         }
 
         if(selectedTab == constants.screens.community) {
@@ -218,7 +220,7 @@ const MainLayout = ({navigation, selectedTab, setSelectedTab}: {navigation: any,
             padTabFlex.value = withTiming(1 , {duration: 500})
             padTabColor.value = withTiming(COLORS.white, {duration: 500})
         }
-        
+          
         if(selectedTab == constants.screens.profile) {
             flatListRef?.current?.scrollToIndex({
                 index: 4,
@@ -230,6 +232,7 @@ const MainLayout = ({navigation, selectedTab, setSelectedTab}: {navigation: any,
             notificationTabFlex.value = withTiming(1 , {duration: 500})
             notificationTabColor.value = withTiming(COLORS.white, {duration: 500})
         }
+      }
     },[selectedTab])
     return (
         <Animated.View style={{flex:1, backgroundColor: COLORS.white}}>

@@ -59,7 +59,6 @@ const ForgetPassword: React.FC<Props> = ({ navigation: { navigate }, route }) =>
   // ****
   const [resetPassword, {isLoading}] = useResetPasswordMutation();
 
-
   const handleResetPassword = async (data: UserData) => {
     const crendentials = {
       email: email,

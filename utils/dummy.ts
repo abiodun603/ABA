@@ -89,4 +89,27 @@ export const DATA2:{
   }
 ];
 
+export const filterByDate: any = [
+  {
+    id: 1,
+    name: "Starting soon",
+  },
+  {
+    id: 2,
+    name: "Today",
+  },
+  {
+    id: 3,
+    name: "Tomorrow",
+  },
+  {
+    id: 4,
+    name: "This weekend",
+  },
+  {
+    id: 5,
+    name: "Next week",
+  }
+]
+
 export const GroupCatergory = ["Parent", "Care Giver", "Authism Patient"]

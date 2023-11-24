@@ -35,8 +35,12 @@ export type RootStackParamList = {
   ProfileNotification: undefined;
   ProfilePreview: undefined;
   EditProfile: undefined;
+  //*** */
   Events: undefined;
   EventDetails: undefined;
+  EventCat: undefined;
+  EventFilter: undefined;
+  //***** */
   Verification: undefined;
   Resources: undefined;
   TopNavPanel: undefined;

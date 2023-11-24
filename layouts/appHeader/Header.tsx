@@ -33,7 +33,6 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ title, extraOneIcon, profileIcon, drawerNav, navigation, iconColor, iconName, onPress=()=>{},rightNavPress=()=>{}, iconButton, rightNavigation}) => {
-
   const navigate = useNavigation()
 
   return (
@@ -65,14 +64,12 @@ const Header: React.FC<HeaderProps> = ({ title, extraOneIcon, profileIcon, drawe
         </Text>
         <View className='flex flex-row items-center space-x-2'>
           {rightNavigation && 
-          <TouchableOpacity
-            onPress={rightNavPress}
-          >
-            <Text style={{color: Colors.text, fontFamily: Font['inter-medium'], fontSize: FontSize.small}}>{rightNavigation}</Text>
-          </TouchableOpacity>
+            <TouchableOpacity
+              onPress={rightNavPress}
+            >
+              <Text style={{color: Colors.text, fontFamily: Font['inter-medium'], fontSize: FontSize.small}}>{rightNavigation}</Text>
+            </TouchableOpacity>
           }
-          
-          
           {
             extraOneIcon && 
             <TouchableOpacity

@@ -5,9 +5,9 @@ const screens = {
     events: "Events",
     settings: "Settings",
     chats: "Chats",
-    community: "Community",
+    community: "Events",
     profile: "Profile",
-    contact: "Contact",
+    contact: "Explore",
     rate: "Rate Us",
     support: "Support"
 

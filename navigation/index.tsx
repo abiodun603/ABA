@@ -40,6 +40,8 @@ import GroupConfirmation from "../screens/groups/GroupConfirmation";
 import Group from "../screens/groups/Group";
 import Members from "../screens/chat/Members";
 import Chat from "../screens/chat/Chat";
+import Contact from "../screens/Explore";
+import EventFilter from "../screens/events/EventFilter";
 
 const theme = {
   ...DefaultTheme,
@@ -81,6 +83,10 @@ export default function Navigation() {
       <Stack.Screen name = "GroupCat" component={GroupCat} />
       <Stack.Screen name = "GroupJoin" component={GroupJoin} />
       <Stack.Screen name = "GroupConfirmation" component={GroupConfirmation} />
+
+      {/* Events */}
+      <Stack.Screen name="EventFilter" component={EventFilter} /> 
+
 
       <Stack.Screen name="ProfilePreview" component={ProfilePreview} /> 
       <Stack.Screen name="EditProfile" component={EditProfile} /> 

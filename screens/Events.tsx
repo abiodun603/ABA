@@ -103,11 +103,11 @@ export const EventCard = ({event_about, event_time ,event_name, event_city, even
   const toast = useToast()
 
   // Fucnc
-  const toggleBookMark = () => {
+  const toggleBookMark = async () => {
     const formData = {
       event_id: event_id
     }
-    saveEvent(formData)
+    await saveEvent(formData)
     .unwrap()
     .then((data) => {
       // Handle success
@@ -128,13 +128,6 @@ export const EventCard = ({event_about, event_time ,event_name, event_city, even
     });
     setBookMark(!bookMark)
   }
-
-  // const handleViewEvent = (id: any) => {
-  //   const { isFetching, data } = useGetEventDetailsQuery(id);
-  //   if (data) {
-  //     navigation.navigate('EventDetails');
-  //   }
-  // };
 
   const onShare = async () => {
     const options = {
@@ -157,7 +150,6 @@ export const EventCard = ({event_about, event_time ,event_name, event_city, even
     }catch(error:any) {
       console.log(error?.message)
     }
-    
   }
   return(
     <ScrollView style= {{width: "100%"}} className='border-b border-gray-200 mt-6 px-4'>
@@ -334,8 +326,7 @@ const Contact = ({navigation}: {navigation: any}) => {
       <ScrollView showsVerticalScrollIndicator={false} className='flex-col space-y-7'> 
         <FlatList
           data={getAllEvents.docs || []}
-          renderItem={({item}) => <EventCard event_about={item.event_about} event_time={item.event_time} event_name={item.event_name} event_city={item.event_city} event_id={item.id} navigation={navigation} members = {item.members}/>
-        }
+          renderItem={({item}) => <EventCard event_about={item.event_about} event_time={item.event_time} event_name={item.event_name} event_city={item.event_city} event_id={item.id} navigation={navigation} members = {item.members}/>}
           keyExtractor={item => item.id}
         />
         {/* BottomSheet component */}

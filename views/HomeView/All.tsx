@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { EventCard } from '../../screens/Community'
+import { EventCard } from '../../screens/Events'
 
 const All = () => {
   return (

@@ -52,7 +52,7 @@ const GridView = <T extends any>(props: IGridViewProps<T>) => {
 }
 
 
-const Contact = ({navigation}: {navigation: any}) => {
+const Explore = ({navigation}: {navigation: any}) => {
   const [show, setShow ] = useState(false) 
   const [bookMark, setBookMark] = useState(false)
   const toggleBookMark = () => setBookMark(!bookMark)
@@ -194,48 +194,29 @@ const Contact = ({navigation}: {navigation: any}) => {
           </View> 
         </View>
         <View>
-        {getEventsByCatType?.docs &&
-          Object.keys(getEventsByCatType?.docs).map((category, index) => (
-            <View key={index} className='mt-3'>
-              <Text className='text-black text-xs font-bold my-2 capitalize'>{category}</Text>
-              <FlatList
-                horizontal
-                data={getEventsByCatType?.docs[category] || []}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item }) => renderEventCard(item.id, item.event_about, item.event_name, item.event_time, item.event_city, toggleBookMark, bookMark, navigation)}
-                showsHorizontalScrollIndicator={false}
-              />
-            </View>
-          ))}
+          {getEventsByCatType?.docs &&
+            Object.keys(getEventsByCatType?.docs).map((category, index) => (
+              <View key={index} className='mt-3'>
+                <View style={{flexDirection: "row", justifyContent: "space-between", marginBottom: 10}}>
+                  <Text className='text-black text-xs font-bold my-2 capitalize'>{category}</Text>
+                  {/* touch button */}
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate("EventFilter")}
+                  > 
+                    <Text style={{color: Colors.primary, fontFamily: Font['inter-medium'], fontSize: FontSize.small}}>See all</Text>
+                  </TouchableOpacity>              
+                </View>
+                <FlatList
+                  horizontal
+                  data={getEventsByCatType?.docs[category] || []}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={({ item }) => renderEventCard(item.id, item.event_about, item.event_name, item.event_time, item.event_city, toggleBookMark, bookMark, navigation)}
+                  showsHorizontalScrollIndicator={false}
+                />
+              </View>
+            ))}
         </View>
-       
-        {/* <View className='mt-3'>
-          <Text className='text-black text-xs font-bold my-2'>Tech</Text>
-          <View>
-            <FlatList
-              horizontal
-              data = {[1, 2, 3, 4]}
-              renderItem={() => renderEventCard(toggleBookMark, bookMark, navigation)}
-              keyExtractor={(item, index) => index.toString()}
-              showsHorizontalScrollIndicator = {false}
-            />
-          </View> 
-        </View>
-        <View className='mt-3'>
-          <Text className='text-black text-xs font-bold my-2'>Career & Business</Text>
-          <View>
-            <FlatList
-              horizontal
-              data = {[1, 2, 3, 4]}
-              renderItem={() => renderEventCard(toggleBookMark, bookMark, navigation)}
-              keyExtractor={(item, index) => index.toString()}
-              showsHorizontalScrollIndicator = {false}
-            />
-          </View>
-        </View>  */}
-          
       </View>
-
       {/* Divider */}
       <Divider mt={8} thickness={1}/>
         <View className='flex-row justify-between items-center my-4  px-4'>
@@ -285,7 +266,7 @@ const Contact = ({navigation}: {navigation: any}) => {
   )
 }
 
-export default Contact
+export default Explore
 
 const styles = StyleSheet.create({
   container: {
