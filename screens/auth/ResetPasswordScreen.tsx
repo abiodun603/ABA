@@ -61,7 +61,6 @@ const ForgetPassword: React.FC<Props> = ({ navigation: { navigate }, route }) =>
 
   const handleResetPassword = async (data: UserData) => {
     const crendentials = {
-      email: email,
       otp: otp,
       password: data.new_password
     }
@@ -73,7 +72,7 @@ const ForgetPassword: React.FC<Props> = ({ navigation: { navigate }, route }) =>
       // Being that the result is handled in extraReducers in authSlice,
       // we know that we're authenticated after this, so the user
       // and token will be present in the store
-      // navigate("ResetSuccess") 
+      navigate("Login") 
 
     });
   

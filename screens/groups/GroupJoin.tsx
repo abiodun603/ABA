@@ -85,9 +85,9 @@ const JoinCard = ({name, members, community_id, navigate}: any) => {
       const response: any = await joinCommunity(id);
       if (response) {
         console.log(response)
-        if(response?.data.status){
-          navigate("GroupConfirmation")
-        }
+        // if(response?.data.status){
+        //   navigate("GroupConfirmation")
+        // }
        
         if(response?.error?.status === 500){
           toast.show({
@@ -243,7 +243,7 @@ const GroupJoin: React.FC<Props> = ({ navigation: { navigate } , route}) => {
       iconName={!show && "plus"}
       onPress={()=> setShow(true)}
     >
-      <ScrollView style = {styles.container} className=' mt-4'>
+      <View style = {styles.container} className=' mt-4'>
         <View className='px-4'>
           <View className="flex-row items-center justify-between mb-1 ">
             {/*  */}
@@ -373,7 +373,7 @@ const GroupJoin: React.FC<Props> = ({ navigation: { navigate } , route}) => {
             </ScrollView>
           </FormProvider>
         </BottomSheet>
-      </ScrollView>
+      </View>
     </Layout>
   )
 }

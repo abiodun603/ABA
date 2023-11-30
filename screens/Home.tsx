@@ -128,7 +128,7 @@ const Home = ({navigation}: {navigation: any}) => {
         cords: userLocation
       }
       dispatch(setEventLocation(data));
-      console.log(userLocation)
+      // console.log(userLocation)
     })();
   }, []);
 
@@ -180,7 +180,7 @@ const Home = ({navigation}: {navigation: any}) => {
     )
   }
 
-  // console.log(nextEventData)
+  console.log(nextEventData)
   const MyGroupsCard = ({name, community_id}: any) => {
     return (
       <TouchableOpacity className='h-40 w-32 rounded-md mr-3' style={{borderRadius: 10}} onPress={()=>navigation.navigate("Group", { communityId: community_id })} >
@@ -242,7 +242,6 @@ const Home = ({navigation}: {navigation: any}) => {
                 contentContainerStyle = {{maxWidth: screenWidth}}
                 viewabilityConfig={viewConfigRef}
                 onViewableItemsChanged={onViewRef.current}
-                // style = {{width: screenWidth}}
               />
               <View style = {{flexDirection: "row", justifyContent: "center", marginVertical: 20}} >
                 {nextEventData?.docs.map((item: any,index:number) => {

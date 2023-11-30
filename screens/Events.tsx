@@ -336,7 +336,6 @@ const Contact = ({navigation}: {navigation: any}) => {
             setShow(false);
           }}
           height={0.9}
-
           enableBackdropDismiss
         >
           <FormProvider {...methods}>

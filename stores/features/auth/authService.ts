@@ -39,7 +39,6 @@ export interface forgetPasswordRequest {
 }
 
 export interface resetPasswordRequest {
-  email: string,
   password: string,
   otp: string
 }

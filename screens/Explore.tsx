@@ -60,7 +60,7 @@ const Explore = ({navigation}: {navigation: any}) => {
   const {isLoading: isPopularEventsLoading, data: getPopularEvents} = useGetPopularEventsQuery()
   const {isLoading: isEventsByCatTypeLoading, data: getEventsByCatType} = useGetEventsByCatTypeQuery()
 
-  console.log(getEventsByCatType)
+  // console.log(getEventsByCatType)
 
   if(isPopularEventsLoading && isEventsByCatTypeLoading){
     return <Text>Loading...</Text>;

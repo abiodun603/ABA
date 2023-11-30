@@ -1,9 +1,8 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text,View } from 'react-native'
 import React from 'react'
 
 // ** Layout
 import Layout from '../../layouts/Layout';
-
 //
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from '../../types';
@@ -37,7 +36,7 @@ const GridView = <T extends any>(props: IGridViewProps<T>) => {
 }
 
 const GroupCat: React.FC<Props> = ({ navigation: { navigate } }) => {
-  const {data, isLoading} = useGetCategoryQuery()
+  const {data, isLoading, } = useGetCategoryQuery()
 
   if(isLoading){
     return <Text>Loading...</Text>;

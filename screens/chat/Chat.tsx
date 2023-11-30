@@ -99,8 +99,6 @@ const Chat: React.FC<Props> = ({ navigation: { navigate } }) => {
     // Clean up the socket listener when the component unmounts
     return () => {
       socket.off("latestMessage");
-      // socket.off("getMessage");
-      // socket.disconnect();
     };
   }, [socket]); 
   
