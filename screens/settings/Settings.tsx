@@ -30,32 +30,27 @@ const DATA: any = [
   },
   {
     id: 2,
-    name: "Accessibility",
-    newMessage: "2",
-    route: "About"
+    name: "My Community",
+    route: "PersonalGroups"
   },
   {
     id: 3,
     name: "Language",
-    newMessage: "2",
     route: "Language"
   },
   {
     id: 4,
     name: "Privacy and Visibility",
-    newMessage: null,
     route: "About"
   },
   {
     id: 5,
     name: "Invite",
-    newMessage: "2",
     route: "About"
   },
   {
     id: 6,
     name: "About ABA App",
-    newMessage: null,
     route: "About"
   },
 ]

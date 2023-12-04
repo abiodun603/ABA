@@ -51,8 +51,8 @@ export interface ProfileRequest {
 }
 
 interface OtpRequest {
-  otp: string;
-  email: string;
+  otp?: string;
+  email?: string;
 }
 
 export const authApi = createApi({
@@ -94,6 +94,13 @@ export const authApi = createApi({
         body: {otp: credentials.otp},
       }),
     }),
+    otpForget: builder.mutation<any, OtpRequest>({
+      query: (credentials) => ({
+        url: `/users/verifyResetOTP`,
+        method: 'POST',
+        body: credentials,
+      }),
+    }),
     otpResend: builder.mutation<any, OtpRequest>({
       query: (credentials) => ({
         url: `/users/resend`,
@@ -119,4 +126,4 @@ export const authApi = createApi({
   }),
 })
 
-export const { useOtpResendMutation, useResetPasswordMutation, useForgetPasswordMutation, useLoginMutation, useOtpMutation, useSignupMutation,  useUpdateProfileMutation, useGetProfileQuery } = authApi
+export const { useOtpResendMutation, useOtpForgetMutation, useResetPasswordMutation, useForgetPasswordMutation, useLoginMutation, useOtpMutation, useSignupMutation,  useUpdateProfileMutation, useGetProfileQuery } = authApi

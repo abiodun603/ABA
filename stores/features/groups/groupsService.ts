@@ -24,28 +24,13 @@ export const groupsApi = createApi({
       }),
       providesTags: ["Community"],
     }),
-    getCategory: builder.query<GroupsResponse, void>({
-      query: () => ({
-        url: '/category',
-        method: 'GET',
-      }),
-      providesTags: ["Community"],
-    }),
-    getCategoryById: builder.query<GroupsResponse, any>({
-      query: (id) => ({
+    deleteCommunity: builder.mutation<any, string>({
+      query: (id) => ({ 
         url: `/community/${id}`,
-        method: 'GET',
-      }),
-      providesTags: ["Community"],
-    }),
-    createCommunity: builder.mutation<void, GroupRequest>({
-      query: (credentials) => ({ 
-        url: `/community`,
-        method: 'POST',
-        body: credentials
+        method: 'DELETE',
       }),
       invalidatesTags: ["Community"]
-    }), 
+    }),
     getMyCommunity: builder.query<EventResponse, void>({
       query: () => ({ 
         url: `/community/me`,
@@ -67,6 +52,28 @@ export const groupsApi = createApi({
       }),
       providesTags: ["Community"]
     }),
+    getCategory: builder.query<GroupsResponse, void>({
+      query: () => ({
+        url: '/category',
+        method: 'GET',
+      }),
+      providesTags: ["Community"],
+    }),
+    getCategoryById: builder.query<GroupsResponse, any>({
+      query: (id) => ({
+        url: `/community/${id}`,
+        method: 'GET',
+      }),
+      providesTags: ["Community"],
+    }),
+    createCommunity: builder.mutation<void, GroupRequest>({
+      query: (credentials) => ({ 
+        url: `/community`,
+        method: 'POST',
+        body: credentials
+      }),
+      invalidatesTags: ["Community"]
+    }),  
     leaveCommunity: builder.mutation<void, GetOneCommunityRequest>({
       query: (credentials) => ({ 
         url: `/community/leave`,
@@ -112,4 +119,4 @@ export const groupsApi = createApi({
   })
 })
 
-export const {useGetCommunityMembersQuery, useGetCategoryByIdQuery, useGetCategoryQuery, useGetCommunityQuery, useGetOneCommunityQuery, useGetMyCommunityQuery, useGetEventDetailsQuery, useGetSavedEventQuery, useJoinCommunityMutation, useCreateCommunityMutation, useLeaveCommunityMutation, useGetPastEventQuery, useGetJoinedCommunityQuery } = groupsApi
+export const {useGetCommunityMembersQuery, useDeleteCommunityMutation,  useGetCategoryByIdQuery, useGetCategoryQuery, useGetCommunityQuery, useGetOneCommunityQuery, useGetMyCommunityQuery, useGetEventDetailsQuery, useGetSavedEventQuery, useJoinCommunityMutation, useCreateCommunityMutation, useLeaveCommunityMutation, useGetPastEventQuery, useGetJoinedCommunityQuery } = groupsApi

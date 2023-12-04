@@ -42,8 +42,8 @@ type Props = NativeStackScreenProps<RootStackParamList, "Login">;
 const StyledView = styled(View)
 
 const defaultValues = {
-  email: 'senatorugen@gmail.com',
-  password: 'Telvida@123!!'
+  email: 'abioduncsc@gmail.com',
+  password: 'Telvida@123'
 }
 
 interface UserData {

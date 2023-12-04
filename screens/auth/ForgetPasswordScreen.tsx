@@ -25,7 +25,6 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { styled } from "nativewind";
 
 // ** Hook
-import { useAuth } from "../../hooks/useAuth";
 
 // ** Component
 import Input from "../../components/Input";
@@ -54,29 +53,17 @@ const ForgetPassword: React.FC<Props> = ({ navigation: { navigate } }) => {
 
   const toast = useToast()
 
-   // ** Hooks
-   const auth = useAuth()
-
   const handleForgetPassword = async (data: UserData) => {
     const formData = {
       email: data.email,
     }
     try {
       await forgetPassword(formData).unwrap().then((res: any) => {
-       
-        console.log(res)
         if(res?.status){
           const userEmail = res?.data.email
           navigate("OtpScreen", { email: userEmail, routeNav: "forgetPassword"} as { email: any });
         }
-        // toast.show({
-        //   placement: "top",
-        //   render: ({ id }) => <Toaster id = {id} message="" type="success"  />
-        // })
         methods.reset()
-        // Being that the result is handled in extraReducers in authSlice,
-        // we know that we're authenticated after this, so the user
-        // and token will be present in the store
       });
     
     } catch (err: any) {

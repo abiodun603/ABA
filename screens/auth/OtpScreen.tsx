@@ -27,12 +27,12 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 // ** Component
 import Input from "../../components/Input";
 import Button from "../../components/CustomButton";
+import Toaster from "../../components/Toaster/Toaster";
 
 // ** Types
 import { RootStackParamList } from "../../types";
-import { useOtpMutation, useOtpResendMutation } from "../../stores/features/auth/authService";
+import { useOtpForgetMutation, useOtpMutation, useOtpResendMutation } from "../../stores/features/auth/authService";
 import { useToast } from "@gluestack-ui/themed";
-import Toaster from "../../components/Toaster/Toaster";
 type Props = NativeStackScreenProps<RootStackParamList, "OtpScreen">;
 // Define the type for your route parameters
 type RouteParams = {
@@ -52,6 +52,7 @@ const OtpScreen: React.FC<Props> = ({ navigation: { navigate }, route}) => {
   const { email , routeNav} = route.params as unknown  as RouteParams;
   const methods = useForm({defaultValues});
   const [otp, { isLoading }] = useOtpMutation();
+  const [otpForget, {isLoading: isOtpForgetLoading}] = useOtpForgetMutation()
   const [otpResend] = useOtpResendMutation();
   const toast = useToast()
 
@@ -63,21 +64,26 @@ const OtpScreen: React.FC<Props> = ({ navigation: { navigate }, route}) => {
       otp: data.code
     }
    try {
-    await otp(crendentials).unwrap().then((res: any) => {
-      console.log(res)
-      toast.show({
-        placement: "top",
-        render: ({ id }) => <Toaster id = {id} message="Otp Authenticated successfully" type="success"  />
-      })
-      // Being that the result is handled in extraReducers in authSlice,
-      // we know that we're authenticated after this, so the user
-      // and token will be present in the store
-      if(routeNav === "forgetPassword"){
+    if(routeNav === "forgetPassword"){
+      console.log("forgetPassword", crendentials)
+      await otpForget(crendentials).unwrap().then((res: any) => {
+        console.log(res)
+        toast.show({
+          placement: "top",
+          render: ({ id }) => <Toaster id = {id} message="Otp Authenticated successfully" type="success"  />
+        })
         navigate("ResetPassword", { email: email, otp: otpCode, routeNav: "forgetPassword" } as unknown as { email: any, otpCode: string,  routeNav: string});
-      }else{
-        navigate("IdentifySuccess");
-      }
-    });
+      });
+    }else {
+      await otp(crendentials).unwrap().then((res: any) => {
+        console.log(res)
+        toast.show({
+          placement: "top",
+          render: ({ id }) => <Toaster id = {id} message="Otp Authenticated successfully" type="success"  />
+        })
+          navigate("IdentifySuccess");
+      });
+    }
   
   } catch (err: any) {
     console.log(err)
@@ -162,7 +168,7 @@ const OtpScreen: React.FC<Props> = ({ navigation: { navigate }, route}) => {
             />
 
             <View style={{marginTop: Spacing*2}} />
-            <Button title="Confirm" isLoading={isLoading} onPress={methods.handleSubmit(handleOtp)} />
+            <Button title="Confirm" isLoading={isLoading || isOtpForgetLoading} onPress={methods.handleSubmit(handleOtp)} />
           </View>
         {/* ===== ======= */}
         </FormProvider>
