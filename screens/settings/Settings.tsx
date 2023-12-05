@@ -35,8 +35,8 @@ const DATA: any = [
   },
   {
     id: 3,
-    name: "Language",
-    route: "Language"
+    name: "My Events",
+    route: "PersonalEvents"
   },
   {
     id: 4,

@@ -36,6 +36,7 @@ import { RootStackParamList } from "../../types";
 // ** Store and Action
 import { useLoginMutation } from "../../stores/features/auth/authService";
 import { CustomMenu } from "../../components/Menu/Menu";
+import Toaster from "../../components/Toaster/Toaster";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Login">;
 
@@ -70,50 +71,18 @@ const LoginScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
       if(err.status === 401){
         toast.show({
           placement: "top",
-          render: ({ id }) => {
-            return (
-              <Toast nativeID={id} action="error" variant="accent">
-                <VStack space="xs">
-                  <ToastTitle>New Message</ToastTitle>
-                  <ToastDescription>
-                    The email or password provided is incorrect.
-                  </ToastDescription>
-                </VStack>
-              </Toast>
-            )
-          },
+          render: ({ id }) => <Toaster id = {id} message=" The email or password provided is incorrect."   />
         })
       }
       if(err.status === 500){
         toast.show({
           placement: "top",
-          render: ({ id }) => {
-            return (
-              <Toast nativeID={id} action="error" variant="accent">
-                <VStack space="xs">
-                  <ToastTitle>New Message</ToastTitle>
-                  <ToastDescription>
-                    Email verification required
-                  </ToastDescription>
-                </VStack>
-              </Toast>
-            )
-          },
+          render: ({ id }) => <Toaster id = {id} message=" Email verification required"   />
         })
       }
       toast.show({
         placement: "top",
-        render: ({ id }) => {
-          return (
-            <Toast nativeID={id} action="error" variant="accent">
-              <VStack space="xs">
-                <ToastDescription>
-                 Opps!!! NetWork Error
-                </ToastDescription>
-              </VStack>
-            </Toast>
-          )
-        },
+        render: ({ id }) => <Toaster id = {id} message="Opps!!! NetWork Error"   />
       });
     }
   };

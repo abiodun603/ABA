@@ -1,19 +1,16 @@
-import { Image, ImageBackground, Share, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import {  ImageBackground, Share, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
-import { Box, Divider } from 'native-base';
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons"
-import Entypo from "@expo/vector-icons/Entypo"
 import { styled } from 'nativewind';
 import Layout from '../../layouts/Layout';
 import { RootStackParamList } from '../../types';
 
 // ** Icons
-import {Ionicons, MaterialIcons, FontAwesome} from "@expo/vector-icons"
+import {Ionicons} from "@expo/vector-icons"
 
 // ** Helpers
-import { ShortenedWord } from '../../helpers/wordShorther';
+
 import { FlatList } from 'react-native';
-import { Avatar, AvatarFallbackText, AvatarGroup, AvatarImage, Toast, ToastDescription, ToastTitle, VStack, useToast } from '@gluestack-ui/themed';
+import { Avatar, AvatarFallbackText, AvatarGroup, AvatarImage,useToast } from '@gluestack-ui/themed';
 import { useGetCommunityMembersQuery, useGetJoinedCommunityQuery, useGetOneCommunityQuery, useJoinCommunityMutation, useLeaveCommunityMutation } from '../../stores/features/groups/groupsService';
 
 
@@ -22,7 +19,7 @@ import BottomSheet from '../../components/bottom-sheet/BottomSheet';
 import CustomButton from '../../components/CustomButton';
 import { Alert } from 'react-native';
 import Toaster from '../../components/Toaster/Toaster';
-import { ScrollView } from 'react-native-gesture-handler';
+
 
 type Props = NativeStackScreenProps<RootStackParamList, "Group">;
 const StyledView = styled(View)
@@ -138,7 +135,7 @@ const Group: React.FC<Props> = ({ navigation: { navigate } , route}) => {
     return <Text>No data available.</Text>; // Display a message when there is no data
   }
 
-  console.log(getCommunityMembers)
+  console.log(data, communityId)
 
   const handleLeaveGroup = () => {
     setShow(false);
@@ -182,58 +179,26 @@ const Group: React.FC<Props> = ({ navigation: { navigate } , route}) => {
       const id = {
         community_id: communityId
       }
-      // Make the API call to join the community
       const response: any = await joinCommunity(id);
       if (response) {
-        console.log(response)
-        // if(response?.data.status){
-        //   navigate("GroupConfirmation")
-        // }
-       
+        console.log(response)       
         if(response?.error?.status === 500){
           toast.show({
             placement: "top",
-            render: ({ id }) => {
-              return (
-                <Toast nativeID={id} action="error" variant="accent">
-                  <VStack space="xs">
-                    <ToastTitle>New Message</ToastTitle>
-                    <ToastDescription>
-                      {response?.error?.data.error}
-                    </ToastDescription>
-                  </VStack>
-                </Toast>
-              )
-            },
+            render: ({ id }) => <Toaster id = {id} message={response?.error?.data.error}  />
           })
           return;
-          // navigate.("Group")
         }
         return;
       } else {
-        // Handle any other specific cases, if needed
       }
     } catch (err: any) {
-      // Handle errors, e.g., show an error message, log the error, etc.
       console.log('Error joining community:', err);
       if(err){
-        // if(err?.error?.status === 500){
           toast.show({
             placement: "top",
-            render: ({ id }) => {
-              return (
-                <Toast nativeID={id} action="error" variant="accent">
-                  <VStack space="xs">
-                    <ToastTitle>New Message</ToastTitle>
-                    <ToastDescription>
-                      You already join this community
-                    </ToastDescription>
-                  </VStack>
-                </Toast>
-              )
-            },
+            render: ({ id }) => <Toaster id = {id} message=" You already join this community"/>
           })
-        // }
       }
     }
   };

@@ -41,6 +41,7 @@ export type RootStackParamList = {
   EventDetails: undefined;
   EventCat: undefined;
   EventFilter: undefined;
+  PersonalEvents: undefined;
   //***** */
   Verification: undefined;
   Resources: undefined;

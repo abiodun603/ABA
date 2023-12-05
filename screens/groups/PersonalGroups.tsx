@@ -54,38 +54,11 @@ const GroupCard = ({name, members, community_id, navigate}: any) => {
           },
         },
       ],
-      // { cancelable: false }
     ); 
-    // try {
-    //   console.log(community_id)
-    //   const id = {
-    //     community_id: community_id
-    //   }
-    //   const response: any = await joinCommunity(id);
-    //   if (response) {
-    //     console.log(response)
-    //     if(response?.error?.status === 500){
-    //       toast.show({
-    //         placement: "top",
-    //         render: ({ id }) => <Toaster id={id} type="error" message={response?.error?.data.error} />
-    //       })
-    //       return;
-    //     }
-    //     return;
-    //   }
-    // } catch (err: any) {
-    //   console.log('Error joining community:', err);
-    //   if(err){
-    //       toast.show({
-    //         placement: "top",
-    //         render: ({ id }) => <Toaster id={id} type="error" message="You already join this community"/>
-    //       })
-    //   }
-    // }
   };
   return (
     <View className = "flex-row items-center justify-between ">
-      <TouchableOpacity className=' mt-4 flex-row items-center space-x-2'>
+      <TouchableOpacity className=' mt-4 flex-row items-center space-x-2'  onPress={()=>navigate("Group", { communityId: community_id })}>
         <View className='h-[80px] w-[80px]  bg-slate-400 rounded-lg  justify-center items-center'>
         <ImageBackground
           resizeMode="cover"

@@ -43,6 +43,7 @@ import Chat from "../screens/chat/Chat";
 import Contact from "../screens/Explore";
 import EventFilter from "../screens/events/EventFilter";
 import PersonalGroups from "../screens/groups/PersonalGroups";
+import PersonalEvents from "../screens/events/PersonalEvents";
 
 const theme = {
   ...DefaultTheme,
@@ -88,6 +89,7 @@ export default function Navigation() {
 
       {/* Events */}
       <Stack.Screen name="EventFilter" component={EventFilter} /> 
+      <Stack.Screen name="PersonalEvents" component={PersonalEvents} /> 
 
 
       <Stack.Screen name="ProfilePreview" component={ProfilePreview} /> 

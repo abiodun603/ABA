@@ -44,6 +44,7 @@ const Event = () => {
               event_id={item?.event_id?.id} 
               members = {item?.event_id?.members}
               navigation={navigation}
+              isSave
             />
         }
       />

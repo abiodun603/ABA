@@ -3,6 +3,8 @@ import React, { useState } from 'react'
 
 // ** Third Party
 import { useToast } from '@gluestack-ui/themed';
+import {  useForm } from 'react-hook-form'
+import { SelectList, MultipleSelectList } from 'react-native-dropdown-select-list';
 
 // ** Store, Hooks
 import { useUnSaveEventMutation, useGetSavedEventQuery } from '../../../stores/features/event/eventService';
@@ -12,17 +14,92 @@ import Toaster from '../../../components/Toaster/Toaster';
 
 // ** Helper
 import { ShortenedWord } from '../../../helpers/wordShorther';
+import { formatTimestampToTime, formatTimestampToTimeWithMidday } from '../../../helpers/timeConverter'
+
+
 
 // ** Icons
-import { Ionicons } from '@expo/vector-icons'; 
+import { Ionicons, Feather } from '@expo/vector-icons'; 
+import BottomSheet from '../../../components/bottom-sheet/BottomSheet';
+import { FormProvider } from 'react-hook-form';
+import Input from '../../../components/Input';
+import CustomButton from '../../../components/CustomButton';
+import { formatDate } from '../../../helpers/formatDate';
+import { DatePicker } from '../../../components/datepicker/DatePicker';
 
-export const EventCard = ({event_about, event_time ,event_name, event_city, event_id, members, navigation}: any) => {
+const data = [
+  {key:'1', value:'Select event tags', disabled:true},
+  {key:'event', value:'Event'},
+  {key:'chster', value:'Chster'},
+]
+
+const status = [
+  {key:'1', value:'Select status', disabled:true},
+  {key:'private', value:'Private'},
+  {key:'public', value:'Public'},
+]
+
+const members = [
+  {key:'1', value:'Select members', disabled:true},
+]
+
+const types = [
+  {key:'1', value:'Select event types', disabled:true},
+]
+
+const defaultValues = {
+  event_name: '',
+  event_about: '',
+  event_city: '',
+  event_type: '',
+  event_address: '',
+}
+
+export const EventCard = ({event_about, event_time ,event_name, event_city, event_id, members, isDelete, handleDeleteEvent, isEdit, navigation,isSave ,  handleEdit}: any) => {
   const [bookMark, setBookMark] = useState(true)
+  const [show, setShow ] = useState(false) 
+  const [selected, setSelected] = React.useState("");
+  const [selectedEventType, setSelectedEventType] = React.useState("");
+  const [selectedStatus, setSelectedStatus] = React.useState("");
+  const [selectedMembers, setSelectedMembers] = useState<any[]>([])
+  const [selectedHost, setSelectedHost] = useState<any[]>([])
 
+  const methods = useForm({defaultValues});
+
+
+  // ** Slice Store
   const [unSaveEvent] = useUnSaveEventMutation()
   const toast = useToast()
 
+
+  // End Funtion
+  const [date1, setDate1] = useState(new Date());
+  const [time1, setTime1] = useState(new Date());
+  const [time2, setTime2] = useState(new Date());
+
+  const dateCallback1 = (selectedDate: any) => {
+    const currentDate = selectedDate || date1;
+    setDate1(currentDate);
+  };
+
+  // Startt time
+  const timeCallback1 = (selectedDate: any) => {
+    const currentDate = selectedDate || time1;
+    setTime1(currentDate);
+  };
+
+  // End Time
+  const timeCallback2 = (selectedDate: any) => {
+    const currentDate = selectedDate || time2;
+    setTime2(currentDate);
+  };
+
+
   // Fucnc
+  const handleUpdateEvent = () => {
+
+  }
+
   const toggleBookMark = async() => {
     console.log(event_id)
     try{
@@ -30,10 +107,6 @@ export const EventCard = ({event_about, event_time ,event_name, event_city, even
       .unwrap()
       .then((data) => {
         console.log('res:', data);
-        // toast.show({
-        //   placement: 'top',
-        //   render: ({id}) => <Toaster id={id} type="success" message="Event removed !!!" />
-        // })
       })
     }catch(error: any) {
       // Handle error
@@ -73,13 +146,128 @@ export const EventCard = ({event_about, event_time ,event_name, event_city, even
           </View>
           <View className="flex-row items-center justify-between mt-3">
             <Text >{members?.length || "0"} going <Text className='capitalize'>{event_city}</Text></Text>
-            <View className='flex-row'>
+            <View className='flex-row space-x-1'>
               {/* <Ionicons name='share-outline' size={23} onPress={onShare}/>  */}
-              {!bookMark ? <Ionicons  name='bookmark-outline' size={22} onPress={toggleBookMark} /> :  <Ionicons name='bookmark' size={22} color="#d82727" onPress={toggleBookMark}/>}
+              {
+                isSave ? !bookMark ? <Ionicons  name='bookmark-outline' size={22} onPress={toggleBookMark} /> :  <Ionicons name='bookmark' size={22} color="#d82727" onPress={toggleBookMark}/> : ''
+              }
+              {isEdit &&
+                <TouchableOpacity onPress={()=> setShow(true)}>
+                  <Feather name='edit' size={22} onPress={handleEdit}/>
+                </TouchableOpacity>
+              }
+              {isDelete &&
+                <TouchableOpacity>
+                  <Ionicons name='trash-bin-outline' size={22}  onPress={handleDeleteEvent}/>
+                </TouchableOpacity>
+              }
             </View>
           </View>
       </TouchableOpacity>
+
+      {/* BottomSheet component */}
+      <BottomSheet
+        show={show}
+        onDismiss={() => {
+          setShow(false);
+        }}
+        height={0.9}
+        enableBackdropDismiss
+      >
+        <FormProvider {...methods}>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            {/* <Text className='font-medium text-2xl text-black '>Create a new events</Text> */}
+            <View className='mt-4'>
+              <Input
+                name='event_name'
+                label="Event name"
+                placeholder="Enter event name"
+              />
+              <Input
+                name='event_about'
+                label="Event description"
+                placeholder="Enter event description"
+              />
+              <Input
+                name='event_city'
+                label="Event city"
+                placeholder="Enter event city"
+              />
+              <Input
+                name='event_address'
+                label="Event address"
+                placeholder="Enter event address"
+              />
+              <DatePicker mode="date" selectedDateCallback={dateCallback1} datePickerPlaceholder={formatDate(date1)} datePickerlabel="Event date"/>
+              <DatePicker mode="time" selectedDateCallback={timeCallback1} datePickerPlaceholder={formatTimestampToTime(time1)} datePickerlabel="Event start time"/>
+              <DatePicker mode="time" selectedDateCallback={timeCallback2} datePickerPlaceholder={formatTimestampToTime(time2)} datePickerlabel="Event end time"/>
+              <View className='flex flex-col mb-5'>
+                {/* <Text className=' font-normal text-sm text-black'>Gender</Text> */}
+                <MultipleSelectList 
+                  setSelected={(val: React.SetStateAction<any[]>) => setSelectedHost(val)} 
+                  data={members} 
+                  save="key"
+                  boxStyles={{borderRadius:4, borderColor: "#80747B", paddingLeft: 10}}
+                  search={false} 
+
+                  placeholder='Select Host'
+                />
+              </View>
+              <View className='flex flex-col mb-5'>
+                <SelectList 
+                  setSelected={(val: React.SetStateAction<string>) => setSelectedEventType(val)} 
+                  data={types} 
+                  save="key"
+                  boxStyles={{borderRadius:4, borderColor: "#80747B", height:56, paddingLeft: 10}}
+                  search={false} 
+                  placeholder='Select event type'
+                />
+              </View>
+              <View className='flex flex-col mb-5'>
+                {/* <Text className=' font-normal text-sm text-black'>Gender</Text> */}
+                <MultipleSelectList
+                  setSelected={(val: React.SetStateAction<any[]>) => setSelectedMembers(val)} 
+                  data={members} 
+                  save="key"
+                  boxStyles={{borderRadius:4, borderColor: "#80747B", paddingLeft: 10}}
+                  search={false} 
+
+                  placeholder='Select Members'
+                />
+              </View>
+              <View className='flex flex-col mb-5'>
+                {/* <Text className=' font-normal text-sm text-black'>Gender</Text> */}
+                <SelectList 
+                  setSelected={(val: React.SetStateAction<string>) => setSelected(val)} 
+                  data={data} 
+                  save="value"
+                  boxStyles={{borderRadius:4, borderColor: "#80747B", height:56, paddingLeft: 10}}
+                  search={false} 
+                  placeholder='Select event tags'
+                />
+              </View>
+              <View className='flex flex-col mb-5'>
+                <SelectList 
+                  setSelected={(val: React.SetStateAction<string>) => setSelectedStatus(val)} 
+                  data={status} 
+                  save="value"
+                  boxStyles={{borderRadius:4, borderColor: "#80747B", height:56, paddingLeft: 10}}
+                  search={false} 
+                  placeholder='Select event status'
+                />
+              </View>
+              <View className='mb-20'>
+                <CustomButton
+                title="Submit" 
+                // isLoading={createEventLoading}
+                onPress={methods.handleSubmit(handleUpdateEvent)}              
+                />
+              </View>
+            </View>
+          </ScrollView>
+          
+        </FormProvider>
+      </BottomSheet>
     </ScrollView>
-    
   )
 }
