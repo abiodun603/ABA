@@ -14,7 +14,7 @@ import { RootStackParamList } from '../../types';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Divider } from 'native-base';
 import CustomButton from '../../components/CustomButton';
-import { useGetEventDetailsQuery, useGetJoinedEventQuery, useLeaveEventMutation, useUpdateAttendEventMutation } from '../../stores/features/event/eventService';
+import { useGetEventByIdQuery, useGetJoinedEventQuery, useLeaveEventMutation, useUpdateAttendEventMutation } from '../../stores/features/event/eventService';
 import { ShortenedWord } from '../../helpers/wordShorther';
 import Toaster from '../../components/Toaster/Toaster';
 import { useToast } from '@gluestack-ui/themed';
@@ -38,7 +38,7 @@ const EventDetails: React.FC<Props>  = ({navigation, route}) => {
 
   const { eventId } = route.params as unknown  as RouteParams;;;
 
-  const { isLoading, data } = useGetEventDetailsQuery(eventId);
+  const { isLoading, data } = useGetEventByIdQuery(eventId);
   const {  data: isJoinedEvent } = useGetJoinedEventQuery(eventId);
 
   console.log(isJoinedEvent);

@@ -101,11 +101,7 @@ const EditProfile: React.FC<Props> = ({ navigation: { navigate } }) => {
   // Populate the form fields with the profile data when it's available
   useEffect(() => {
     if (user) {
-      // Set the default values of the form fields using setValue
       setValue('name', user.name || ''); // Set the default value to an empty string if the property is undefined
-      // setValue('username', user.username || '');
-      // setValue('email', user?.email || '');
-      // setValue('phone', 'No phone number');
     }
   }, [user, setValue]);
 

@@ -66,9 +66,7 @@ const PersonalEvents: React.FC<Props> = ({navigation}: {navigation: any}) => {
     ); 
   };
 
-  const handleEdit = () => {
-    
-  }
+
 
   return (
     <Layout

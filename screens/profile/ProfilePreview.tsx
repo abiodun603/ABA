@@ -22,19 +22,16 @@ import CustomButton from '../../components/CustomButton';
 // ** Hooks
 import useGlobalState from '../../hooks/global.state';
 
-
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 type Props = NativeStackScreenProps<RootStackParamList, "ProfilePreview">;
-const StyledView = styled(View)
 
 
 const ProfilePreview: React.FC<Props> = ({ navigation: { navigate } }) => {
   const { user} = useGlobalState()
-  console.log(user)
   return (
     <Layout
       title = "Profile Preview"
-  >
+    >
     <View style={styles.container}>
       {/* Image */}
       <View className='h-[348px] w-full rounded-2xl bg-slate-800'>

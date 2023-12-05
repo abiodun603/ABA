@@ -1,13 +1,14 @@
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, TextInput, ScrollView, ImageBackground } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 // ** Third Party
 import { useToast } from '@gluestack-ui/themed';
 import {  useForm } from 'react-hook-form'
 import { SelectList, MultipleSelectList } from 'react-native-dropdown-select-list';
+import { parseISO } from 'date-fns';
 
 // ** Store, Hooks
-import { useUnSaveEventMutation, useGetSavedEventQuery } from '../../../stores/features/event/eventService';
+import { useUnSaveEventMutation, useGetSavedEventQuery, useGetEventByIdQuery, useUpdateEventMutation } from '../../../stores/features/event/eventService';
 
 // ** Component
 import Toaster from '../../../components/Toaster/Toaster';
@@ -51,7 +52,6 @@ const defaultValues = {
   event_name: '',
   event_about: '',
   event_city: '',
-  event_type: '',
   event_address: '',
 }
 
@@ -64,16 +64,24 @@ export const EventCard = ({event_about, event_time ,event_name, event_city, even
   const [selectedMembers, setSelectedMembers] = useState<any[]>([])
   const [selectedHost, setSelectedHost] = useState<any[]>([])
 
+
   const methods = useForm({defaultValues});
+  const {setValue} = methods
 
 
   // ** Slice Store
   const [unSaveEvent] = useUnSaveEventMutation()
+  const [updateEvent, {isLoading: isUpdateLoading}] = useUpdateEventMutation()
+  const { isLoading: isEventIdLoading, data: EventDetails } = useGetEventByIdQuery(event_id);
+  console.log(EventDetails)
+
+// Parse the date string using date-fns parseISO function
+  const initialDate = EventDetails?.event_date && parseISO(EventDetails?.event_date);
   const toast = useToast()
 
 
   // End Funtion
-  const [date1, setDate1] = useState(new Date());
+  const [date1, setDate1] = useState(initialDate);
   const [time1, setTime1] = useState(new Date());
   const [time2, setTime2] = useState(new Date());
 
@@ -96,8 +104,35 @@ export const EventCard = ({event_about, event_time ,event_name, event_city, even
 
 
   // Fucnc
-  const handleUpdateEvent = () => {
+  const handleUpdateEvent =  async(data: any) => {
+    const formData = {
+      id: event_id,
+      ...data
+    }
+    // console.log(formData, date1);
+    updateEvent(formData)
+    .unwrap()
+    .then((data) => {
+      // Handle success
+      console.log('Event updated:', data);
+      methods.reset()
+      toast.show({
+        placement: 'top',
+        render: ({id}) => <Toaster id={id} type="success" message="Event updated!!!" />
+      })
+      setShow(false)
 
+    })
+    .catch((error) => {
+      // Handle error
+      toast.show({
+        placement: 'top',
+        render: ({id}) => <Toaster id={id} type="error" message={error?.data.errors[0].message} />
+      })
+      setShow(false)
+
+      console.error(error);
+    });
   }
 
   const toggleBookMark = async() => {
@@ -119,6 +154,17 @@ export const EventCard = ({event_about, event_time ,event_name, event_city, even
     setBookMark(!bookMark)
   }
 
+  // Populate the form fields with the profile data when it's available
+  useEffect(() => {
+    if (EventDetails) {
+      setValue('event_name',  EventDetails?.event_name ||'');
+      setValue('event_about',  EventDetails?.event_about ||'');
+      setValue('event_city',  EventDetails?.event_city ||'');
+      setValue('event_address',  EventDetails?.event_address ||'');  
+    }
+  }, [EventDetails, setValue]);
+
+  console.log(EventDetails)
   return(
     <ScrollView style= {{width: "100%"}} className='border-b border-gray-200 mt-6 px-4'>
       <TouchableOpacity 
@@ -171,7 +217,7 @@ export const EventCard = ({event_about, event_time ,event_name, event_city, even
         onDismiss={() => {
           setShow(false);
         }}
-        height={0.9}
+        height={0.5}
         enableBackdropDismiss
       >
         <FormProvider {...methods}>
@@ -198,11 +244,10 @@ export const EventCard = ({event_about, event_time ,event_name, event_city, even
                 label="Event address"
                 placeholder="Enter event address"
               />
-              <DatePicker mode="date" selectedDateCallback={dateCallback1} datePickerPlaceholder={formatDate(date1)} datePickerlabel="Event date"/>
+              {/* <DatePicker mode="date" selectedDateCallback={dateCallback1} datePickerPlaceholder={formatDate(date1)} datePickerlabel="Event date"  />
               <DatePicker mode="time" selectedDateCallback={timeCallback1} datePickerPlaceholder={formatTimestampToTime(time1)} datePickerlabel="Event start time"/>
-              <DatePicker mode="time" selectedDateCallback={timeCallback2} datePickerPlaceholder={formatTimestampToTime(time2)} datePickerlabel="Event end time"/>
-              <View className='flex flex-col mb-5'>
-                {/* <Text className=' font-normal text-sm text-black'>Gender</Text> */}
+              <DatePicker mode="time" selectedDateCallback={timeCallback2} datePickerPlaceholder={formatTimestampToTime(time2)} datePickerlabel="Event end time"/> */}
+              {/* <View className='flex flex-col mb-5'>
                 <MultipleSelectList 
                   setSelected={(val: React.SetStateAction<any[]>) => setSelectedHost(val)} 
                   data={members} 
@@ -212,8 +257,8 @@ export const EventCard = ({event_about, event_time ,event_name, event_city, even
 
                   placeholder='Select Host'
                 />
-              </View>
-              <View className='flex flex-col mb-5'>
+              </View> */}
+              {/* <View className='flex flex-col mb-5'>
                 <SelectList 
                   setSelected={(val: React.SetStateAction<string>) => setSelectedEventType(val)} 
                   data={types} 
@@ -222,9 +267,8 @@ export const EventCard = ({event_about, event_time ,event_name, event_city, even
                   search={false} 
                   placeholder='Select event type'
                 />
-              </View>
-              <View className='flex flex-col mb-5'>
-                {/* <Text className=' font-normal text-sm text-black'>Gender</Text> */}
+              </View> */}
+              {/* <View className='flex flex-col mb-5'>
                 <MultipleSelectList
                   setSelected={(val: React.SetStateAction<any[]>) => setSelectedMembers(val)} 
                   data={members} 
@@ -234,9 +278,8 @@ export const EventCard = ({event_about, event_time ,event_name, event_city, even
 
                   placeholder='Select Members'
                 />
-              </View>
-              <View className='flex flex-col mb-5'>
-                {/* <Text className=' font-normal text-sm text-black'>Gender</Text> */}
+              </View> */}
+              {/* <View className='flex flex-col mb-5'>
                 <SelectList 
                   setSelected={(val: React.SetStateAction<string>) => setSelected(val)} 
                   data={data} 
@@ -255,11 +298,11 @@ export const EventCard = ({event_about, event_time ,event_name, event_city, even
                   search={false} 
                   placeholder='Select event status'
                 />
-              </View>
+              </View> */}
               <View className='mb-20'>
                 <CustomButton
-                title="Submit" 
-                // isLoading={createEventLoading}
+                title="Update" 
+                isLoading={isUpdateLoading}
                 onPress={methods.handleSubmit(handleUpdateEvent)}              
                 />
               </View>

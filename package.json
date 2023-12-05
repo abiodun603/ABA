@@ -23,6 +23,7 @@
     "@react-navigation/native-stack": "^6.9.8",
     "@reduxjs/toolkit": "^1.9.2",
     "axios": "^1.4.0",
+    "date-fns": "^2.30.0",
     "expo": "~47.0.12",
     "expo-app-loading": "~2.1.1",
     "expo-constants": "~14.0.2",

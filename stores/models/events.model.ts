@@ -16,7 +16,7 @@ export interface EventResponse {
   description: string
   location: string
   time: string
-  data: string
+  event_date: string
   event_time: string
   event_city: string
   event_name: string
@@ -29,6 +29,7 @@ export interface EventResponse {
 }
 
 export interface EventRequest {
+  id?: string
   event_time: string
   event_city: string
   event_name: string
