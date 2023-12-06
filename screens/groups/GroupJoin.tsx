@@ -346,7 +346,7 @@ const GroupJoin: React.FC<Props> = ({ navigation: { navigate } , route}) => {
                     data={members} 
                     save="key"
                     boxStyles={{borderRadius:4, borderColor: "#80747B", paddingLeft: 10}}
-                    search={false} 
+                    search={true} 
 
                     placeholder='Select community members'
                   />

@@ -3,6 +3,7 @@ interface GroupsCreator {
 }
 
 export interface GroupRequest {
+  id?: string
   community_name: string
   community_description: string
   status: string

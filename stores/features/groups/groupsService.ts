@@ -15,7 +15,7 @@ interface GetOneCommunityRequest {
 export const groupsApi = createApi({
   baseQuery,
   reducerPath: 'groupsApi',
-  tagTypes: ["Community"],
+  tagTypes: ["Community", "MyCommunity"],
   endpoints: (builder) => ({
     getCommunity: builder.query<GroupsResponse, void>({
       query: () => ({
@@ -36,7 +36,15 @@ export const groupsApi = createApi({
         url: `/community/me`,
         method: 'GET',
       }),
-      providesTags: ["Community"],
+      providesTags: ["MyCommunity"],
+    }),
+    updateMyCommunity: builder.mutation<void, Partial<GroupRequest> & Pick<GroupRequest, 'id'>>({
+      query: ({id, ...patch}) => ({
+        url: `/community/${id}`,
+        method: 'PATCH',
+        body: patch
+      }),
+      invalidatesTags: ["MyCommunity"]
     }),
     getJoinedCommunity: builder.query<any, string>({
       query: (id) => ({ 
@@ -119,4 +127,4 @@ export const groupsApi = createApi({
   })
 })
 
-export const {useGetCommunityMembersQuery, useDeleteCommunityMutation,  useGetCategoryByIdQuery, useGetCategoryQuery, useGetCommunityQuery, useGetOneCommunityQuery, useGetMyCommunityQuery, useGetEventDetailsQuery, useGetSavedEventQuery, useJoinCommunityMutation, useCreateCommunityMutation, useLeaveCommunityMutation, useGetPastEventQuery, useGetJoinedCommunityQuery } = groupsApi
+export const {useGetCommunityMembersQuery, useUpdateMyCommunityMutation, useDeleteCommunityMutation,  useGetCategoryByIdQuery, useGetCategoryQuery, useGetCommunityQuery, useGetOneCommunityQuery, useGetMyCommunityQuery, useGetEventDetailsQuery, useGetSavedEventQuery, useJoinCommunityMutation, useCreateCommunityMutation, useLeaveCommunityMutation, useGetPastEventQuery, useGetJoinedCommunityQuery } = groupsApi

@@ -4,8 +4,8 @@ import React, { useEffect, useState } from 'react'
 // ** Third Party
 import { useToast } from '@gluestack-ui/themed';
 import {  useForm } from 'react-hook-form'
-import { SelectList, MultipleSelectList } from 'react-native-dropdown-select-list';
 import { parseISO } from 'date-fns';
+import { FormProvider } from 'react-hook-form';
 
 // ** Store, Hooks
 import { useUnSaveEventMutation, useGetSavedEventQuery, useGetEventByIdQuery, useUpdateEventMutation } from '../../../stores/features/event/eventService';
@@ -22,7 +22,6 @@ import { formatTimestampToTime, formatTimestampToTimeWithMidday } from '../../..
 // ** Icons
 import { Ionicons, Feather } from '@expo/vector-icons'; 
 import BottomSheet from '../../../components/bottom-sheet/BottomSheet';
-import { FormProvider } from 'react-hook-form';
 import Input from '../../../components/Input';
 import CustomButton from '../../../components/CustomButton';
 import { formatDate } from '../../../helpers/formatDate';
@@ -164,7 +163,6 @@ export const EventCard = ({event_about, event_time ,event_name, event_city, even
     }
   }, [EventDetails, setValue]);
 
-  console.log(EventDetails)
   return(
     <ScrollView style= {{width: "100%"}} className='border-b border-gray-200 mt-6 px-4'>
       <TouchableOpacity 

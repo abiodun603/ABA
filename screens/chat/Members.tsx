@@ -1,16 +1,30 @@
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import { FlatList, StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native'
+import React, { useState } from 'react'
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+
+// ** Layout
 import Layout from '../../layouts/Layout';
 
 // ** Utils
 import socket from '../../utils/socket'
 
-import { RootStackParamList } from '../../types';
+import { useAppDispatch } from '../../hooks/useTypedSelector';
+
+// ** Icons
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons"
+
+//** Components 
+import BottomSheet from '../../components/bottom-sheet/BottomSheet';
+import CustomButton from '../../components/CustomButton';
+import Toaster from '../../components/Toaster/Toaster';
+
+// ** Store Slices
+import useGlobalState from '../../hooks/global.state';
+
 import { useGetCommunityMembersQuery } from '../../stores/features/groups/groupsService';
 import {  setMemberEmailAndID } from '../../stores/features/chatMember/chatMemberDetail';
-import { useAppDispatch } from '../../hooks/useTypedSelector';
-import useGlobalState from '../../hooks/global.state';
+
+import { RootStackParamList } from '../../types';
 type Props = NativeStackScreenProps<RootStackParamList, "Members">;
 
 // Define the type for your route parameters
@@ -19,6 +33,11 @@ type RouteParams = {
 }
 
 const Members: React.FC<Props> = ({ navigation: { navigate }, route }) => {
+  const [show, setShow] = useState(false)
+  const [selectedUserId, setSelectedUserId] = useState("");
+  const [selectedUserRole, setSelectedUserRole] = useState("");
+
+
   const { communityId } = route.params as unknown  as RouteParams;
   const { data: getCommunityMembers, isLoading} =  useGetCommunityMembersQuery(communityId)
   const {user} = useGlobalState()
@@ -34,6 +53,11 @@ const Members: React.FC<Props> = ({ navigation: { navigate }, route }) => {
     return <Text>No data available.</Text>; // Display a message when there is no data
   }
 
+  const handleUserId = (userId: string, userRole: string) => {
+    setSelectedUserId(userId);
+    setSelectedUserRole(userRole);
+    setShow(true)
+  }
 
   const handleChatSession = async(id: string, email: string) => {
     const data  = {
@@ -54,6 +78,48 @@ const Members: React.FC<Props> = ({ navigation: { navigate }, route }) => {
     })
   }
 
+  console.log(selectedUserId)
+
+  const toggleAdminAccess = () => {
+    
+  }
+
+  const handleRemoveFromGroup = () => {
+    setShow(false);
+    // const formData = {
+    //   community_id: communityId 
+    // }
+    // Alert.alert(
+    //   'Leave Group',
+    //   'Are you sure you want to leave this group?',
+    //   [
+    //     {
+    //       text: 'Cancel',
+    //       style: 'cancel',
+    //     },
+    //     {
+    //       text: 'OK',
+    //       onPress: () => {
+    //         leaveCommunity(formData)
+    //         .unwrap()
+    //         .then((data) => {
+    //           // Handle success
+    //           console.log('res:', data);
+    //         })
+    //         .catch((error) => {
+    //           // Handle error
+    //           toast.show({
+    //             placement: 'top',
+    //             render: ({id}) => <Toaster id={id} type="error" message={error?.data.errors[0].message} />
+    //           })
+    //           console.error(error);
+    //         });
+    //       },
+    //     },
+    //   ],
+    // ); 
+  }
+
     
   return (
     <Layout
@@ -66,16 +132,35 @@ const Members: React.FC<Props> = ({ navigation: { navigate }, route }) => {
           data={getCommunityMembers?.docs || []}
           keyExtractor={(item: any, index: { toString: () => any; }) => index.toString()}
           renderItem={({ item }: any) => 
-          <TouchableOpacity onPress={() => handleChatSession(item.id, item.email)} className='flex-row items-center space-x-3 mb-5'>
-            <View className='w-16 h-16 rounded-full border border-black bg-blue-400 items-center justify-center'>
-              <Text>{(item.name || '').charAt(0).toUpperCase()}</Text>
-            </View>
-            <Text className='text-lg text-gray-900 font-semibold'>{item.name}</Text>
-          </TouchableOpacity>
+          <View className='flex-row items-center justify-between mb-5'>
+            <TouchableOpacity onPress={() => handleChatSession(item.id, item.email)} onLongPress={()=> handleUserId(item.id, item.role)} className='flex-row items-center space-x-3'>
+              <View className='w-16 h-16 rounded-full border border-black bg-blue-400 items-center justify-center'>
+                <Text>{(item.name || '').charAt(0).toUpperCase()}</Text>
+              </View>
+              <Text className='text-lg text-gray-900 font-semibold'>{item.name}</Text>
+            </TouchableOpacity>
+            {item.role === 'admin' && <Text className='italic text-sm text-gray-800 capitalize'>{item.role}</Text>}
+          </View>
         }
         />
         
       </View>
+
+      {/* BottomSheet component */}
+      <BottomSheet
+        show={show}
+        onDismiss={() => {
+          setShow(false);
+        }}
+        height={0.2}
+
+        enableBackdropDismiss
+      >
+        <View className='space-y-2'>
+          <CustomButton title={selectedUserRole === 'admin' ? 'Dismiss as Admin' : 'Make Group Admin'} onPress={toggleAdminAccess} buttonStyle={{borderRadius: 8, marginBottom: 8}} />
+          <CustomButton title='Remove from Group' onPress={handleRemoveFromGroup} buttonStyle={{borderRadius: 8}}/>
+        </View>
+      </BottomSheet>
     </View>
   </Layout>
   )
