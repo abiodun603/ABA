@@ -21,7 +21,7 @@ import Toaster from '../../components/Toaster/Toaster';
 // ** Store Slices
 import useGlobalState from '../../hooks/global.state';
 
-import { useGetCommunityMembersQuery } from '../../stores/features/groups/groupsService';
+import { useAddCommunityAdminMutation, useGetCommunityMembersQuery } from '../../stores/features/groups/groupsService';
 import {  setMemberEmailAndID } from '../../stores/features/chatMember/chatMemberDetail';
 
 import { RootStackParamList } from '../../types';
@@ -40,6 +40,7 @@ const Members: React.FC<Props> = ({ navigation: { navigate }, route }) => {
 
   const { communityId } = route.params as unknown  as RouteParams;
   const { data: getCommunityMembers, isLoading} =  useGetCommunityMembersQuery(communityId)
+  const [addCommunityAdmin, {isLoading: isAddAdminLoading}] = useAddCommunityAdminMutation()
   const {user} = useGlobalState()
 
   const dispatch = useAppDispatch()
@@ -80,8 +81,34 @@ const Members: React.FC<Props> = ({ navigation: { navigate }, route }) => {
 
   console.log(selectedUserId)
 
-  const toggleAdminAccess = () => {
-    
+  const toggleAdminAccess = async() => {
+    const formData = {
+      communityId: communityId,
+      userId: selectedUserId
+    }
+    try{
+      await addCommunityAdmin(formData).unwrap().then((res: any) => {
+        console.log(res)
+      });
+    }catch (err: any) {
+      console.log(err)
+      // if(err.status === 401){
+      //   toast.show({
+      //     placement: "top",
+      //     render: ({ id }) => <Toaster id = {id} message="Error Signing up"   />
+      //   })
+      // }
+      // if(err.status === 500){
+      //   toast.show({
+      //     placement: "top",
+      //     render: ({ id }) => <Toaster id = {id} message="Error Signing up"   />
+      //   })
+      // }
+      // toast.show({
+      //   placement: "top",
+      //   render: ({ id }) => <Toaster id = {id} message="Error Signing up"   />
+      // });
+    }
   }
 
   const handleRemoveFromGroup = () => {

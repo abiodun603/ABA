@@ -10,6 +10,11 @@ export interface GroupRequest {
   members: string[] 
 }
 
+export interface AddGroupAdminRequest {
+  communityId: string
+  userId: string
+}
+
 export interface GroupsResponse {
   docs: any
   title: string

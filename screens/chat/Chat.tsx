@@ -17,6 +17,7 @@ import FontSize from '../../constants/FontSize';
 import { formatTimestampToTime } from '../../helpers/timeConverter';
 import { FlatList } from 'react-native';
 import { ScrollView } from 'react-native';
+import ChatInput from '../../components/ChatInput';
 type Props = NativeStackScreenProps<RootStackParamList, "Chat">;
 
 type IChatIdProps = {
@@ -160,7 +161,7 @@ const Chat: React.FC<Props> = ({ navigation: { navigate } }) => {
               :  <Text className='text-center mt-6 '>No message yet</Text>
             } 
         </View>
-        <ChatTab message={message} setMessage={setMessage} onPress={handleSendMessage} />
+        <ChatInput message={message} setMessage={setMessage} onPress={handleSendMessage} />
       </KeyboardAvoidingView>
     </Layout>
   )

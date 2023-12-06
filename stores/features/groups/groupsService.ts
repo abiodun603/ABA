@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { baseQuery } from '../../../configs/authConfig'
 import type { EventResponse } from '../../models/events.model'
-import { GroupRequest, GroupsDetailsResponse, GroupsResponse } from '../../models/groups.mdel'
+import { AddGroupAdminRequest, GroupRequest, GroupsDetailsResponse, GroupsResponse } from '../../models/groups.mdel'
 
 
 export interface SaveEventRequest {
@@ -15,7 +15,7 @@ interface GetOneCommunityRequest {
 export const groupsApi = createApi({
   baseQuery,
   reducerPath: 'groupsApi',
-  tagTypes: ["Community", "MyCommunity"],
+  tagTypes: ["Community", "MyCommunity", "Members"],
   endpoints: (builder) => ({
     getCommunity: builder.query<GroupsResponse, void>({
       query: () => ({
@@ -58,8 +58,16 @@ export const groupsApi = createApi({
         url: `/community/members/${id}`,
         method: 'GET',
       }),
-      providesTags: ["Community"]
+      providesTags: ["Members"]
     }),
+    addCommunityAdmin: builder.mutation<void, AddGroupAdminRequest>({
+      query: (credentials) => ({ 
+        url: `/community/addAdmin`,
+        method: 'POST',
+        body: credentials
+      }),
+      invalidatesTags: ["Members"]
+    }),  
     getCategory: builder.query<GroupsResponse, void>({
       query: () => ({
         url: '/category',
@@ -127,4 +135,4 @@ export const groupsApi = createApi({
   })
 })
 
-export const {useGetCommunityMembersQuery, useUpdateMyCommunityMutation, useDeleteCommunityMutation,  useGetCategoryByIdQuery, useGetCategoryQuery, useGetCommunityQuery, useGetOneCommunityQuery, useGetMyCommunityQuery, useGetEventDetailsQuery, useGetSavedEventQuery, useJoinCommunityMutation, useCreateCommunityMutation, useLeaveCommunityMutation, useGetPastEventQuery, useGetJoinedCommunityQuery } = groupsApi
+export const {useGetCommunityMembersQuery, useAddCommunityAdminMutation, useUpdateMyCommunityMutation, useDeleteCommunityMutation,  useGetCategoryByIdQuery, useGetCategoryQuery, useGetCommunityQuery, useGetOneCommunityQuery, useGetMyCommunityQuery, useGetEventDetailsQuery, useGetSavedEventQuery, useJoinCommunityMutation, useCreateCommunityMutation, useLeaveCommunityMutation, useGetPastEventQuery, useGetJoinedCommunityQuery } = groupsApi
