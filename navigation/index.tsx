@@ -44,6 +44,7 @@ import Contact from "../screens/Explore";
 import EventFilter from "../screens/events/EventFilter";
 import PersonalGroups from "../screens/groups/PersonalGroups";
 import PersonalEvents from "../screens/events/PersonalEvents";
+import ChatCommunity from "../screens/chat/ChatCommunity";
 
 const theme = {
   ...DefaultTheme,
@@ -80,12 +81,17 @@ export default function Navigation() {
       {/* Chat */}
       <Stack.Screen name="Members" component={Members} />  
       <Stack.Screen name="Chat" component={Chat} />
+      <Stack.Screen name="ChatCommunity" component={ChatCommunity} />
+
       {/* Group */}
       <Stack.Screen name = "Group" component={Group} />
       <Stack.Screen name = "GroupCat" component={GroupCat} />
       <Stack.Screen name = "GroupJoin" component={GroupJoin} />
       <Stack.Screen name = "GroupConfirmation" component={GroupConfirmation} />
       <Stack.Screen name = "PersonalGroups" component={PersonalGroups} />
+
+      {/*  */}
+      {/* <Stack.Screen name = "Resources" component={Resources} /> */}
 
       {/* Events */}
       <Stack.Screen name="EventFilter" component={EventFilter} /> 

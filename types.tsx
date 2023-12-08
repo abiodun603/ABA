@@ -29,6 +29,8 @@ export type RootStackParamList = {
   //Chats
   Members: any;
   Chat: any;
+  ChatCommunity: any;
+  // Resources
   //
   OtpScreen: any;
   ResetPassword: any;

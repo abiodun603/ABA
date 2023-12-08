@@ -16,9 +16,8 @@ import Font from '../../constants/Font';
 import FontSize from '../../constants/FontSize';
 import { formatTimestampToTime } from '../../helpers/timeConverter';
 import { FlatList } from 'react-native';
-import { ScrollView } from 'react-native';
 import ChatInput from '../../components/ChatInput';
-type Props = NativeStackScreenProps<RootStackParamList, "Chat">;
+type Props = NativeStackScreenProps<RootStackParamList, "ChatCommunity">;
 
 type IChatIdProps = {
   message: string
@@ -36,7 +35,13 @@ interface IMessageCardProps {
   message: string
   chatId: IChatIdProps
 }
-const MessageCard = ({message, time, chatId}: {message: string, time: any, chatId: string}) => {
+
+// Define the type for your route parameters
+type RouteParams = {
+  communityId: string; // Replace 'string' with the correct type for communityId
+};
+
+const MessageCard = ({message, time, chatId}: {message: string, time: any, chatId: string, name: string}) => {
   const {user} = useGlobalState();
   const [containerWidth, setContainerWidth] = useState<any>(null);
   const contentRef = useRef<View | null>(null);
@@ -51,83 +56,105 @@ const MessageCard = ({message, time, chatId}: {message: string, time: any, chatI
   // console.log(getFindContactId, chatId)
   return (
     <View style={user?.id === chatId ? [styles.cardContainer, styles.rightChat, { width: containerWidth }]: [styles.cardContainer, , styles.leftChat, { width: containerWidth }]}>
-      <Text style={styles.messageText}>
-        {message} 
-      </Text>
-      <Text style={[styles.time]} className="absolute -bottom-4 right-2">{formatTimestampToTime(time)}</Text>
+      <Text className='text-xs text-gray-400 mb-10 absolute -top-1 left-2 py-1 '>{chatId !== user?.id ? name : ''}</Text>
+      <View>
+        <Text style={styles.messageText}>
+          {message} 
+        </Text>
+      </View>
+      <Text style={[styles.time]} className="absolute -bottom-4 right-2 ">{formatTimestampToTime(time)}</Text>
     </View> 
   )
 }
 
-const Chat: React.FC<Props> = ({ navigation: { navigate } }) => {
+const ChatCommunity: React.FC<Props> = ({ navigation: { navigate } , route}) => {
   const [message, setMessage] = useState('');
   const [messagesRecieved, setMessagesReceived] = useState<any[]>([]);
   const [imageUri, setImageUri] = useState<any>(null);
   const [arrayBuffer, setArrayBuffer] = useState<any>(null);
 
   const flatListRef = useRef<FlatList<any>>(null);
-  
+  const { communityId } = route.params as unknown  as RouteParams;
+
    const {user} = useGlobalState()
-  const getChatId = useAppSelector(state => state.chatMember.chatId);
-  const getMemberEmail= useAppSelector(state => state.chatMember.email);
-  const getMemberId = useAppSelector(state => state.chatMember.memberId);
 
   const handleSendMessage = async() => {
-    
+    if(arrayBuffer){
+        socket.emit('uploadFile', {
+          arrayBuffer,
+          fileName: imageUri,
+          communityId: communityId,
+          currentUserId: user?.id,
+          // type: 'video/mp4'
+        });
+        console.log("try me")
+  
+        socket.on('uploadComplete', (data) => {
+          console.log('Received ArrayBuffer data:', data);
+          // Process the ArrayBuffer here
+        });
+     
+    }else{
       const data = {
-        chatId: getChatId,
-        currentUserId: user?.id,
-        recipientId: getMemberId,
-        message: arrayBuffer ? arrayBuffer : message
+        communityId: communityId,
+        current_user_id: user?.id,
+        message: message
       }
-      setMessage("")
+      // console.log(data);
       socket.emit("sendMessage", data)
+    // }
+    }
+    
   }
 
+  
   // Runs whenever a socket event is recieved from the server
   useEffect(() => {
     // Listen for the server's response
-    socket.on("latestMessage", (newData) => {
+    socket.on("newCommunityMessage", (newData) => {
       console.log(newData)
       setMessagesReceived((state) => [
         ...state,
         {
           id: newData.id,
           message: newData.message,
-          chatId: newData.senderId.id,
+          chatId: newData.current_user_id,
           time: newData.createdAt,
         },
       ]);
     });
     // Clean up the socket listener when the component unmounts
     return () => {
-      socket.off("latestMessage");
+      socket.off("newCommunityMessage");
     };
   }, [socket]); 
-  
 
   // Add this
   useEffect(() => {
     const data = {
-      chatId: getChatId
+      communityId: communityId,
+      limit:40,
+      page:1
     }
-    socket.emit('recieveMessage', data)
-    socket.on("getAllMessageByChatId", (data) => {
-      console.log(data)
+    console.log("fire me again", data)
+
+    socket.emit('fetchAllMessage', data)
+    socket.on("fetchAllCommunityMessage", (data) => {
       setMessagesReceived((state) => [
         ...state,
         ...data.docs.map((doc: any) => ({
           id: doc.id,
           message: doc.message,
-          chatId: doc.senderId.id,
-          time: doc.createdAt,
+          name: doc.communityId.created_by.name,
+          chatId: doc.communityId.created_by.id,
+          time: doc.createdAt
         })),
       ]);
     });
   
     return () => {
-      socket.off('recieveMessage')
-      socket.off('getAllMessageByChatId')
+      socket.off('fetchAllMessage')
+      socket.off('fetchAllCommunityMessage')
     }
   }, [socket]);
 
@@ -137,6 +164,8 @@ const Chat: React.FC<Props> = ({ navigation: { navigate } }) => {
       flatListRef.current.scrollToEnd({ animated: true });
     }
   }, [messagesRecieved]);
+
+  console.log(messagesRecieved)
 
 
   return (
@@ -154,7 +183,7 @@ const Chat: React.FC<Props> = ({ navigation: { navigate } }) => {
                 data={messagesRecieved}
                 keyExtractor={(item, index) => item?.id}
                 renderItem={({ item }) => (
-                  <MessageCard  message={item.message} time={item.time} chatId= {item.chatId} />
+                  <MessageCard  message={item.message} time={item.time} chatId= {item.chatId} name={item.name} />
                 )}
                 onContentSizeChange={() => {
                   flatListRef.current?.scrollToEnd({ animated: true });
@@ -169,7 +198,7 @@ const Chat: React.FC<Props> = ({ navigation: { navigate } }) => {
   )
 }
 
-export default Chat
+export default ChatCommunity
 
 const styles = StyleSheet.create({
   container: {
@@ -200,14 +229,14 @@ const styles = StyleSheet.create({
   alignSelf: "flex-start",
   paddingRight: 60,
   paddingLeft: 20,
-  paddingVertical: 10,
+  paddingVertical: 15,
   maxWidth: 200
   },
   rightChat: {
     alignSelf: "flex-end",
     paddingRight: 60,
     paddingLeft: 20,
-    paddingVertical: 10,
+    paddingVertical: 18,
     maxWidth: 200
   },
   messageText: {
@@ -217,3 +246,21 @@ const styles = StyleSheet.create({
   },
 })
 
+    // if(arrayBuffer){
+    //   setMessage("")
+    //   try {
+    //     socket.emit('uploadFile', {
+    //       arrayBuffer,
+    //       fileName: imageUri,
+    //       communityId: "6535053f2fd2ee7715d143b5",
+    //       currentUserId: "6565b9bfa82809c6aad0eb79",
+    //       type: 'video/mp4'
+    //     });
+  
+    //     socket.on('uploadComplete', (data) => {
+    //       console.log('Received ArrayBuffer data:', data);
+    //     });
+    //   } catch (error) {
+    //     console.error('Error sending data to server:', error);
+    //   }
+    // }else {

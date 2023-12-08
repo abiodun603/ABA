@@ -133,7 +133,7 @@ const Home = ({navigation}: {navigation: any}) => {
   }, []);
 
   useEffect(() => {
-    // Fetch contacts when the component mounts
+    // Fetch contacts when the componentu mounts
     const addSocketId = () => {
       const data = {
         current_user : user?.id
@@ -142,8 +142,7 @@ const Home = ({navigation}: {navigation: any}) => {
       socket.emit("addUser", data);
     };
     addSocketId();
-   console.log("i just fired")
-    // Clean up the socket listener when the component unmounts
+      // Clean up the socket listener when the component unmounts
     return () => {
       socket.off("addUser");
       socket.disconnect();
@@ -181,9 +180,18 @@ const Home = ({navigation}: {navigation: any}) => {
   }
 
   console.log(nextEventData)
+
   const MyGroupsCard = ({name, community_id}: any) => {
+    const handleCommunity = async() => {
+      const data = {
+        communityId: community_id,
+        current_user_id: user.id
+      }
+      navigation.navigate("Group", { communityId: community_id })
+      socket.emit("joinCommunity", data)
+    }
     return (
-      <TouchableOpacity className='h-40 w-32 rounded-md mr-3' style={{borderRadius: 10}} onPress={()=>navigation.navigate("Group", { communityId: community_id })} >
+      <TouchableOpacity className='h-40 w-32 rounded-md mr-3' style={{borderRadius: 10}} onPress={handleCommunity} >
         <ImageBackground
           resizeMode="cover"
           imageStyle={{ borderRadius: 10}}

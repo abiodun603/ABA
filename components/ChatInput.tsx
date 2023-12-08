@@ -84,6 +84,7 @@ const ChatInput = ({ reply, closeReply, isLeft, username, onPress, message, setM
     });
 
     // console.log(result);
+    
 
     if (!result.canceled) {
       setImageUri(result.assets[0].uri);

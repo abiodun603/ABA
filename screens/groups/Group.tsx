@@ -20,6 +20,8 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import BottomSheet from '../../components/bottom-sheet/BottomSheet';
 import CustomButton from '../../components/CustomButton';
 import Toaster from '../../components/Toaster/Toaster';
+import Resources from './Resources';
+import ChatCommunity from '../chat/ChatCommunity';
 
 
 type Props = NativeStackScreenProps<RootStackParamList, "Group">;
@@ -113,6 +115,12 @@ const renderEventCard = (toggleBookMark: any, bookMark: any, navigation: any) =>
 const Group: React.FC<Props> = ({ navigation: { navigate } , route}) => {
   const [bookMark, setBookMark] = useState(false)
   const [show, setShow] = useState(false)
+  const [showResources, setShowResources] = useState(false)
+
+  const toggleShowResources =  () => {
+    setShow(false)
+    setShowResources(!showResources)
+  }
 
   const toggleBookMark = () => setBookMark(!bookMark)
   // 
@@ -227,21 +235,24 @@ const Group: React.FC<Props> = ({ navigation: { navigate } , route}) => {
           <Text className='text-black text-xs font-normal mt-3'>Part of {data?.community_name} (117 groups)</Text>
           <Text className='text-gray-800 text-lg font-bold mt-2 uppercase'>{data?.community_name}-community</Text>
         </View>
-        <TouchableOpacity 
-          onPress={()=> navigate("Members", {communityId})}>
-          <FlatList
-            data={getCommunityMembers?.docs || []}
-            horizontal
-            showsHorizontalScrollIndicator = {false}
-            keyExtractor={(item: any, index: { toString: () => any; }) => index.toString()}
-            renderItem={({ item }: any) => 
-              <View className='w-10 mr-1 mt-3 h-10 rounded-full border border-black bg-blue-400 items-center justify-center'>
-                <Text>{(item.name || '').charAt(0).toUpperCase()}</Text>
-              </View>
-          }
-          />
-        </TouchableOpacity>
-      
+        <View className='flex-row items-center justify-between'>
+          <TouchableOpacity 
+            onPress={()=> navigate("Members", {communityId})}>
+            <FlatList
+              data={getCommunityMembers?.docs || []}
+              horizontal
+              showsHorizontalScrollIndicator = {false}
+              keyExtractor={(item: any, index: { toString: () => any; }) => index.toString()}
+              renderItem={({ item }: any) => 
+                <View className='w-10 mr-1 mt-3 h-10 rounded-full border border-black bg-blue-400 items-center justify-center'>
+                  <Text>{(item.name || '').charAt(0).toUpperCase()}</Text>
+                </View>
+            }
+            />
+          </TouchableOpacity>
+          <Ionicons name="chatbubbles-outline" size={30} onPress={() => navigate("ChatCommunity", {communityId: communityId})} />
+        </View>
+
         <View>
           <Text className='text-black text-xs font-bold mt-3'>{getCommunityMembers?.docs?.length || 0} Members</Text>
           <Text className='text-gray text-xs font-normal'>Lagos, Nigeria Public group</Text>
@@ -281,13 +292,28 @@ const Group: React.FC<Props> = ({ navigation: { navigate } , route}) => {
         onDismiss={() => {
           setShow(false);
         }}
-        height={0.15}
+        height={0.18}
 
         enableBackdropDismiss
       >
         <View>
+          <CustomButton title='Your resources' onPress={toggleShowResources} buttonStyle={{marginBottom: 10}} />
+        </View>
+        <View>
           <CustomButton title='Leave group' onPress={handleLeaveGroup} />
         </View>
+      </BottomSheet>
+
+      <BottomSheet
+        show={show}
+        onDismiss={() => {
+          setShow(false);
+        }}
+        height={0.9}
+
+        enableBackdropDismiss
+      >
+       <Resources />
       </BottomSheet>
     </View>
   </Layout>
