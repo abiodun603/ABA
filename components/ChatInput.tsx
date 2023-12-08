@@ -16,12 +16,23 @@ import Animated, {
 } from "react-native-reanimated";
 
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
+import * as DocumentPicker from 'expo-document-picker';
+import * as ImagePicker from 'expo-image-picker'
 import { theme } from "../theme";
+import BottomSheet from "./bottom-sheet/BottomSheet";
+import CustomButton from "./CustomButton";
+import * as FileSystem from 'expo-file-system';
+import { Buffer } from '@craftzdog/react-native-buffer';
 
-const ChatInput = ({ reply, closeReply, isLeft, username }: any) => {
-  const [message, setMessage] = useState("");
+const ChatInput = ({ reply, closeReply, isLeft, username, onPress, message, setMessage , imageUri, setImageUri, arrayBuffer, setArrayBuffer}: any) => {
 	const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [show, setShow ] = useState(false) 
+  const [selectedDocument, setSelectedDocument] = useState(null);
+
+
   const height = useSharedValue(70);
+
+  console.log(message)
 
   useEffect(() => {
 		if (showEmojiPicker) {
@@ -45,6 +56,54 @@ const ChatInput = ({ reply, closeReply, isLeft, username }: any) => {
 		}
 	})
 
+  const pickDocument = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync();
+
+      if (result.type === 'success') {
+        // setSelectedDocument(result);
+        // Handle additional logic or UI updates as needed
+        console.log('Selected document:', result);
+      }
+    } catch (err) {
+      // Handle errors
+      console.error('Error picking document:', err);
+    } finally {
+      // closeBottomSheet();
+    }
+  };
+
+
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    // console.log(result);
+
+    if (!result.canceled) {
+      setImageUri(result.assets[0].uri);
+      try {
+        // const fileUri = imageUri;
+        const fileStream = await FileSystem.readAsStringAsync(result.assets[0].uri, {
+          encoding: FileSystem.EncodingType.Base64,
+        });
+        const imageArrayBuffer = Buffer.from(fileStream, 'base64');
+        setArrayBuffer(imageArrayBuffer);
+        setShow(false);
+          setMessage(`Send File to user`)
+      } catch (error) {
+        console.error('Error converting image to ArrayBuffer:', error);
+      }
+    }
+  
+  };
+
+  console.log(arrayBuffer, imageUri);
 
   return(
     <View>
@@ -85,7 +144,7 @@ const ChatInput = ({ reply, closeReply, isLeft, username }: any) => {
               value={message}
               onChangeText={(text) => setMessage(text)}
             />
-            <TouchableOpacity style={styles.rightIconButtonStyle}>
+            <TouchableOpacity style={styles.rightIconButtonStyle} onPress={()=> setShow(true)}>
               <Icon
                 name="paperclip"
                 size={23}
@@ -105,9 +164,43 @@ const ChatInput = ({ reply, closeReply, isLeft, username }: any) => {
               name={message ? "send" : "microphone"}
               size={23}
               color={theme.colors.white}
+              onPress={onPress}
             />
           </TouchableOpacity>
         </View>
+        {/* BottomSheet component */}
+        <BottomSheet
+          show={show}
+          onDismiss={() => {
+            setShow(false);
+          }}
+          height={0.27}
+          enableBackdropDismiss
+          isTransparent
+          isHeaderTransparent
+        >
+           <CustomButton
+              title="Photo" 
+              buttonColor="#FFFFFF"
+              titleColor="#0047ab"
+              buttonStyle={{borderRadius: 10, marginBottom: 5}}
+              onPress={pickImage}  
+            />
+           <CustomButton
+            title="Document" 
+            buttonColor="#FFFFFF"
+            titleColor="#0047ab"
+            buttonStyle={{borderRadius: 10, marginBottom: 10}}
+            onPress={pickDocument}              
+          />
+          <CustomButton
+            title="Cancel" 
+            buttonColor="#FFFFFF"
+            titleColor="#0047ab"
+            buttonStyle={{borderRadius: 10, height: 60}}
+            onPress={() => setShow(false)}
+          />
+        </BottomSheet>
       </Animated.View>
     </View>
   )

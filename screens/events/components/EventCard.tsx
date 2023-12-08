@@ -139,7 +139,7 @@ export const EventCard = ({event_about, event_time ,event_name, event_city, even
     try{
       await unSaveEvent(event_id)
       .unwrap()
-      .then((data) => {
+      .then((data: any) => {
         console.log('res:', data);
       })
     }catch(error: any) {

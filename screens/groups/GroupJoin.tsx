@@ -211,7 +211,6 @@ const GroupJoin: React.FC<Props> = ({ navigation: { navigate } , route}) => {
       status: selectedStatus.toLowerCase(),
       members: selectedMembers
     }
-    methods.reset();
 
     createCommunity(formData)
     .unwrap()
@@ -223,6 +222,7 @@ const GroupJoin: React.FC<Props> = ({ navigation: { navigate } , route}) => {
         render: ({id}) => <Toaster id={id} type="success" message="Thank you!!!. Community Created" />
       })
       setShow(false)
+      methods.reset();
 
     })
     .catch((error) => {

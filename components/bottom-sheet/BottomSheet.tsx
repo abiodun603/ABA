@@ -19,6 +19,8 @@ interface BottomSheetProps {
   height: number;
   enableBackdropDismiss: boolean;
   children: React.ReactNode;
+  isTransparent?: boolean;
+  isHeaderTransparent?:boolean;
 }
 
 const BottomSheet: React.FC<BottomSheetProps> = ({
@@ -26,6 +28,8 @@ const BottomSheet: React.FC<BottomSheetProps> = ({
   onDismiss,
   enableBackdropDismiss,
   height,
+  isTransparent,
+  isHeaderTransparent,
   children,
 }) => {
   const bottomSheetHeight = Dimensions.get('window').height *  height;
@@ -90,6 +94,7 @@ const BottomSheet: React.FC<BottomSheetProps> = ({
           },
           styles.common,
         ]}
+        className={isTransparent ? "bg-transparent" : "bg-white"}
       >
         <PanGestureHandler onGestureEvent={onGesture} onEnded={onGestureEnd}>
           <View
@@ -103,6 +108,7 @@ const BottomSheet: React.FC<BottomSheetProps> = ({
                 },
               },
             ]}
+            className={isHeaderTransparent ? "bg-transparent" : "bg-white"}
           >
             <View
               style={{
@@ -132,14 +138,13 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     zIndex: 100,
-    backgroundColor: '#fff',
+    // backgroundColor: '#fff',
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
     overflow: 'hidden',
   },
   header: {
     height: 44,
-    backgroundColor: '#fff',
   },
   common: {
     shadowColor: '#000',
@@ -154,7 +159,7 @@ const styles = StyleSheet.create({
   backDrop: {
     ...StyleSheet.absoluteFillObject,
     zIndex: 80,
-    backgroundColor: 'rgba(0, 0, 0, 0.12)',
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
   },
   content: {
     paddingHorizontal: 18,

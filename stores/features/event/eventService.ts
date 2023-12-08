@@ -137,4 +137,4 @@ export const eventsApi = createApi({
   })
 })
 
-export const {useGetSortUpcomingEventQuery, useGetMyEventsQuery, useDeleteEventMutation, useLazyGetSortUpcomingEventQuery,  useGetEventsQuery, useGetEventsByCatTypeQuery, useGetPopularEventsQuery, useUnSaveEventMutation, useGetNextEventQuery, useUpdateAttendEventMutation, useGetEventByIdQuery, useGetJoinedEventQuery, useGetSavedEventQuery, useSaveEventMutation, useGetEventTypesQuery, useCreateEventMutation, useLeaveEventMutation, useUpdateEventMutation} = eventsApi
+export const {useGetSortUpcomingEventQuery, useGetMyEventsQuery, useDeleteEventMutation, useGetEventsQuery, useGetEventsByCatTypeQuery, useGetPopularEventsQuery, useUnSaveEventMutation, useGetNextEventQuery, useUpdateAttendEventMutation, useGetEventByIdQuery, useGetJoinedEventQuery, useGetSavedEventQuery, useSaveEventMutation, useGetEventTypesQuery, useCreateEventMutation, useLeaveEventMutation, useUpdateEventMutation} = eventsApi

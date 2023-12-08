@@ -30,7 +30,7 @@ const ChatTab: FC<IChatTabProps> = ({message, setMessage, onPress}) => {
             placeholder='Text message'
             mode="outlined"
             style={{ backgroundColor: 'transparent' }}
-            onChangeText={setMessage}
+            onChangeText={(text) => setMessage(text)}            
             value={message}
           />
         </View>

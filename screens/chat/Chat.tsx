@@ -62,6 +62,8 @@ const MessageCard = ({message, time, chatId}: {message: string, time: any, chatI
 const Chat: React.FC<Props> = ({ navigation: { navigate } }) => {
   const [message, setMessage] = useState('');
   const [messagesRecieved, setMessagesReceived] = useState<any[]>([]);
+  const [imageUri, setImageUri] = useState<any>(null);
+  const [arrayBuffer, setArrayBuffer] = useState<any>(null);
 
   const flatListRef = useRef<FlatList<any>>(null);
   
@@ -71,15 +73,22 @@ const Chat: React.FC<Props> = ({ navigation: { navigate } }) => {
   const getMemberId = useAppSelector(state => state.chatMember.memberId);
 
   const handleSendMessage = () => {
-    const data = {
-      chatId: getChatId,
-      currentUserId: user?.id,
-      recipientId: getMemberId,
-      message: message
+    if(arrayBuffer){
+      setMessage("")
+    }else {
+      const data = {
+        chatId: getChatId,
+        currentUserId: user?.id,
+        recipientId: getMemberId,
+        message: arrayBuffer ? arrayBuffer : message
+      }
+      setMessage("")
+      socket.emit("sendMessage", data)
     }
+    // if(imageUri){
+    //   setImageUri("")
+    // }
 
-    // socket.em
-    socket.emit("sendMessage", data)
   }
 
   // Runs whenever a socket event is recieved from the server
@@ -161,7 +170,7 @@ const Chat: React.FC<Props> = ({ navigation: { navigate } }) => {
               :  <Text className='text-center mt-6 '>No message yet</Text>
             } 
         </View>
-        <ChatInput message={message} setMessage={setMessage} onPress={handleSendMessage} />
+        <ChatInput imageUri={imageUri} setImageUri={setImageUri} arrayBuffer={arrayBuffer} setArrayBuffer={setArrayBuffer} message={message} setMessage={setMessage} onPress={handleSendMessage} />
       </KeyboardAvoidingView>
     </Layout>
   )

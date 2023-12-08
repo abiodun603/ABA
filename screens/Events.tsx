@@ -394,14 +394,13 @@ const Contact = ({navigation}: {navigation: any}) => {
                 </View>
                 <View className='mb-20'>
                   <CustomButton
-                  title="Submit" 
-                  isLoading={createEventLoading}
-                  onPress={methods.handleSubmit(handleCreateEvent)}              
+                    title="Submit" 
+                    isLoading={createEventLoading}
+                    onPress={methods.handleSubmit(handleCreateEvent)}              
                   />
                 </View>
               </View>
             </ScrollView>
-            
           </FormProvider>
         </BottomSheet>
       </ScrollView>

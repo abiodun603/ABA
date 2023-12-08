@@ -1,4 +1,4 @@
-import {  ImageBackground, Share, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import {  ImageBackground, Share, StyleSheet, Text, Alert, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import { styled } from 'nativewind';
 import Layout from '../../layouts/Layout';
@@ -11,13 +11,14 @@ import {Ionicons} from "@expo/vector-icons"
 
 import { FlatList } from 'react-native';
 import { Avatar, AvatarFallbackText, AvatarGroup, AvatarImage,useToast } from '@gluestack-ui/themed';
-import { useGetCommunityMembersQuery, useGetJoinedCommunityQuery, useGetOneCommunityQuery, useJoinCommunityMutation, useLeaveCommunityMutation } from '../../stores/features/groups/groupsService';
+import { useGetCommunityEventQuery, useGetCommunityMembersQuery, useGetCommunityResourcesQuery, useGetJoinedCommunityQuery, useGetOneCommunityQuery, useJoinCommunityMutation, useLeaveCommunityMutation } from '../../stores/features/groups/groupsService';
 
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+
+//** Components 
 import BottomSheet from '../../components/bottom-sheet/BottomSheet';
 import CustomButton from '../../components/CustomButton';
-import { Alert } from 'react-native';
 import Toaster from '../../components/Toaster/Toaster';
 
 
@@ -119,13 +120,15 @@ const Group: React.FC<Props> = ({ navigation: { navigate } , route}) => {
 
   const { communityId } = route.params as unknown  as RouteParams;
   const { isLoading, data } = useGetOneCommunityQuery(communityId);
+  const {isLoading: isEventLoading, data: getCommunityEventData} = useGetCommunityEventQuery(communityId)
+  const {data: getCommunityResources} = useGetCommunityResourcesQuery()
   const [leaveCommunity] = useLeaveCommunityMutation()
   const {  data: isJoinedCommunity, isLoading: isJoinedCommunityLoading } = useGetJoinedCommunityQuery(communityId);
   const { data: getCommunityMembers, isLoading: isCommunityMembersLoading}  =  useGetCommunityMembersQuery(communityId)
   const [joinCommunity, { isLoading: isJoining }, ] = useJoinCommunityMutation()
 
 
-  // console.log(isJoinedCommunity)
+  console.log(getCommunityResources)
 
   if(isLoading && isJoinedCommunityLoading && isCommunityMembersLoading){
     return <Text>Loading...</Text>;
@@ -135,7 +138,7 @@ const Group: React.FC<Props> = ({ navigation: { navigate } , route}) => {
     return <Text>No data available.</Text>; // Display a message when there is no data
   }
 
-  console.log(data, communityId)
+  console.log(getCommunityEventData)
 
   const handleLeaveGroup = () => {
     setShow(false);
@@ -170,7 +173,6 @@ const Group: React.FC<Props> = ({ navigation: { navigate } , route}) => {
           },
         },
       ],
-      // { cancelable: false }
     ); 
   }
 
@@ -258,13 +260,18 @@ const Group: React.FC<Props> = ({ navigation: { navigate } , route}) => {
             <Text className="text-ksecondary text-sm opacity-50 font-normal">See all</Text>
           </View>          
           <View>
+          {
+            getCommunityEventData?.docs.length > 0 ?
             <FlatList
               horizontal
-              data = {[1, 2, 3, 4]}
+              data = {getCommunityEventData?.docs}
               renderItem={() => renderEventCard(toggleBookMark, bookMark, navigate)}
               keyExtractor={(item, index) => index.toString()}
               showsHorizontalScrollIndicator = {false}
-            />
+            /> : 
+            <Text className='text-sm text-ksecondary'>No Event at the Moment!!!</Text>
+          } 
+          
           </View> 
         </View>
       </View>
