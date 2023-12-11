@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import Layout from '../../layouts/Layout';
@@ -16,6 +16,8 @@ import Font from '../../constants/Font';
 import FontSize from '../../constants/FontSize';
 import { formatTimestampToTime } from '../../helpers/timeConverter';
 import { FlatList } from 'react-native';
+import { Buffer } from '@craftzdog/react-native-buffer';
+import * as FileSystem from 'expo-file-system';
 import ChatInput from '../../components/ChatInput';
 type Props = NativeStackScreenProps<RootStackParamList, "ChatCommunity">;
 
@@ -36,12 +38,15 @@ interface IMessageCardProps {
   chatId: IChatIdProps
 }
 
+const blurhash =
+  '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
+
 // Define the type for your route parameters
 type RouteParams = {
   communityId: string; // Replace 'string' with the correct type for communityId
 };
 
-const MessageCard = ({message, time, chatId}: {message: string, time: any, chatId: string, name: string}) => {
+const MessageCard = ({message, time, chatId, name, fileUri}: {message: string, time: any, chatId: string, name: string,fileUri: any}) => {
   const {user} = useGlobalState();
   const [containerWidth, setContainerWidth] = useState<any>(null);
   const contentRef = useRef<View | null>(null);
@@ -57,11 +62,20 @@ const MessageCard = ({message, time, chatId}: {message: string, time: any, chatI
   return (
     <View style={user?.id === chatId ? [styles.cardContainer, styles.rightChat, { width: containerWidth }]: [styles.cardContainer, , styles.leftChat, { width: containerWidth }]}>
       <Text className='text-xs text-gray-400 mb-10 absolute -top-1 left-2 py-1 '>{chatId !== user?.id ? name : ''}</Text>
-      <View>
-        <Text style={styles.messageText}>
-          {message} 
-        </Text>
+      <View className='h-'>
+        {
+          fileUri !== '' && (
+            <Image
+              source={{uri: fileUri}}
+              resizeMode="cover"
+              
+            />
+          )}
       </View>
+       
+          <Text style={styles.messageText}>
+            {message} 
+          </Text>
       <Text style={[styles.time]} className="absolute -bottom-4 right-2 ">{formatTimestampToTime(time)}</Text>
     </View> 
   )
@@ -72,6 +86,7 @@ const ChatCommunity: React.FC<Props> = ({ navigation: { navigate } , route}) => 
   const [messagesRecieved, setMessagesReceived] = useState<any[]>([]);
   const [imageUri, setImageUri] = useState<any>(null);
   const [arrayBuffer, setArrayBuffer] = useState<any>(null);
+  const [downloadedFileUri, setDownloadedFileUri] = useState('');
 
   const flatListRef = useRef<FlatList<any>>(null);
   const { communityId } = route.params as unknown  as RouteParams;
@@ -79,20 +94,17 @@ const ChatCommunity: React.FC<Props> = ({ navigation: { navigate } , route}) => 
    const {user} = useGlobalState()
 
   const handleSendMessage = async() => {
+    const data = {
+      arrayBuffer: arrayBuffer,
+      fileName: "a.jpg",
+      communityId: communityId,
+      currentUserId: user?.id,
+    }
     if(arrayBuffer){
-        socket.emit('uploadFile', {
-          arrayBuffer,
-          fileName: imageUri,
-          communityId: communityId,
-          currentUserId: user?.id,
-          // type: 'video/mp4'
-        });
+      console.log(data)
+        socket.emit('uploadFile', data);
         console.log("try me")
   
-        socket.on('uploadComplete', (data) => {
-          console.log('Received ArrayBuffer data:', data);
-          // Process the ArrayBuffer here
-        });
      
     }else{
       const data = {
@@ -104,8 +116,8 @@ const ChatCommunity: React.FC<Props> = ({ navigation: { navigate } , route}) => 
       socket.emit("sendMessage", data)
     // }
     }
-    
   }
+
 
   
   // Runs whenever a socket event is recieved from the server
@@ -119,6 +131,7 @@ const ChatCommunity: React.FC<Props> = ({ navigation: { navigate } , route}) => 
           id: newData.id,
           message: newData.message,
           chatId: newData.current_user_id,
+          file: '',
           time: newData.createdAt,
         },
       ]);
@@ -128,6 +141,51 @@ const ChatCommunity: React.FC<Props> = ({ navigation: { navigate } , route}) => 
       socket.off("newCommunityMessage");
     };
   }, [socket]); 
+
+  const convertArrayBufferToFile = async (arrayBuffer: any) => {
+    
+    try {
+      const fileUri = `${FileSystem.documentDirectory}downloaded_image.jpg`; // Change the file name and extension as needed
+      await FileSystem.writeAsStringAsync(fileUri, Buffer.from(arrayBuffer).toString('base64'), {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+      setDownloadedFileUri(fileUri)
+      return fileUri;
+    } catch (error) {
+      console.error('Error converting ArrayBuffer to file:', error);
+    }
+  };
+
+
+  useEffect(() => {
+    socket.on("uploadComplete", async (data) => {
+      try {
+        const fileUri = await convertArrayBufferToFile(data.arrayBuffer);
+        setMessagesReceived((state) => [
+          ...state,
+          {
+            id: data.id,
+            message: '',
+            file: fileUri,
+            chatId: data.current_user_id,
+            time: data.createdAt,
+          },
+        ]);
+      } catch (error) {
+        console.error('Error handling upload complete:', error);
+      }
+    });
+    console.log("file me upload complete");
+  
+    // Cleanup the event listener when the component is unmounted
+    return () => {
+      socket.off("uploadComplete");
+    };
+  }, [socket]);
+
+  const handleClearMessage = () => setMessagesReceived([])
+
+
 
   // Add this
   useEffect(() => {
@@ -165,7 +223,7 @@ const ChatCommunity: React.FC<Props> = ({ navigation: { navigate } , route}) => 
     }
   }, [messagesRecieved]);
 
-  console.log(messagesRecieved)
+  console.log(messagesRecieved, downloadedFileUri)
 
 
   return (
@@ -183,7 +241,7 @@ const ChatCommunity: React.FC<Props> = ({ navigation: { navigate } , route}) => 
                 data={messagesRecieved}
                 keyExtractor={(item, index) => item?.id}
                 renderItem={({ item }) => (
-                  <MessageCard  message={item.message} time={item.time} chatId= {item.chatId} name={item.name} />
+                  <MessageCard  message={item.message} time={item.time} chatId= {item.chatId} name={item.name}  fileUri = {item.file}/>
                 )}
                 onContentSizeChange={() => {
                   flatListRef.current?.scrollToEnd({ animated: true });
@@ -192,7 +250,8 @@ const ChatCommunity: React.FC<Props> = ({ navigation: { navigate } , route}) => 
               :  <Text className='text-center mt-6 '>No message yet</Text>
             } 
         </View>
-        <ChatInput imageUri={imageUri} setImageUri={setImageUri} arrayBuffer={arrayBuffer} setArrayBuffer={setArrayBuffer} message={message} setMessage={setMessage} onPress={handleSendMessage} />
+        <TouchableOpacity onPress={handleClearMessage} className='mb-10'><Text>Clear</Text></TouchableOpacity>
+        <ChatInput imageUri={imageUri} setImageUri={setImageUri} arrayBuffer={arrayBuffer} setArrayBuffer={setArrayBuffer} message={message} setMessage={setMessage} onPress={handleSendMessage}  />
       </KeyboardAvoidingView>
     </Layout>
   )
