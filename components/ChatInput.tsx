@@ -24,7 +24,7 @@ import CustomButton from "./CustomButton";
 import * as FileSystem from 'expo-file-system';
 import { Buffer } from '@craftzdog/react-native-buffer';
 
-const ChatInput = ({ reply, closeReply, isLeft, username, onPress, message, setMessage , imageUri, setImageUri, arrayBuffer, setArrayBuffer}: any) => {
+const ChatInput = ({ reply, closeReply, isLeft, username, onPress, message, setMessage , imageUri, setImageUri, arrayBuffer, setFileName, setArrayBuffer}: any) => {
 	const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [show, setShow ] = useState(false) 
   const [selectedDocument, setSelectedDocument] = useState(null);
@@ -64,6 +64,20 @@ const ChatInput = ({ reply, closeReply, isLeft, username, onPress, message, setM
         // setSelectedDocument(result);
         // Handle additional logic or UI updates as needed
         console.log('Selected document:', result);
+        // Read the content of the document as a string
+        const documentContent = await FileSystem.readAsStringAsync(result.uri, {
+          encoding: FileSystem.EncodingType.UTF8,
+        });
+
+        // Convert the string content to an ArrayBuffer
+        const arrayBuffer = stringToArrayBuffer(documentContent);
+
+        // Now you can use the 'arrayBuffer' as needed, for example, send it to the server
+        console.log('Selected document content:', arrayBuffer);
+        setArrayBuffer(arrayBuffer);
+        setFileName(result.name)
+        setShow(false);
+        setMessage(`Send File to Community`)
       }
     } catch (err) {
       // Handle errors
@@ -71,6 +85,16 @@ const ChatInput = ({ reply, closeReply, isLeft, username, onPress, message, setM
     } finally {
       // closeBottomSheet();
     }
+  };
+
+  // Function to convert a string to an ArrayBuffer
+  const stringToArrayBuffer = (str: any) => {
+    const buffer = new ArrayBuffer(str.length);
+    const bufferView = new Uint8Array(buffer);
+    for (let i = 0; i < str.length; i++) {
+      bufferView[i] = str.charCodeAt(i);
+    }
+    return buffer;
   };
 
 
@@ -81,13 +105,17 @@ const ChatInput = ({ reply, closeReply, isLeft, username, onPress, message, setM
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
-    });
 
-    // console.log(result);
-    
+    });
 
     if (!result.canceled) {
       setImageUri(result.assets[0].uri);
+      // Get the file name
+      // Extract file name from the uri
+      const uriComponents = result.assets[0].uri.split('/');
+      const fileName = uriComponents[uriComponents.length - 1];
+
+      console.log('Selected image file name:', fileName);
       try {
         // const fileUri = imageUri;
         const fileStream = await FileSystem.readAsStringAsync(result.assets[0].uri, {
@@ -95,8 +123,9 @@ const ChatInput = ({ reply, closeReply, isLeft, username, onPress, message, setM
         });
         const imageArrayBuffer = Buffer.from(fileStream, 'base64');
         setArrayBuffer(imageArrayBuffer);
+        setFileName(fileName)
         setShow(false);
-          setMessage(`Send File to user`)
+          setMessage(`Send File to Community`)
       } catch (error) {
         console.error('Error converting image to ArrayBuffer:', error);
       }

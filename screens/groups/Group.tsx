@@ -217,9 +217,8 @@ const Group: React.FC<Props> = ({ navigation: { navigate } , route}) => {
     <Layout
       title = "Group Details"
       iconName="dots-horizontal"
-      onPress={()=> setShow(true)}
-
-  >
+      onPress={()=> navigate("Resources", {communityId: communityId})}
+   >
     <View style={styles.container}>
       <View className='px-5'>
         <View>
@@ -304,7 +303,7 @@ const Group: React.FC<Props> = ({ navigation: { navigate } , route}) => {
         </View>
       </BottomSheet>
 
-      <BottomSheet
+      {/* <BottomSheet
         show={show}
         onDismiss={() => {
           setShow(false);
@@ -314,7 +313,7 @@ const Group: React.FC<Props> = ({ navigation: { navigate } , route}) => {
         enableBackdropDismiss
       >
        <Resources />
-      </BottomSheet>
+      </BottomSheet> */}
     </View>
   </Layout>
   )

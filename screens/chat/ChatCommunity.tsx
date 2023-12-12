@@ -86,6 +86,7 @@ const ChatCommunity: React.FC<Props> = ({ navigation: { navigate } , route}) => 
   const [messagesRecieved, setMessagesReceived] = useState<any[]>([]);
   const [imageUri, setImageUri] = useState<any>(null);
   const [arrayBuffer, setArrayBuffer] = useState<any>(null);
+  const [fileName, setFileName] = useState<any>(null)
   const [downloadedFileUri, setDownloadedFileUri] = useState('');
 
   const flatListRef = useRef<FlatList<any>>(null);
@@ -96,7 +97,7 @@ const ChatCommunity: React.FC<Props> = ({ navigation: { navigate } , route}) => 
   const handleSendMessage = async() => {
     const data = {
       arrayBuffer: arrayBuffer,
-      fileName: "a.jpg",
+      fileName: fileName,
       communityId: communityId,
       currentUserId: user?.id,
     }
@@ -124,7 +125,7 @@ const ChatCommunity: React.FC<Props> = ({ navigation: { navigate } , route}) => 
   useEffect(() => {
     // Listen for the server's response
     socket.on("newCommunityMessage", (newData) => {
-      console.log(newData)
+      console.log("get Lastest Chat", newData)
       setMessagesReceived((state) => [
         ...state,
         {
@@ -160,6 +161,7 @@ const ChatCommunity: React.FC<Props> = ({ navigation: { navigate } , route}) => 
   useEffect(() => {
     socket.on("uploadComplete", async (data) => {
       try {
+        console.log(data)
         const fileUri = await convertArrayBufferToFile(data.arrayBuffer);
         setMessagesReceived((state) => [
           ...state,
@@ -251,7 +253,7 @@ const ChatCommunity: React.FC<Props> = ({ navigation: { navigate } , route}) => 
             } 
         </View>
         <TouchableOpacity onPress={handleClearMessage} className='mb-10'><Text>Clear</Text></TouchableOpacity>
-        <ChatInput imageUri={imageUri} setImageUri={setImageUri} arrayBuffer={arrayBuffer} setArrayBuffer={setArrayBuffer} message={message} setMessage={setMessage} onPress={handleSendMessage}  />
+        <ChatInput imageUri={imageUri} setImageUri={setImageUri} arrayBuffer={arrayBuffer} setArrayBuffer={setArrayBuffer} message={message} setMessage={setMessage} onPress={handleSendMessage} setFileName={setFileName} />
       </KeyboardAvoidingView>
     </Layout>
   )

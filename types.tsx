@@ -46,7 +46,7 @@ export type RootStackParamList = {
   PersonalEvents: undefined;
   //***** */
   Verification: undefined;
-  Resources: undefined;
+  Resources: any;
   TopNavPanel: undefined;
   Settings:undefined;
   About: undefined;

@@ -12,6 +12,11 @@ interface GetOneCommunityRequest {
   community_id: any
 }
 
+type ResourceRequest = {
+  community_id: string;
+  media_type: string
+}
+
 export const groupsApi = createApi({
   baseQuery,
   reducerPath: 'groupsApi',
@@ -146,7 +151,19 @@ export const groupsApi = createApi({
         method: 'GET',
       }),
     }),
+    getCommunityImages:  builder.query<any, ResourceRequest>({
+      query: ({community_id, media_type}) => ({ 
+        url: `/resources/resourcesByCommunityId/${community_id}/${media_type}`,
+        method: 'GET',
+      }),
+    }),
+    getCommunityFile:  builder.query<any, ResourceRequest>({
+      query: ({community_id, media_type}) => ({ 
+        url: `/resources/resourcesByCommunityId/${community_id}/${media_type}`,
+        method: 'GET',
+      }),
+    }),
   })
 })
 
-export const {useGetCommunityMembersQuery, useGetCommunityResourcesQuery, useGetCommunityEventQuery, useAddCommunityAdminMutation, useUpdateMyCommunityMutation, useDeleteCommunityMutation,  useGetCategoryByIdQuery, useGetCategoryQuery, useGetCommunityQuery, useGetOneCommunityQuery, useGetMyCommunityQuery, useGetEventDetailsQuery, useGetSavedEventQuery, useJoinCommunityMutation, useCreateCommunityMutation, useLeaveCommunityMutation, useGetPastEventQuery, useGetJoinedCommunityQuery } = groupsApi
+export const {useGetCommunityMembersQuery, useGetCommunityFileQuery, useGetCommunityImagesQuery, useGetCommunityResourcesQuery, useGetCommunityEventQuery, useAddCommunityAdminMutation, useUpdateMyCommunityMutation, useDeleteCommunityMutation,  useGetCategoryByIdQuery, useGetCategoryQuery, useGetCommunityQuery, useGetOneCommunityQuery, useGetMyCommunityQuery, useGetEventDetailsQuery, useGetSavedEventQuery, useJoinCommunityMutation, useCreateCommunityMutation, useLeaveCommunityMutation, useGetPastEventQuery, useGetJoinedCommunityQuery } = groupsApi

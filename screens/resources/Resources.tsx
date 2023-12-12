@@ -23,47 +23,26 @@ import Layout from '../../layouts/Layout';
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useGetSavedResourcesQuery } from '../../stores/features/resources/resourcesService';
 import { ShortenedWord } from '../../helpers/wordShorther';
+import FileResources from './components/FileResources';
+import ImageResources from './components/ImageResources';
+import TopNavPanel from '../../navigation/TopTabs';
 type Props = NativeStackScreenProps<RootStackParamList, "Resources">;
 
-interface ICardProps {
-  id: string ;
-  email: string;
-  resource: string
-  filename?: string
-  onPress?: ()=>void;
-}
+
+const TabData = [
+  { name: "Image", component: ImageResources },
+  { name: "File", component: FileResources },
+];
+
+// Define the type for your route parameters
+type RouteParams = {
+  communityId: string; // Replace 'string' with the correct type for communityId
+};
 
 
-const Card: React.FC<ICardProps> = ({id , email, resource, filename, onPress}) => {
-  console.log(id, email, resource)
-  return(
-    <TouchableOpacity 
-      onPress={onPress }
-      style={styles.cardContainer}>
-        <View className='flex-row items-center space-x-3'>
-          <View className='h-12 w-12 flex items-center justify-center rounded-2xl bg-ksecondary'>
-            <Text className='text-white text-sm font-bold'>A</Text>
-          </View>
-          <View style={{marginLeft: 10}}>
-            {/* name */}
-            <Text style={styles.title}><ShortenedWord word={resource} maxLength={30} /></Text>
-            {/* incoming message type */}
-            <Text style={styles.description}>{email}</Text>
-          </View>
-        </View>
+const Resources: React.FC<Props> = ({ navigation: { navigate }, route }) => {
 
-        <View>
-          {/* time */}
-          {/* <MaterialIcons name = "more-vert" size={25} color="#4E444B" /> */}
-        </View>
-    
-    </TouchableOpacity>
-  )
-}
-
-
-const Resources: React.FC<Props> = ({ navigation: { navigate } }) => {
-  const {data, isLoading} = useGetSavedResourcesQuery()
+  const { communityId } = route.params as unknown  as RouteParams;
 
   return (
     <Layout
@@ -73,7 +52,7 @@ const Resources: React.FC<Props> = ({ navigation: { navigate } }) => {
     >
     <View style={styles.container}>
       {/* search button */}
-      <View style={styles.inputContainer}>
+      {/* <View style={styles.inputContainer}>
         <TextInput
           placeholder='Search Resources'
           placeholderTextColor="#4E444B" 
@@ -83,23 +62,10 @@ const Resources: React.FC<Props> = ({ navigation: { navigate } }) => {
           style = {{ fontSize: FontSize.large, color: '#4E444B'}}
           name = "search"
         />
-      </View>  
+      </View>   */}
       <View className='mt-6' />
       {/* Events */}
-      <FlatList
-        data={data?.docs}
-        keyExtractor={item => item.id.toString()}
-        renderItem={
-          ({item}) => 
-            <Card  
-              resource = {item?.resource.filename || ""}
-              email={item?.user.email}
-              id = {item?.id.toString()}
-          /> 
-        }
-      />
-
-      
+      <TopNavPanel tabs={TabData} communityId={communityId} /> 
     </View>
   </Layout>
   )

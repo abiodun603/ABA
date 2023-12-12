@@ -9,9 +9,10 @@ interface TabItem {
 
 interface MyTabsProps  {
   tabs: TabItem[];
+  communityId?: string;
 }
 
-const TopNavPanel: React.FC<MyTabsProps> = ({ tabs }) => {
+const TopNavPanel: React.FC<MyTabsProps> = ({ tabs , communityId}) => {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -27,7 +28,7 @@ const TopNavPanel: React.FC<MyTabsProps> = ({ tabs }) => {
       }}
     >
       {tabs.map((tab) => (
-        <Tab.Screen key={tab.name} name={tab.name} component={tab.component} />
+        <Tab.Screen key={tab.name} name={tab.name} component={tab.component} initialParams={{ communityId }} />
       ))}
     </Tab.Navigator>
   );
