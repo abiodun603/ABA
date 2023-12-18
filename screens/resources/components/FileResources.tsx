@@ -12,7 +12,7 @@ interface ImageResourcesProps {
   // ... other props specific to ImageResources
 }
 
-const FileCard = ({url}:{url: string}) => {
+export const FileCard = ({url}:{url: string}) => {
   // Extract file name from the uri
   const uriComponents = url.split('/');
   let fileName = uriComponents[uriComponents.length - 1];
@@ -21,6 +21,7 @@ const FileCard = ({url}:{url: string}) => {
   fileName = decodeURIComponent(fileName);
 
   const handleDownload = async () => {
+    console.log("click me ")
     try {
       // Open the file in the device's default application
       await Linking.openURL(url);
@@ -30,10 +31,12 @@ const FileCard = ({url}:{url: string}) => {
   };
 
   return (
-    <TouchableOpacity className='h-20 w-full border-[2px] border-gray-400 rounded-md mt-5 flex flex-row items-center justify-start pl-6' onPress={handleDownload}>
-      <Feather name="file" size={34} color="#A3229A" />
-      <Text className='text-gray-700 text-lg font-semibold pl-2'>{fileName}</Text>
-    </TouchableOpacity>
+    <View>
+      <TouchableOpacity className='h-20 z-50 w-full border-[2px] border-gray-400 rounded-md mt-5 flex flex-row items-center justify-start pl-6' onPress={handleDownload}>
+        <Feather name="file" size={34} color="#A3229A" />
+        <Text className='text-gray-700 text-lg font-semibold pl-2'>{fileName}</Text>
+      </TouchableOpacity>
+    </View>
   )
 }
 
@@ -60,7 +63,7 @@ const FileResources: React.FC<ImageResourcesProps>  = ({ route, ...otherProps })
           keyExtractor={(item: { id: { toString: () => any; }; createdAt: string; url: string}) => item.id.toString()}
           renderItem={
             ({item}) => 
-              <FileCard url = {item.url} /> 
+              <FileCard url = {item.url}  /> 
           }
         />
     </View>

@@ -143,7 +143,7 @@ export const groupsApi = createApi({
           method: 'POST',
           body: credentials
       }),
-      invalidatesTags: ["Community"]
+      invalidatesTags: ["MyCommunity"]
     }),
     getCommunityResources: builder.query<EventResponse, void>({
       query: () => ({ 

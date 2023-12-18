@@ -68,22 +68,38 @@ const LoginScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
       navigate('CustomDrawer');
     } catch (err: any) {
       console.log(err)
-      if(err.status === 401){
-        toast.show({
-          placement: "top",
-          render: ({ id }) => <Toaster id = {id} message=" The email or password provided is incorrect."   />
-        })
-      }
-      if(err.status === 500){
-        toast.show({
-          placement: "top",
-          render: ({ id }) => <Toaster id = {id} message=" Email verification required"   />
-        })
-      }
+      // if(err.status === 401){
+      //   toast.show({
+      //     placement: "top",
+      //     render: ({ id }) => <Toaster id = {id} message=" The email or password provided is incorrect."   />
+      //   })
+      // }
+      // if(err.status === 500){
+      //   toast.show({
+      //     placement: "top",
+      //     render: ({ id }) => <Toaster id = {id} message=" Email verification required"   />
+      //   })
+      // }
+      // toast.show({
+      //   placement: "top",
+      //   render: ({ id }) => <Toaster id = {id} message="Opps!!! NetWork Error"   />
+      // });
       toast.show({
         placement: "top",
-        render: ({ id }) => <Toaster id = {id} message="Opps!!! NetWork Error"   />
-      });
+        render: ({ id }) => {
+          const toastId = "toast-" + id
+          return (
+            <Toast nativeID={toastId} action="success">
+              <VStack space="xs">
+                <ToastTitle>hjhjjhj</ToastTitle>
+                {/* <ToastDescription>
+                  {action.description}
+                </ToastDescription> */}
+              </VStack>
+            </Toast>
+          )
+        },
+      })
     }
   };
 
@@ -124,10 +140,10 @@ const LoginScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
                 passwordIcon
                 rules={{
                   required: 'Password is required',
-                  pattern: {
-                    value: /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-                    message: 'Password must contain at least 8 characters, one uppercase letter, one number, and one special character'
-                  }
+                  // pattern: {
+                  //   value: /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+                  //   message: 'Password must contain at least 8 characters, one uppercase letter, one number, and one special character'
+                  // }
                 }}
               />
 

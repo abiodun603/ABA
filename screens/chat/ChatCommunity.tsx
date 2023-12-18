@@ -19,6 +19,9 @@ import { FlatList } from 'react-native';
 import { Buffer } from '@craftzdog/react-native-buffer';
 import * as FileSystem from 'expo-file-system';
 import ChatInput from '../../components/ChatInput';
+import { getFileExtension } from '../../helpers/getFileExtension';
+import { FileCard } from '../resources/components/FileResources';
+import { ImageCard } from '../resources/components/ImageResources';
 type Props = NativeStackScreenProps<RootStackParamList, "ChatCommunity">;
 
 type IChatIdProps = {
@@ -58,24 +61,18 @@ const MessageCard = ({message, time, chatId, name, fileUri}: {message: string, t
     }
   }, []);
 
-  // console.log(getFindContactId, chatId)
   return (
     <View style={user?.id === chatId ? [styles.cardContainer, styles.rightChat, { width: containerWidth }]: [styles.cardContainer, , styles.leftChat, { width: containerWidth }]}>
-      <Text className='text-xs text-gray-400 mb-10 absolute -top-1 left-2 py-1 '>{chatId !== user?.id ? name : ''}</Text>
-      <View className='h-'>
+      <Text className='text-xs text-gray-400 mb-10 absolute -top-1 left-2 py-1  pl-2'>{chatId !== user?.id ? name : ''}</Text>
         {
-          fileUri !== '' && (
-            <Image
-              source={{uri: fileUri}}
-              resizeMode="cover"
-              
-            />
-          )}
-      </View>
-       
-          <Text style={styles.messageText}>
-            {message} 
-          </Text>
+          getFileExtension(message) === '.docx' || getFileExtension(message) === '.pdf' ? 
+          <FileCard url={message} /> :
+          getFileExtension(message) === '.jpg' || getFileExtension(message) === '.jpeg'?
+          <ImageCard isImageTime url = {message} />
+          : <Text style={styles.messageText}>
+              {message} 
+            </Text>
+        }
       <Text style={[styles.time]} className="absolute -bottom-4 right-2 ">{formatTimestampToTime(time)}</Text>
     </View> 
   )
@@ -103,10 +100,11 @@ const ChatCommunity: React.FC<Props> = ({ navigation: { navigate } , route}) => 
     }
     if(arrayBuffer){
       console.log(data)
-        socket.emit('uploadFile', data);
-        console.log("try me")
-  
-     
+      socket.emit('uploadFile', data);
+      console.log("try me")
+      setArrayBuffer("")
+      setFileName("")
+      setMessage("")
     }else{
       const data = {
         communityId: communityId,
@@ -115,11 +113,10 @@ const ChatCommunity: React.FC<Props> = ({ navigation: { navigate } , route}) => 
       }
       // console.log(data);
       socket.emit("sendMessage", data)
+      setMessage("")
     // }
     }
   }
-
-
   
   // Runs whenever a socket event is recieved from the server
   useEffect(() => {
@@ -132,7 +129,6 @@ const ChatCommunity: React.FC<Props> = ({ navigation: { navigate } , route}) => 
           id: newData.id,
           message: newData.message,
           chatId: newData.current_user_id,
-          file: '',
           time: newData.createdAt,
         },
       ]);
@@ -167,8 +163,7 @@ const ChatCommunity: React.FC<Props> = ({ navigation: { navigate } , route}) => 
           ...state,
           {
             id: data.id,
-            message: '',
-            file: fileUri,
+            message: fileUri,
             chatId: data.current_user_id,
             time: data.createdAt,
           },
@@ -200,13 +195,14 @@ const ChatCommunity: React.FC<Props> = ({ navigation: { navigate } , route}) => 
 
     socket.emit('fetchAllMessage', data)
     socket.on("fetchAllCommunityMessage", (data) => {
+      console.log(data)
       setMessagesReceived((state) => [
         ...state,
         ...data.docs.map((doc: any) => ({
           id: doc.id,
           message: doc.message,
-          name: doc.communityId.created_by.name,
-          chatId: doc.communityId.created_by.id,
+          name: doc.current_user_id.name,
+          chatId: doc.current_user_id.id,
           time: doc.createdAt
         })),
       ]);

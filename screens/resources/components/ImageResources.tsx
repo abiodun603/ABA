@@ -11,9 +11,7 @@ interface ImageResourcesProps {
   // ... other props specific to ImageResources
 }
 
-const ImageCard = ({time, url}: any) => {
-
-
+export const ImageCard = ({time, url, isImageTime}: {time?: any, url: string, isImageTime?: boolean}) => {
   const handleDownload = async () => {
     try {
       // Open the image in the device's default image viewer or prompt user to choose an app
@@ -24,7 +22,10 @@ const ImageCard = ({time, url}: any) => {
   };
   return(
     <TouchableOpacity onPress={handleDownload}>
-      <Text className='mt-5 text-sm text-gray-700'>{formatTimestampToTime(time)}</Text>
+      {
+        isImageTime && <Text className='mt-5 text-sm text-gray-700'>{formatTimestampToTime(time)}</Text>
+      }
+      
       <View className='mt-3 rounded-md'>
         {/* Image */}
         <Image
@@ -60,7 +61,7 @@ const ImageResources: React.FC<ImageResourcesProps>  = ({ route, ...otherProps }
         keyExtractor={(item: { id: { toString: () => any; }; createdAt: string; url: string}) => item.id.toString()}
         renderItem={
           ({item}) => 
-            <ImageCard time = {item.createdAt} url = {item.url} /> 
+            <ImageCard time = {item.createdAt} url = {item.url} isImageTime /> 
         }
       />
       {/* <ImageCard/> */}
