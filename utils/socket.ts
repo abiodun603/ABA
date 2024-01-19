@@ -1,3 +1,3 @@
 import { io } from "socket.io-client";
-const socket = io("https://5f9d-129-205-124-180.ngrok-free.app")
+const socket = io("https://3f54-105-112-20-182.ngrok-free.app")
 export default socket;
