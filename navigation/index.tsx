@@ -30,9 +30,6 @@ import EmailVerification from "../screens/auth/EmailVerification";
 import Preview from "../screens/pdf/Preview";
 import Notification from "../screens/notification/Notification";
 import Identification from "../screens/auth/Identification";
-import Role from "../screens/identification/Role";
-import TopNavPanel from "./TopTabs";
-import { AuthProvider } from "../contexts/AuthContext";
 import EventDetails from "../screens/events/EventDetails";
 import GroupCat from "../screens/groups/GroupCat";
 import GroupJoin from "../screens/groups/GroupJoin";
@@ -40,7 +37,6 @@ import GroupConfirmation from "../screens/groups/GroupConfirmation";
 import Group from "../screens/groups/Group";
 import Members from "../screens/chat/Members";
 import Chat from "../screens/chat/Chat";
-import Contact from "../screens/Explore";
 import EventFilter from "../screens/events/EventFilter";
 import PersonalGroups from "../screens/groups/PersonalGroups";
 import PersonalEvents from "../screens/events/PersonalEvents";
@@ -57,9 +53,7 @@ const theme = {
 export default function Navigation() {
   return (
     <NavigationContainer theme={theme}>
-      <AuthProvider>
         <RootNavigator />
-      </AuthProvider>
     </NavigationContainer>
   );
 }

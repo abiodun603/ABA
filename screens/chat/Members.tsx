@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native'
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
@@ -10,13 +10,9 @@ import socket from '../../utils/socket'
 
 import { useAppDispatch } from '../../hooks/useTypedSelector';
 
-// ** Icons
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons"
-
 //** Components 
 import BottomSheet from '../../components/bottom-sheet/BottomSheet';
 import CustomButton from '../../components/CustomButton';
-import Toaster from '../../components/Toaster/Toaster';
 
 // ** Store Slices
 import useGlobalState from '../../hooks/global.state';

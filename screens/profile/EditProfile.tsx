@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import React, { useEffect } from 'react'
 
 // ** Constants
@@ -11,9 +11,8 @@ import { RootStackParamList } from "../../types";
 import { FormProvider, useForm } from "react-hook-form";
 
 // ** Third Party
-import { styled } from 'nativewind';
 import { Divider } from 'native-base';
-import { Toast, ToastDescription, ToastTitle, VStack, useToast } from "@gluestack-ui/themed";
+import { Toast, ToastTitle, VStack, useToast } from "@gluestack-ui/themed";
 
 // ** Layout
 import Layout from '../../layouts/Layout';
@@ -29,10 +28,9 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import Input from '../../components/Input';
 
 // ** Types
-import { useUpdateProfileMutation, type ProfileRequest } from '../../stores/features/auth/authService';
+import { useUpdateProfileMutation} from '../../stores/features/auth/authService';
 
 type Props = NativeStackScreenProps<RootStackParamList, "EditProfile">;
-const StyledView = styled(View)
 
 const defaultValues = {
   name: '',

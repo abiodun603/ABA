@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import {  Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 
 // ** ICONS
@@ -271,11 +271,4 @@ const EventDetails: React.FC<Props>  = ({navigation, route}) => {
 }
 
 export default EventDetails
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    position: 'relative',
-  },
-})
 

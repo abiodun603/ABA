@@ -1,12 +1,8 @@
-import { Dimensions, KeyboardAvoidingView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import {  StyleSheet, TouchableOpacity, View } from 'react-native'
 import React, { FC } from 'react'
-import {MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons'; 
-import Input from './Input';
-import FontSize from '../constants/FontSize';
-import Colors from '../constants/Colors';
+import { FontAwesome } from '@expo/vector-icons'; 
 import { TextInput } from 'react-native-paper';
 
-const w = Dimensions.get('window').width
 
 interface IChatTabProps {
   message: string

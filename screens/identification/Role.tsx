@@ -5,6 +5,9 @@ import { SelectList } from 'react-native-dropdown-select-list';
 import CustomButton from '../../components/CustomButton';
 import { useNavigation } from '@react-navigation/native';
 
+// ** Third Party
+import { FormProvider, useForm } from "react-hook-form";
+
 const data = [
   {key:'1', value:'Select', disabled:true},
   {key:'2', value:'Professional'},
@@ -12,33 +15,44 @@ const data = [
   {key:'4', value:'Caregiver'},
 ] 
 
+const defaultValues = {
+  bio: '',
+}
+
+
 const Role = () => {
+  const methods = useForm({defaultValues});
   const [selected, setSelected] = React.useState("");
   // 
   const navigation = useNavigation();
 
   return (
     <View className='mt-8' style={{flex: 1}}>
-      <View className='relative'>
-        <Text style={[styles.label]}>Role in Community</Text>
-        <SelectList 
-          setSelected={(val: React.SetStateAction<string>) => setSelected(val)} 
-          data={data} 
-          save="value"
-          boxStyles={{borderRadius:4, borderColor: "#80747B", marginBottom: 25, paddingVertical: 17}}
-          search={false} 
-          placeholder='Other'
+      <FormProvider {...methods}>
+        <View className='relative'>
+          <Text style={[styles.label]}>Role in Community</Text>
+          <SelectList 
+            setSelected={(val: React.SetStateAction<string>) => setSelected(val)} 
+            data={data} 
+            save="value"
+            boxStyles={{borderRadius:4, borderColor: "#80747B", marginBottom: 25, paddingVertical: 17}}
+            search={false} 
+            placeholder='Other'
+          />
+        </View>
+
+        <Input
+          label="Info"
+          placeholder="Tell us more information about you"
+          name="bio"
         />
-      </View>
 
-      <Input
-        label="Info"
-        placeholder="Tell us more information about you"
-      />
+        <View className='absolute bottom-10 w-full'>
+          <CustomButton title='Submit' onPress={() => navigation.navigate("IdentifySuccess") } />
+        </View> 
+      </FormProvider>
 
-      <View className='absolute bottom-10 w-full'>
-        <CustomButton title='Submit' onPress={() => navigation.navigate("IdentifySuccess") } />
-      </View> 
+      
     </View>
   )
 }

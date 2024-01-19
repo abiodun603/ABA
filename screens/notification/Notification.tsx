@@ -1,4 +1,4 @@
-import {FlatList, StyleSheet, Text, TextInput, View,TouchableOpacity, ScrollView } from 'react-native'
+import {FlatList, StyleSheet, Text, View,TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 
 // ** Constants
@@ -9,18 +9,13 @@ import Colors from '../../constants/Colors';
 // ** Types
 import { RootStackParamList } from "../../types";
 
-// ** Third Party
-import { styled } from 'nativewind';
-
 // ** Layout
 import Layout from '../../layouts/Layout';
 
 
 //
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import Input from '../../components/Input';
 type Props = NativeStackScreenProps<RootStackParamList, "Notification">;
-const StyledView = styled(View)
 
 const DATA = [
   {

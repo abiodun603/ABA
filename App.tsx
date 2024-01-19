@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import Navigation from './navigation';
@@ -10,13 +10,7 @@ import { NativeBaseProvider,  } from "native-base";
 import Toast from 'react-native-toast-message';
 import {DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { GluestackUIProvider, config } from "@gluestack-ui/themed"
-import Constants from 'expo-constants';
 
-import socket from './utils/socket';
-import { Platform } from 'react-native';
-import fetchCityFromCoordinates from './services/fetchCityFromCoordinates';
-import { useAppDispatch } from './hooks/useTypedSelector';
-import { setEventLocation } from './stores/features/event/eventSlice';
 import store from './stores/store';
 
 

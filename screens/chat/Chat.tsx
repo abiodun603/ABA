@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, FlatList } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import Layout from '../../layouts/Layout';
@@ -8,34 +8,16 @@ import { KeyboardAvoidingView } from 'native-base';
 // ** Utils
 import socket from '../../utils/socket'
 
-import ChatTab from '../../components/ChatTab';
 import useGlobalState from '../../hooks/global.state';
 import { useAppSelector } from '../../hooks/useTypedSelector';
 import { Colors } from '../../constants';
 import Font from '../../constants/Font';
 import FontSize from '../../constants/FontSize';
 import { formatTimestampToTime } from '../../helpers/timeConverter';
-import { FlatList } from 'react-native';
-import { ScrollView } from 'react-native';
 import ChatInput from '../../components/ChatInput';
 type Props = NativeStackScreenProps<RootStackParamList, "Chat">;
 
-type IChatIdProps = {
-  message: string
-}
 
-interface Message {
-  id: string;
-  message: string;
-  time: string;
-  chatId: string;
-}
-
-interface IMessageCardProps {
-  id: string
-  message: string
-  chatId: IChatIdProps
-}
 const MessageCard = ({message, time, chatId}: {message: string, time: any, chatId: string}) => {
   const {user} = useGlobalState();
   const [containerWidth, setContainerWidth] = useState<any>(null);
@@ -69,11 +51,9 @@ const Chat: React.FC<Props> = ({ navigation: { navigate } }) => {
   
    const {user} = useGlobalState()
   const getChatId = useAppSelector(state => state.chatMember.chatId);
-  const getMemberEmail= useAppSelector(state => state.chatMember.email);
   const getMemberId = useAppSelector(state => state.chatMember.memberId);
 
   const handleSendMessage = async() => {
-    
       const data = {
         chatId: getChatId,
         currentUserId: user?.id,

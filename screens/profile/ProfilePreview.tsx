@@ -10,7 +10,6 @@ import Colors from '../../constants/Colors';
 import { RootStackParamList } from "../../types";
 
 // ** Third Party
-import { styled } from 'nativewind';
 import {  Divider } from 'native-base';
 
 // ** Layout

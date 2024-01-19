@@ -28,15 +28,13 @@ import AuthHeader from "../../layouts/authHeader/AuthHeader";
 import { FormProvider, useForm } from 'react-hook-form';
 import { Box, Checkbox } from "native-base";
 import { styled } from "nativewind";
-import { Toast, ToastDescription, ToastTitle, VStack, useToast } from "@gluestack-ui/themed";
+import { Toast, ToastTitle, VStack, useToast } from "@gluestack-ui/themed";
 
 // ** Types
 import { RootStackParamList } from "../../types";
 
 // ** Store and Action
 import { useLoginMutation } from "../../stores/features/auth/authService";
-import { CustomMenu } from "../../components/Menu/Menu";
-import Toaster from "../../components/Toaster/Toaster";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Login">;
 
@@ -89,9 +87,9 @@ const LoginScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
         render: ({ id }) => {
           const toastId = "toast-" + id
           return (
-            <Toast nativeID={toastId} action="success">
+            <Toast nativeID={toastId} action="error">
               <VStack space="xs">
-                <ToastTitle>hjhjjhj</ToastTitle>
+                <ToastTitle >Network request failed</ToastTitle>
                 {/* <ToastDescription>
                   {action.description}
                 </ToastDescription> */}

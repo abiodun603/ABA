@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, ImageBackground} from 'react-native'
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, ImageBackground, ScrollView} from 'react-native'
 import React from 'react'
 
 // ** Constants
@@ -8,11 +8,10 @@ import Font from '../../constants/Font';
 
 
 // ** Store, Features
-import { ScrollView } from 'react-native';
 import { ShortenedWord } from '../../helpers/wordShorther';
 import { useGetPastEventQuery } from '../../stores/features/groups/groupsService';
 
-export const EventCard = ({event_about, event_time ,event_name, event_city, event_id, members, navigation}: any) => {
+export const EventCard = ({event_about, event_time ,event_name, event_city, members}: any) => {
   return(
     <ScrollView style= {{width: "100%"}} className='border-b border-gray-200 mt-6 px-4'>
       <TouchableOpacity
@@ -39,7 +38,7 @@ export const EventCard = ({event_about, event_time ,event_name, event_city, even
             </View>
           </View>
           <View className="flex-row items-center justify-between mt-3">
-            <Text >{members?.length || "0"} going <Text className='capitalize'>{event_city}</Text></Text>
+            <Text >{members && members?.length || "0"} going <Text className='capitalize'>{event_city}</Text></Text>
             <View className='flex-row'>
               {/* <Ionicons name='share-outline' size={23} onPress={onShare}/> 
               {!bookMark ? <Ionicons name='bookmark-outline' size={22} onPress={toggleBookMark} /> :  <Ionicons name='bookmark' size={22} color="#d82727" onPress={toggleBookMark}/>} */}

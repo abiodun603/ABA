@@ -7,7 +7,7 @@ import Font from '../constants/Font'
 import FontSize from '../constants/FontSize'
 
 // ** Icons
-import {Ionicons, MaterialIcons, FontAwesome} from "@expo/vector-icons"
+import {Ionicons, MaterialIcons} from "@expo/vector-icons"
 
 // ** Layouts
 import Layout from '../layouts/Layout'
@@ -20,7 +20,6 @@ import socket from '../utils/socket'
 import { GroupCatergory } from '../utils/dummy'
 
 // ** Hooks
-import useGlobalState from '../hooks/global.state'
 import MapView, { Marker } from 'react-native-maps'
 import useLocation from '../hooks/useLocation'
 import { useGetEventsByCatTypeQuery, useGetPopularEventsQuery } from '../stores/features/event/eventService'

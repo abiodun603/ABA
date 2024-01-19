@@ -9,22 +9,17 @@ import Colors from '../../constants/Colors';
 // ** Types
 import { RootStackParamList } from "../../types";
 
-// ** Third Party
-import { styled } from 'nativewind';
-import { Divider } from 'native-base';
 
 // ** Layout
 import Layout from '../../layouts/Layout';
 
 // ** Components
-import CustomButton from '../../components/CustomButton';
 import { ShortenedWord } from '../../helpers/wordShorther';
 import { useGetSavedEventQuery } from '../../stores/features/event/eventService';
 //
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Events">;
-const StyledView = styled(View)
 
 interface ICardProps {
   id: string ;

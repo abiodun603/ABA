@@ -1,4 +1,4 @@
-import { StyleSheet, Text,View } from 'react-native'
+import { Text,View } from 'react-native'
 import React from 'react'
 
 // ** Layout
@@ -6,7 +6,6 @@ import Layout from '../../layouts/Layout';
 //
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from '../../types';
-import { GroupCatergory } from '../../utils/dummy';
 import { TouchableOpacity } from 'react-native';
 import { ImageBackground } from 'react-native';
 import { useGetCategoryQuery } from '../../stores/features/groups/groupsService';
@@ -83,11 +82,3 @@ const GroupCat: React.FC<Props> = ({ navigation: { navigate } }) => {
 }
 
 export default GroupCat
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingHorizontal: 20,
-    position: 'relative',
-  }
-})

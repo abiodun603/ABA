@@ -5,7 +5,7 @@ import {
   Text,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React from "react";
 import { RootStackParamList } from "../../types";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import Button from "../../components/CustomButton";
@@ -14,12 +14,10 @@ type Props = NativeStackScreenProps<RootStackParamList, "ResetSuccess">;
 // ** Thirld Party
 import Entypo from "@expo/vector-icons/Entypo"
 
-
 // ** Image
 import Shield from "../../assets/sheild-dynamic-premium.png"
 
 const ResetSuccess: React.FC<Props> = ({ navigation: { navigate } }) => {
-  const [toggleCheckBox, setToggleCheckBox] = useState(false)
 
   return (
     <SafeAreaView style={{flex: 1}}>

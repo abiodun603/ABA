@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react'
 // import { Box } from 'native-base'
-import { SafeAreaView, StyleSheet, View } from 'react-native'
+import {  StyleSheet, View } from 'react-native'
 import Header from './appHeader/Header'
 // import { ILinearGradientProps } from "native-base/lib/typescript/components/primitives/Box/types";
 // import {

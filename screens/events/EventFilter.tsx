@@ -1,24 +1,19 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 
 // ** Icons
 import { Entypo, FontAwesome } from '@expo/vector-icons'; 
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { styled } from 'nativewind';
 import Layout from '../../layouts/Layout';
 import { RootStackParamList } from '../../types';
-import { FlatList } from 'react-native';
-import { TouchableOpacity } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
-import { useGetEventsQuery, useGetSortUpcomingEventQuery, useLazyGetSortUpcomingEventQuery } from '../../stores/features/event/eventService';
+import { useLazyGetSortUpcomingEventQuery } from '../../stores/features/event/eventService';
 import { EventCard } from '../Events';
 import BottomSheet from '../../components/bottom-sheet/BottomSheet';
 import { RadioButton } from 'react-native-paper';
 import { filterByDate } from '../../utils/dummy';
 import CustomButton from '../../components/CustomButton';
 type Props = NativeStackScreenProps<RootStackParamList, "EventFilter">;
-const StyledView = styled(View)
 
 export const interestTypes = ["Date", "All upcoming", "Volunteering", "Walking Tours"]
 
@@ -32,7 +27,6 @@ const FilterState = ({children}: {children: React.ReactNode}) => {
 }
 
 const EventFilter: React.FC<Props> = ({navigation}: {navigation: any}) => {
-  const [date, setDate] = useState("Date")
   const [show, setShow ] = useState(false) 
   const [value, setValue] = React.useState('upcoming');
 

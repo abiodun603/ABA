@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 
 // ** Third Party
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
-import { AddIcon, Button, ButtonText, Icon, Menu, MenuItem, MenuItemLabel } from '@gluestack-ui/themed'
+import {  Button, Menu } from '@gluestack-ui/themed'
 
 interface ICustmenuProps {
   children : any

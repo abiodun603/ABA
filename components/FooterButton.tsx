@@ -1,6 +1,5 @@
-import { StyleSheet, Text, View } from 'react-native'
+import {  View } from 'react-native'
 import React from 'react'
-import CustomButton from './CustomButton'
 
 interface CustomRouteBottomProps {
   children: any
@@ -16,6 +15,3 @@ const CustomFooterButton: React.FC<CustomRouteBottomProps> = ({children}) => {
 
 export default CustomFooterButton
 
-const styles = StyleSheet.create({
-  
-})

@@ -1,16 +1,13 @@
 import {
-  Platform,
-  Pressable,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React from "react";
 import { RootStackParamList } from "../../types";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import Input from "../../components/Input";
 import Button from "../../components/CustomButton";
 import AuthHeader from "../../layouts/authHeader/AuthHeader";
 import FontSize from "../../constants/FontSize";
@@ -20,12 +17,9 @@ import Spacing from "../../constants/Spacing";
 
 // ** Third Party
 import { FormProvider, useForm } from "react-hook-form";
-import DateTimePicker from '@react-native-community/datetimepicker';
 import { SelectList } from 'react-native-dropdown-select-list';
 
-import { styled } from "nativewind";
 type Props = NativeStackScreenProps<RootStackParamList, "EmailVerification">;
-const StyledView = styled(View)
 
 const defaultValues = {
   date: new Date(),
@@ -44,33 +38,9 @@ const data = [
 const EmailVerification: React.FC<Props> = ({ navigation: { navigate } }) => {
   const methods = useForm({defaultValues});
   const [selected, setSelected] = React.useState("");
-  const [dateOfBirth, setDateOfBirth] = useState("")
-  const [date, setDate] = useState(new Date())
-  const [showPicker, setShowPicker] = useState(false)
-  const handleSumbit = (data: UserData) => {
-    // Handle login logic here
-    console.log(data);
-  }
 
   console.log(selected)
 
-  const toggleDatePicker = () => {
-    setShowPicker(!showPicker)
-  }
-
-  // const onChange = ({type}, selectedDate) => {
-  //   if (type == 'set'){
-  //     const currentDate = selectedDate;
-  //     setDateOfBirth(currentDate)
-      
-  //     if (Platform.OS === 'android') {
-  //       toggleDatePicker();
-  //       setDateOfBirth(currentDate.toDateString());
-  //     }
-  //   } else {
-  //     toggleDatePicker()
-  //   }
-  // }
   return (
     <SafeAreaView style={{flex: 1}}>
       <ScrollView 

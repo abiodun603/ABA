@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { Alert, View, ScrollView, TouchableOpacity , Text, ImageBackground} from "react-native";
 
 // ** Thirld Party
@@ -10,7 +10,7 @@ import { FormProvider } from 'react-hook-form';
 import { ShortenedWord } from '../../../helpers/wordShorther';
 
 // **  Store Slice
-import { useDeleteCommunityMutation, useGetMyCommunityQuery, useGetOneCommunityQuery, useUpdateMyCommunityMutation } from '../../../stores/features/groups/groupsService';
+import { useDeleteCommunityMutation, useGetOneCommunityQuery, useUpdateMyCommunityMutation } from '../../../stores/features/groups/groupsService';
 
 // ** Icons
 import { Ionicons, Feather } from '@expo/vector-icons'; 
@@ -43,7 +43,7 @@ export const GroupCard = ({name, members, community_id, navigate}: any) => {
   console.log(CommunityDetails)
 
   const methods = useForm({defaultValues});
-  const {setValue} = methods
+  // const {setValue} = methods
   const toast = useToast()
 
   const handleJoinPress = async (community_id: any) => {

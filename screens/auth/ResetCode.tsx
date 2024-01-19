@@ -2,14 +2,11 @@ import {
   SafeAreaView,
   ScrollView,
   StyleSheet,
-  Text,
   View,
 } from "react-native";
 import React, { useState } from "react";
 import { RootStackParamList } from "../../types";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-
-// ** Types
 
 // ** Constants 
 import FontSize from "../../constants/FontSize";
@@ -22,10 +19,6 @@ import AuthHeader from "../../layouts/authHeader/AuthHeader";
 
 // ** Thired Party
 import { FormProvider, useForm } from 'react-hook-form';
-import { styled } from "nativewind";
-
-// ** Hook
-import { useAuth } from "../../hooks/useAuth";
 
 // ** Component
 import Input from "../../components/Input";
@@ -44,17 +37,9 @@ const defaultValues = {
 }
 
 const ResetCode: React.FC<Props> = ({ navigation: { navigate } }) => {
-  const [toggleCheckBox, setToggleCheckBox] = useState(false)
   const methods = useForm({defaultValues});
 
-  // ** Hooks
-  const auth = useAuth()
-
   const handleResetCode = async (data: UserData) => {
-    const { otp,  } = data
-    // auth.otp({ otp }, () => {
-      
-    // })
     navigate("ResetPassword")
   };
 
@@ -102,35 +87,3 @@ const ResetCode: React.FC<Props> = ({ navigation: { navigate } }) => {
 }
 
 export default ResetCode
-
-const styles = StyleSheet.create({
-  text1: {
-    fontSize: FontSize.small,
-    color: Colors.gray,
-    fontFamily:Font["inter-regular"],
-    textAlign: "center",
-    lineHeight:25,
-    marginVertical :20
-  },
-
-  text2: {
-    color: Colors.primary,
-    textDecorationColor: Colors.primary,
-    textDecorationLine: "underline"
-  },
-
-  text3: {
-    color: Colors.text,
-    fontSize: FontSize.small,
-    fontFamily: Font["inter-regular"],
-    textAlign: "center",
-    marginTop: Spacing * 2
-  },
-  text4: {
-    color: Colors.primary
-  },
-  forgetPassword: {
-    flexDirection: "row",
-    marginVertical: Spacing
-  }
-})

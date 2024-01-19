@@ -15,7 +15,6 @@ type Props = NativeStackScreenProps<RootStackParamList, "IdentifySuccess">;
 // ** Thirld Party
 import Entypo from "@expo/vector-icons/Entypo"
 
-
 // ** Image
 import Location from "../../assets/location-dynamic-premium.png"
 

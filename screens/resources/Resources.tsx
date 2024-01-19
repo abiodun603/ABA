@@ -1,4 +1,4 @@
-import {FlatList, StyleSheet, Text, TextInput, View,TouchableOpacity } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import React from 'react'
 
 // ** Constants
@@ -9,11 +9,6 @@ import Colors from '../../constants/Colors';
 // ** Types
 import { RootStackParamList } from "../../types";
 
-// ** Third Party
-import { styled } from 'nativewind';
-import { Divider } from 'native-base';
-import Ionicons from "@expo/vector-icons/Ionicons"
-
 // ** Layout
 import Layout from '../../layouts/Layout';
 
@@ -21,8 +16,6 @@ import Layout from '../../layouts/Layout';
 
 //
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useGetSavedResourcesQuery } from '../../stores/features/resources/resourcesService';
-import { ShortenedWord } from '../../helpers/wordShorther';
 import FileResources from './components/FileResources';
 import ImageResources from './components/ImageResources';
 import TopNavPanel from '../../navigation/TopTabs';

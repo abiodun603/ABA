@@ -1,15 +1,11 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, FlatList } from 'react-native'
 import React from 'react'
 import FontSize from '../../constants/FontSize';
 import { Colors } from '../../constants';
 import Font from '../../constants/Font';
-import { TouchableOpacity } from 'react-native';
-import { ScrollView } from 'react-native';
-import { TextInput } from 'react-native';
 
 // ** Third Pary
 import Ionicons from "@expo/vector-icons/Ionicons"
-import { FlatList } from 'react-native';
 
 const DATA = [
   {

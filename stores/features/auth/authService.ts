@@ -59,7 +59,8 @@ export const authApi = createApi({
   baseQuery,
   tagTypes: ["Profile"],
   endpoints: (builder) => ({
-    signup: builder.mutation<UserResponse, LoginRequest>({
+    signup: builder.mutation<UserResponse, LoginRequest>(
+    {
       query: (credentials) => ({
         url: '/users',
         method: 'POST',

@@ -14,7 +14,6 @@ import { constants } from '../constants'
 import MainLayout from '../screens/MainLayout'
 import { Divider } from 'native-base'
 import SimpleModal from '../components/modal/Modal'
-import socket from '../utils/socket'
 
 const Drawer = createDrawerNavigator()
 

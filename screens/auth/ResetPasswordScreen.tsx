@@ -1,11 +1,9 @@
 import {
   SafeAreaView,
   ScrollView,
-  StyleSheet,
-  Text,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 // ** Types
@@ -14,16 +12,8 @@ import { RootStackParamList } from "../../types";
 // ** Layouts
 import AuthHeader from "../../layouts/authHeader/AuthHeader";
 
-// ** Constants 
-import FontSize from "../../constants/FontSize";
-import Colors from "../../constants/Colors";
-import Font from "../../constants/Font";
-import Spacing from "../../constants/Spacing";
-
 // ** Thired Party
 import { FormProvider, useForm } from 'react-hook-form';
-import { styled } from "nativewind";
-
 
 // ** Component
 import Input from "../../components/Input";
@@ -152,35 +142,3 @@ const ForgetPassword: React.FC<Props> = ({ navigation: { navigate }, route }) =>
 }
 
 export default ForgetPassword
-
-const styles = StyleSheet.create({
-  text1: {
-    fontSize: FontSize.small,
-    color: Colors.gray,
-    fontFamily:Font["inter-regular"],
-    textAlign: "center",
-    lineHeight:25,
-    marginVertical :20
-  },
-
-  text2: {
-    color: Colors.primary,
-    textDecorationColor: Colors.primary,
-    textDecorationLine: "underline"
-  },
-
-  text3: {
-    color: Colors.text,
-    fontSize: FontSize.small,
-    fontFamily: Font["inter-regular"],
-    textAlign: "center",
-    marginTop: Spacing * 2
-  },
-  text4: {
-    color: Colors.primary
-  },
-  forgetPassword: {
-    flexDirection: "row",
-    marginVertical: Spacing
-  }
-})

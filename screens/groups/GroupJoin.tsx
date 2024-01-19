@@ -9,7 +9,7 @@ import { Divider } from 'native-base';
 import { Toast, ToastDescription, ToastTitle, VStack, useToast } from "@gluestack-ui/themed";
 
 // ** Icons
-import {Ionicons, MaterialIcons, FontAwesome} from "@expo/vector-icons"
+import { MaterialIcons} from "@expo/vector-icons"
 
 // ** Helpers
 import { ShortenedWord } from '../../helpers/wordShorther';
@@ -30,6 +30,7 @@ import CustomButton from '../../components/CustomButton';
 import { useGetUsersQuery } from '../../stores/features/users/UsersService';
 import Toaster from '../../components/Toaster/Toaster';
 type Props = NativeStackScreenProps<RootStackParamList, "GroupJoin">;
+
 // Define the type for your route parameters
 type RouteParams = {
   id: any;

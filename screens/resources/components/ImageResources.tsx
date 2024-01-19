@@ -3,7 +3,6 @@ import React from 'react'
 
 // ** Store / Slices
 import { useGetCommunityImagesQuery } from '../../../stores/features/groups/groupsService'
-import { RouteProp } from '@react-navigation/native';
 import { formatTimestampToTime } from '../../../helpers/timeConverter';
 
 interface ImageResourcesProps {

@@ -11,14 +11,10 @@ import { RootStackParamList } from "../../types";
 
 // ** Third Party
 import { styled } from 'nativewind';
-import { Box, Divider } from 'native-base';
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons"
+import { Box } from 'native-base';
 
 // ** Layout
 import Layout from '../../layouts/Layout';
-
-// ** Components
-import CustomRouteBottom from '../../components/CustomRouteBottom';
 
 //
 import { NativeStackScreenProps } from "@react-navigation/native-stack";

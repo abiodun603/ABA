@@ -10,7 +10,6 @@ import React, { useEffect, useRef, useState } from 'react';
 
 // ** Third Party
 import { Portal } from 'react-native-paper';
-import AntDesign from '@expo/vector-icons/AntDesign';
 import { PanGestureHandler, PanGestureHandlerGestureEvent,HandlerStateChangeEvent } from 'react-native-gesture-handler';
 
 interface BottomSheetProps {

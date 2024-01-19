@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, TextInput, ScrollView, ImageBackground } from 'react-native'
+import { View, Text, TouchableOpacity, ScrollView, ImageBackground } from 'react-native'
 import React, { useEffect, useState } from 'react'
 
 // ** Third Party
@@ -8,44 +8,20 @@ import { parseISO } from 'date-fns';
 import { FormProvider } from 'react-hook-form';
 
 // ** Store, Hooks
-import { useUnSaveEventMutation, useGetSavedEventQuery, useGetEventByIdQuery, useUpdateEventMutation } from '../../../stores/features/event/eventService';
+import { useUnSaveEventMutation, useGetEventByIdQuery, useUpdateEventMutation } from '../../../stores/features/event/eventService';
 
 // ** Component
 import Toaster from '../../../components/Toaster/Toaster';
 
 // ** Helper
 import { ShortenedWord } from '../../../helpers/wordShorther';
-import { formatTimestampToTime, formatTimestampToTimeWithMidday } from '../../../helpers/timeConverter'
-
-
 
 // ** Icons
 import { Ionicons, Feather } from '@expo/vector-icons'; 
 import BottomSheet from '../../../components/bottom-sheet/BottomSheet';
 import Input from '../../../components/Input';
 import CustomButton from '../../../components/CustomButton';
-import { formatDate } from '../../../helpers/formatDate';
-import { DatePicker } from '../../../components/datepicker/DatePicker';
 
-const data = [
-  {key:'1', value:'Select event tags', disabled:true},
-  {key:'event', value:'Event'},
-  {key:'chster', value:'Chster'},
-]
-
-const status = [
-  {key:'1', value:'Select status', disabled:true},
-  {key:'private', value:'Private'},
-  {key:'public', value:'Public'},
-]
-
-const members = [
-  {key:'1', value:'Select members', disabled:true},
-]
-
-const types = [
-  {key:'1', value:'Select event types', disabled:true},
-]
 
 const defaultValues = {
   event_name: '',
@@ -57,12 +33,6 @@ const defaultValues = {
 export const EventCard = ({event_about, event_time ,event_name, event_city, event_id, members, isDelete, handleDeleteEvent, isEdit, navigation,isSave ,  handleEdit}: any) => {
   const [bookMark, setBookMark] = useState(true)
   const [show, setShow ] = useState(false) 
-  const [selected, setSelected] = React.useState("");
-  const [selectedEventType, setSelectedEventType] = React.useState("");
-  const [selectedStatus, setSelectedStatus] = React.useState("");
-  const [selectedMembers, setSelectedMembers] = useState<any[]>([])
-  const [selectedHost, setSelectedHost] = useState<any[]>([])
-
 
   const methods = useForm({defaultValues});
   const {setValue} = methods
@@ -306,7 +276,6 @@ export const EventCard = ({event_about, event_time ,event_name, event_city, even
               </View>
             </View>
           </ScrollView>
-          
         </FormProvider>
       </BottomSheet>
     </ScrollView>

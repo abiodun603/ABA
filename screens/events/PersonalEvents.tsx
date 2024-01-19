@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View , ImageBackground, FlatList, Alert} from 'react-native'
+import {  Text, View , FlatList, Alert} from 'react-native'
 import React from 'react'
 
 // ** React Native Library 
@@ -10,11 +10,6 @@ import { RootStackParamList } from "../../types";
 // ** Layout
 import Layout from '../../layouts/Layout';
 
-// ** Thirld Party
-import { useToast } from '@gluestack-ui/themed';
-
-// ** Utils
-import { ShortenedWord } from '../../helpers/wordShorther';
 
 // **  Store Slice
 import { useGetEventsQuery } from '../../stores/features/event/eventService';

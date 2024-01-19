@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, memo } from "react";
+import React, { useState, useEffect } from "react";
 import {
 	View,
 	Text,
@@ -27,7 +27,6 @@ import { Buffer } from '@craftzdog/react-native-buffer';
 const ChatInput = ({ reply, closeReply, isLeft, username, onPress, message, setMessage , imageUri, setImageUri, arrayBuffer, setFileName, setArrayBuffer}: any) => {
 	const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [show, setShow ] = useState(false) 
-  const [selectedDocument, setSelectedDocument] = useState(null);
 
 
   const height = useSharedValue(70);

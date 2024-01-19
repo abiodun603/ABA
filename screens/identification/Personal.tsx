@@ -1,9 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-// ** React Native Library 
-import { useNavigation } from '@react-navigation/native';
-
 // ** Third Party
 import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 import { SelectList } from 'react-native-dropdown-select-list';
@@ -33,19 +30,15 @@ const defaultValues = {
 
 }
 
-interface UserData {
-  fname: string
-  lname: string
-  uname: string
-  bio: string
-}
+// interface UserData {
+//   fname: string
+//   lname: string
+//   uname: string
+//   bio: string
+// }
 
 const Personal = () => {
   const [selected, setSelected] = React.useState("");
-
-  //
-  const navigation = useNavigation();
-
 
   const methods = useForm({defaultValues});
 

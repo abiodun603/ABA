@@ -1,6 +1,5 @@
-import {  ImageBackground, Share, StyleSheet, Text, Alert, TouchableOpacity, View } from 'react-native'
+import {  ImageBackground, Share, StyleSheet, Text, Alert, TouchableOpacity, View, FlatList } from 'react-native'
 import React, { useState } from 'react'
-import { styled } from 'nativewind';
 import Layout from '../../layouts/Layout';
 import { RootStackParamList } from '../../types';
 
@@ -8,8 +7,6 @@ import { RootStackParamList } from '../../types';
 import {Ionicons} from "@expo/vector-icons"
 
 // ** Helpers
-
-import { FlatList } from 'react-native';
 import { Avatar, AvatarFallbackText, AvatarGroup, AvatarImage,useToast } from '@gluestack-ui/themed';
 import { useGetCommunityEventQuery, useGetCommunityMembersQuery, useGetCommunityResourcesQuery, useGetJoinedCommunityQuery, useGetOneCommunityQuery, useJoinCommunityMutation, useLeaveCommunityMutation } from '../../stores/features/groups/groupsService';
 
@@ -20,12 +17,9 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import BottomSheet from '../../components/bottom-sheet/BottomSheet';
 import CustomButton from '../../components/CustomButton';
 import Toaster from '../../components/Toaster/Toaster';
-import Resources from './Resources';
-import ChatCommunity from '../chat/ChatCommunity';
 
 
 type Props = NativeStackScreenProps<RootStackParamList, "Group">;
-const StyledView = styled(View)
 
 // Define the type for your route parameters
 type RouteParams = {

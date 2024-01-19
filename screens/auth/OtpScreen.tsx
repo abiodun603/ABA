@@ -34,6 +34,7 @@ import { RootStackParamList } from "../../types";
 import { useOtpForgetMutation, useOtpMutation, useOtpResendMutation } from "../../stores/features/auth/authService";
 import { useToast } from "@gluestack-ui/themed";
 type Props = NativeStackScreenProps<RootStackParamList, "OtpScreen">;
+
 // Define the type for your route parameters
 type RouteParams = {
   email: any;

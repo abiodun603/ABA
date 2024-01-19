@@ -1,5 +1,5 @@
-import React, { FC, useEffect, useRef, useState } from 'react'
-import {Dimensions, FlatList, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from 'react-native'
+import React, {  useEffect, useRef, useState } from 'react'
+import {Dimensions,ScrollView, FlatList, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from 'react-native'
 
 // ** Constants 
 
@@ -10,7 +10,6 @@ import Layout from '../layouts/Layout'
 import { Fontisto, FontAwesome } from '@expo/vector-icons'; 
 
 // ** Third Pary
-import { ScrollView } from 'react-native-gesture-handler'
 import * as Location from 'expo-location';
 import Constants from 'expo-constants';
 
@@ -25,10 +24,8 @@ import { ShortenedWord } from '../helpers/wordShorther';
 // ** Components
 import useGlobalState from '../hooks/global.state'
 import CustomButton from '../components/CustomButton'
-import { interestTypes } from '../utils/dummy'
 
 // ** Views
-import All from '../views/HomeView/All'
 import Going from '../views/HomeView/Going'
 import Past from '../views/HomeView/Past'
 import Saved from '../views/HomeView/Saved'
@@ -308,18 +305,16 @@ const Home = ({navigation}: {navigation: any}) => {
             <Text className='mt-1  text-sm text-ksecondary font-medium'>Opps!!! No Resource Available</Text>          
           </View>
         </View>
-        <View>
+        {/* <View>
           <View className='mt-10 mb-10'>
             <View className="flex-row items-center justify-between mb-3">
-              {/*  */}
               <Text className="text-black text-sm font-semibold">Your calendar</Text>
             </View>
-            {/* Groups */}
             <View style={{ flex: 1 }}>
               <TopNavPanel tabs={TabData} /> 
             </View>
           </View>
-        </View>
+        </View> */}
       </ScrollView>
     </Layout>
   )

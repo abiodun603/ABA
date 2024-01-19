@@ -43,11 +43,6 @@ interface UserData {
 const Verification: React.FC<Props> = ({ navigation: { navigate }}) => {
   const methods = useForm({defaultValues});
 
-  const handleSubmit = (data: UserData) => {
-    // Handle login logic here
-    console.log(data);
-  }
-  
   return (
     <SafeAreaView>
       <ScrollView 

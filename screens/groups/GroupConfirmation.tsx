@@ -1,22 +1,16 @@
-import { Image, ImageBackground, Share, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import {  ImageBackground, Share, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Box, Divider } from 'native-base';
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons"
-import Entypo from "@expo/vector-icons/Entypo"
-import { styled } from 'nativewind';
 import Layout from '../../layouts/Layout';
 import { RootStackParamList } from '../../types';
 
 // ** Icons
-import {Ionicons, MaterialIcons, FontAwesome} from "@expo/vector-icons"
+import {Ionicons} from "@expo/vector-icons"
 
 // ** Helpers
-import { ShortenedWord } from '../../helpers/wordShorther';
 import { FlatList } from 'react-native';
 
 type Props = NativeStackScreenProps<RootStackParamList, "GroupConfirmation">;
-const StyledView = styled(View)
 
 const renderEventCard = (toggleBookMark: any, bookMark: any, navigation: any) => {
   const onShare = async () => {

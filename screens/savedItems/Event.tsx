@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, FlatList } from 'react-native'
+import { View, StyleSheet, FlatList } from 'react-native'
 import React from 'react'
 
 // ** Constants 
@@ -15,13 +15,13 @@ import { useGetSavedEventQuery } from '../../stores/features/event/eventService'
 import { useNavigation } from '@react-navigation/native';
 import { EventCard } from '../events/components/EventCard';
 
-interface ICardProps {
-  id: string ;
-  email: string;
-  resource: string
-  filename?: string
-  onPress?: ()=>void;
-}
+// interface ICardProps {
+//   id: string ;
+//   email: string;
+//   resource: string
+//   filename?: string
+//   onPress?: ()=>void;
+// }
 
 
 const Event = () => {

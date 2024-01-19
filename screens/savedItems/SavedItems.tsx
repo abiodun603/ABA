@@ -1,4 +1,4 @@
-import { View,StyleSheet } from 'react-native'
+import { View } from 'react-native'
 import React from 'react'
 
 // 
@@ -25,14 +25,3 @@ const SavedItems = () => {
 }
 
 export default SavedItems
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  contentContainer: {
-    flex: 1,
-    alignItems: 'center',
-    paddingHorizontal: 15
-  }
-})

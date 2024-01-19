@@ -1,4 +1,4 @@
-import {FlatList, StyleSheet, Text, TextInput, View,TouchableOpacity } from 'react-native'
+import {FlatList, StyleSheet, Text, View,TouchableOpacity } from 'react-native'
 import React from 'react'
 
 // ** Constants
@@ -10,7 +10,6 @@ import Colors from '../../constants/Colors';
 import { RootStackParamList } from "../../types";
 
 // ** Third Party
-import { styled } from 'nativewind';
 import Entypo from "@expo/vector-icons/Entypo"
 
 // ** Layout
@@ -19,7 +18,6 @@ import Layout from '../../layouts/Layout';
 //
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 type Props = NativeStackScreenProps<RootStackParamList, "Settings">;
-const StyledView = styled(View)
 
 const DATA: any = [
   {

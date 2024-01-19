@@ -2,7 +2,6 @@ import {
   SafeAreaView,
   ScrollView,
   StyleSheet,
-  Text,
   View,
 } from "react-native";
 import React, { useState } from "react";
@@ -22,7 +21,6 @@ import Spacing from "../../constants/Spacing";
 
 // ** Thired Party
 import { FormProvider, useForm } from 'react-hook-form';
-import { styled } from "nativewind";
 
 // ** Hook
 
@@ -47,7 +45,6 @@ const defaultValues = {
 }
 
 const ForgetPassword: React.FC<Props> = ({ navigation: { navigate } }) => {
-  const [toggleCheckBox, setToggleCheckBox] = useState(false)
   const methods = useForm({defaultValues});
   const [forgetPassword, { isLoading }] = useForgetPasswordMutation();
 

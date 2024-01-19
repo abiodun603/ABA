@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View, FlatList } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import Layout from '../../layouts/Layout';
@@ -8,14 +8,11 @@ import { KeyboardAvoidingView } from 'native-base';
 // ** Utils
 import socket from '../../utils/socket'
 
-import ChatTab from '../../components/ChatTab';
 import useGlobalState from '../../hooks/global.state';
-import { useAppSelector } from '../../hooks/useTypedSelector';
 import { Colors } from '../../constants';
 import Font from '../../constants/Font';
 import FontSize from '../../constants/FontSize';
 import { formatTimestampToTime } from '../../helpers/timeConverter';
-import { FlatList } from 'react-native';
 import { Buffer } from '@craftzdog/react-native-buffer';
 import * as FileSystem from 'expo-file-system';
 import ChatInput from '../../components/ChatInput';
@@ -23,26 +20,6 @@ import { getFileExtension } from '../../helpers/getFileExtension';
 import { FileCard } from '../resources/components/FileResources';
 import { ImageCard } from '../resources/components/ImageResources';
 type Props = NativeStackScreenProps<RootStackParamList, "ChatCommunity">;
-
-type IChatIdProps = {
-  message: string
-}
-
-interface Message {
-  id: string;
-  message: string;
-  time: string;
-  chatId: string;
-}
-
-interface IMessageCardProps {
-  id: string
-  message: string
-  chatId: IChatIdProps
-}
-
-const blurhash =
-  '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
 
 // Define the type for your route parameters
 type RouteParams = {
