@@ -1,9 +1,8 @@
-import { Dimensions, StyleSheet, Text, View, Image } from 'react-native'
+import { Dimensions, StyleSheet, Text, View, Image , TouchableOpacity} from 'react-native'
 import React from 'react'
 import Ionicons from "@expo/vector-icons/Ionicons"
 import Font from '../../constants/Font';
 import { useNavigation } from '@react-navigation/native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons"
 import Colors from '../../constants/Colors';
 import FontSize from '../../constants/FontSize';

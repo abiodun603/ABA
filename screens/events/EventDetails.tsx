@@ -1,4 +1,4 @@
-import {  Text, TouchableOpacity, View } from 'react-native'
+import {  Text, TouchableOpacity, View, ScrollView } from 'react-native'
 import React from 'react'
 
 // ** ICONS
@@ -11,7 +11,6 @@ import Layout from '../../layouts/Layout';
 import MapView, { Marker } from 'react-native-maps'
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from '../../types';
-import { ScrollView } from 'react-native-gesture-handler';
 import { Divider } from 'native-base';
 import CustomButton from '../../components/CustomButton';
 import { useGetEventByIdQuery, useGetJoinedEventQuery, useLeaveEventMutation, useUpdateAttendEventMutation } from '../../stores/features/event/eventService';

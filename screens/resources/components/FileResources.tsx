@@ -1,11 +1,9 @@
-import { Linking, StyleSheet, Text, View } from 'react-native'
+import { Linking, StyleSheet, Text, View, TouchableOpacity, FlatList } from 'react-native'
 import React from 'react'
 
 // ** Icons
 import { Feather } from '@expo/vector-icons'; 
-import { FlatList } from 'react-native';
 import { useGetCommunityFileQuery } from '../../../stores/features/groups/groupsService';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
 interface ImageResourcesProps {
   route: any; // Adjust 'YourTabParamList' based on your route param structure

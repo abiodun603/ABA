@@ -43,8 +43,8 @@ const AccountOption: React.FC<Props> = ({ navigation: { navigate } }) => {
           <Text className="text-[#FFD7F3] text-sm font-medium mt-2">Join us in creating a more inclusive world for individuals with autism.</Text>
           <StyledView className="flex flex-col mt-5 ">
             <CustomButton title="Sign up with Email" onPress={() => navigate("CreateAccount")}/>
-            <CustomButton title="Sign up with Google" buttonColor="transparent" titleColor={"#FFD7F3"} buttonStyle={{borderWidth: 1, borderColor: "#FFD7F3", marginTop: 15}}/>
-            <CustomButton title="Sign up with Apple" buttonColor="transparent" titleColor={"#FFD7F3"} buttonStyle={{borderWidth: 1, borderColor: "#FFD7F3", marginTop: 15}}/>
+            {/* <CustomButton title="Sign up with Google" buttonColor="transparent" titleColor={"#FFD7F3"} buttonStyle={{borderWidth: 1, borderColor: "#FFD7F3", marginTop: 15}}/>
+            <CustomButton title="Sign up with Apple" buttonColor="transparent" titleColor={"#FFD7F3"} buttonStyle={{borderWidth: 1, borderColor: "#FFD7F3", marginTop: 15}}/> */}
           </StyledView>
           <Text onPress={() => navigate("Login")} style={styles.text3}>Already have an account? <Text style={styles.text4} >Sign In</Text>.</Text>
         </View>

@@ -4,15 +4,10 @@ import {
   StyleSheet,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React from "react";
 import { RootStackParamList } from "../../types";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-// ** Constants 
-import FontSize from "../../constants/FontSize";
-import Colors from "../../constants/Colors";
-import Font from "../../constants/Font";
-import Spacing from "../../constants/Spacing";
 
 // ** Layouts
 import AuthHeader from "../../layouts/authHeader/AuthHeader";

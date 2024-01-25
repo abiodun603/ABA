@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View , TouchableOpacity, Dimensions, ImageBackground} from 'react-native'
+import { StyleSheet, Text, View , TouchableOpacity, Dimensions, ImageBackground, FlatList, ScrollView, TouchableWithoutFeedback} from 'react-native'
 import React, { useMemo, useState } from 'react'
 
 // ** Layout
@@ -21,7 +21,6 @@ import { SelectList, MultipleSelectList } from 'react-native-dropdown-select-lis
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from '../../types';
 import { GroupCatergory } from '../../utils/dummy';
-import { FlatList, ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { useCreateCommunityMutation, useGetCategoryByIdQuery, useGetCommunityQuery, useJoinCommunityMutation } from '../../stores/features/groups/groupsService';
 import Input from '../../components/Input';
 import BottomSheet from '../../components/bottom-sheet/BottomSheet';
