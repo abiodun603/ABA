@@ -35,6 +35,7 @@ import { RootStackParamList } from "../../types";
 
 // ** Store and Action
 import { useLoginMutation } from "../../stores/features/auth/authService";
+import Toaster from "../../components/Toaster/Toaster";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Login">;
 
@@ -66,22 +67,24 @@ const LoginScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
       navigate('CustomDrawer');
     } catch (err: any) {
       console.log(err)
-      // if(err.status === 401){
-      //   toast.show({
-      //     placement: "top",
-      //     render: ({ id }) => <Toaster id = {id} message=" The email or password provided is incorrect."   />
-      //   })
-      // }
-      // if(err.status === 500){
-      //   toast.show({
-      //     placement: "top",
-      //     render: ({ id }) => <Toaster id = {id} message=" Email verification required"   />
-      //   })
-      // }
-      // toast.show({
-      //   placement: "top",
-      //   render: ({ id }) => <Toaster id = {id} message="Opps!!! NetWork Error"   />
-      // });
+      if(err.status === 401){
+        toast.show({
+          placement: "top",
+          render: ({ id }) => <Toaster id = {id} message=" The email or password provided is incorrect."   />
+        })
+        return
+      }
+      if(err.status === 500){
+        toast.show({
+          placement: "top",
+          render: ({ id }) => <Toaster id = {id} message=" Email verification required"   />
+        })
+        return;
+      }
+      toast.show({
+        placement: "top",
+        render: ({ id }) => <Toaster id = {id} message="Opps!!! NetWork Error"   />
+      });
       toast.show({
         placement: "top",
         render: ({ id }) => {
@@ -171,14 +174,14 @@ const LoginScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
               </View>
             
             </View>
-            <View>
+            <View className="mb-5">
               <View style={{ backgroundColor: "red"}} className="bg-red-800" />
               <Button 
                 title="Sign in" 
                 isLoading={isLoading}
                 onPress={methods.handleSubmit(handleLogin)}              
               />
-              <Text style={styles.text3}>Or sign in with</Text>
+              {/* <Text style={styles.text3}>Or sign in with</Text>
               <StyledView className="flex flex-row  justify-center space-x-2 mt-6">
                 <Box className=" text-black">
                   <Button
@@ -195,7 +198,7 @@ const LoginScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
                     titleColor= {Colors.secondary}
                   />
                 </Box>
-              </StyledView>
+              </StyledView> */}
             </View>
           </FormProvider>
 

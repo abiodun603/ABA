@@ -5,7 +5,7 @@ import {
   Text,
   View,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { RootStackParamList } from "../../types";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import Input from "../../components/Input";
@@ -52,11 +52,22 @@ const Create: React.FC<Props> = ({ navigation: { navigate } }) => {
   const methods = useForm({defaultValues});
   const [selected, setSelected] = React.useState("");
   const [signup, { isLoading }] = useSignupMutation();
+  const [error, setError] = useState<string | null>(null);
+
 
   const toast = useToast()
 
 
   const handleSignup = async (data: UserData) => {
+    if (!selected) {
+      setError('Please select your gender.');
+      return;
+      // You can also perform other actions, e.g., prevent form submission
+    } else {
+      setError(null)
+      // Handle form submission with the selected gender
+      console.log('Selected gender:', selected);
+    }
     // Handle login logic here
     const signupData = {
       email: data.email,
@@ -116,8 +127,7 @@ const Create: React.FC<Props> = ({ navigation: { navigate } }) => {
           rightNavigation = "Sign in"
           head={`Enter your ${'\n'}Information Details`}
           description="Enter your name to get started"
-          rightNavPress={() =>  console.log("Click me")}
-        />
+          rightNavPress={() => navigate("Login")} />
         <FormProvider {...methods}>
           {/* ====== ======== */}
           <View style={{marginVertical: 20}} className="grow" >
@@ -148,6 +158,13 @@ const Create: React.FC<Props> = ({ navigation: { navigate } }) => {
               placeholder="Enter password"
               password
               passwordIcon
+              rules={{
+                required: 'Password is required',
+                pattern: {
+                  value: /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+                  message: 'Password must contain at least 8 characters, one uppercase letter, one number, and one special character'
+                }
+              }}
             />
 
             <View className='flex flex-col mb-5'>
@@ -159,8 +176,9 @@ const Create: React.FC<Props> = ({ navigation: { navigate } }) => {
                 boxStyles={{borderRadius:4, borderColor: "#80747B", height:56}}
                 search={false} 
                 placeholder='Select your gender'
-                
               />
+              {error ? <Text style={{color: 'red', fontSize: 12, marginTop: 7}}>Gender is required</Text> : null}
+              {/* {error && {error}} */}
             </View>
           </View>
           <View>
