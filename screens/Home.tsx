@@ -262,7 +262,7 @@ const Home = ({navigation}: {navigation: any}) => {
           <View className="flex-row items-center justify-between mb-3">
             {/*  */}
             <Text className="text-black text-sm  font-semibold">Your community</Text>
-            <Text className="text-ksecondary text-sm opacity-50 font-normal">See all</Text>
+            <Text onPress={() => navigation.navigate("GroupCat")} className="text-ksecondary text-sm opacity-50 font-normal">See all</Text>
           </View>
           {/* Groups */}
           <View className=''>

@@ -152,13 +152,13 @@ const CustomDrawerContent = ({navigation, selectedTab, setSelectedTab}: {navigat
             >
               <View>
                 <CustomDrawerItem
-                  label={constants.screens.resources}
+                  label={constants.screens.contact}
                   icon = {document}
                   onPress= {() => {
-                      setSelectedTab(constants.screens.resources)
-                      navigation.navigate("Resources")
-                  }}
-                  count='100+'
+                    setSelectedTab(constants.screens.contact)
+                    navigation.navigate("MainLayout")
+                }}
+                  // count='100+'
                   isFocused={selectedTab == constants.screens.home}
                 />
                 <CustomDrawerItem

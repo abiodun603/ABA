@@ -1,13 +1,14 @@
 const screens = {
     main_layout: "MainLaoyout",
     home: "Home",
-    resources: "Resources",
+    resources: "",
     events: "Events",
     settings: "Settings",
     chats: "Chats",
     community: "Events",
     profile: "Profile",
     contact: "Explore",
+    explore: "Explore",
     rate: "Rate Us",
     support: "Support"
 
@@ -20,7 +21,7 @@ const sidebar__tabs = [
     },
     {
       id: 1,
-      label: screens.contact
+      label: screens.explore
     },
     {
         id: 2,

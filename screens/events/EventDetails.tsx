@@ -18,6 +18,7 @@ import { ShortenedWord } from '../../helpers/wordShorther';
 import Toaster from '../../components/Toaster/Toaster';
 import { useToast } from '@gluestack-ui/themed';
 import useLocation from '../../hooks/useLocation';
+import { formattedDateWithDay } from '../../helpers/formatDate';
 
 // Define the type for your route parameters
 type RouteParams = {
@@ -49,6 +50,8 @@ const EventDetails: React.FC<Props>  = ({navigation, route}) => {
   if (!data) {
     return <Text>No data available.</Text>; // Display a message when there is no data
   }
+
+  console.log(data);
 
   const handleAttendEvent = () => {
     updateEventAttend(eventId)
@@ -116,7 +119,7 @@ const EventDetails: React.FC<Props>  = ({navigation, route}) => {
                   <Ionicons name="calendar-outline" size={28} />
                   <View className='space-y-2'>
                     {/* day / month / year */}
-                    <Text className='text-sm text-gray-800 font-semibold'>Saturday, 21 October 2023</Text>
+                    <Text className='text-sm text-gray-800 font-semibold'>{formattedDateWithDay(new Date(data?.event_date))}</Text>
                     {/* time */}
                     <Text className='text-sm text-gray-800 font-medium'>{data?.event_time}</Text>
                   </View>

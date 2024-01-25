@@ -101,6 +101,22 @@ const EventFilter: React.FC<Props> = ({navigation}: {navigation: any}) => {
         </ScrollView>
 
         {/*  */}
+        <View className='h-auto grow'>
+          {
+            results?.data?.docs.length > 0 ? 
+            <FlatList
+              data={results?.data?.docs || []}
+              contentContainerStyle = {{marginTop: 10}}
+              renderItem={({item}) => <EventCard event_about={item.event_about} event_time={item.event_time} event_name={item.event_name} event_city={item.event_city} event_id={item.id} navigation={navigation} members = {item.members}/>}
+              keyExtractor={item => item.id}
+            /> : (
+              <View className='w-full flex items-center justify-center mt-10'>
+                <Text className='flex items-center justify-center  text-sm text-ksecondary font-medium'>No Upcoming Event</Text>
+              </View>
+            )
+          }
+        </View>
+
         <FlatList
           data={results?.data?.docs || []}
           contentContainerStyle = {{marginTop: 10}}

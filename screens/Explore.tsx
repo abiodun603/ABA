@@ -69,7 +69,7 @@ const Explore = ({navigation}: {navigation: any}) => {
     return <Text>No data available.</Text>; // Display a message when there is no data
   }
   // const categories = Object.keys(getEventsByCatType.docs || {});
-
+  console.log(getPopularEvents)
 
   const renderEventCard = (event_id: string,about: string, name: string, time: string, city: any,  toggleBookMark: any, bookMark: any, navigation: any) => {
     const onShare = async () => {
@@ -96,6 +96,8 @@ const Explore = ({navigation}: {navigation: any}) => {
       }
       
     }
+
+    console.log( "popular events")
     return(
       <TouchableOpacity  className='h-60 w-56 rounded-lg mr-3' onPress={() => navigation.navigate("EventDetails", { eventId: event_id })}>
          <View style={{flex:1}} className='rounded-t-lg bg-blue-500'>
@@ -137,7 +139,6 @@ const Explore = ({navigation}: {navigation: any}) => {
       title='Explore'
       navigation={navigation}
       drawerNav
-      iconName="plus"
       onPress={()=> setShow(true)}
     >
       <ScrollView style={styles.container}>
@@ -152,10 +153,10 @@ const Explore = ({navigation}: {navigation: any}) => {
 
         <View className = "flex-row flex-wrap " style={{ flex: 0 }}>
           {
-            eventsDays.map((items, index) => <View className='pl-2 pr-3 py-2 bg-[#333]  flex-row items-center justify-between rounded-lg  mr-2 mb-2' key={index.toString()} style={{ flex: 0 }} >
+            eventsDays.map((items, index) => <TouchableOpacity onPress={() => navigation.navigate("EventFilter")} className='pl-2 pr-3 py-2 bg-[#333]  flex-row items-center justify-between rounded-lg  mr-2 mb-2' key={index.toString()} style={{ flex: 0 }} >
             <Text className='text-white text-xs font-medium'>{items}</Text>
             <MaterialIcons name = "keyboard-arrow-right"  size={20} color="#d1d5db" />
-          </View>)
+          </TouchableOpacity>)
           }
           
         </View>
