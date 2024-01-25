@@ -80,7 +80,7 @@ const EventFilter: React.FC<Props> = ({navigation}: {navigation: any}) => {
               <FontAwesome name = "angle-down" size={20} color="#FFFFFF"/>
             </TouchableOpacity>
           </FilterState>
-          <FilterState>
+          {/* <FilterState>
             <View className='flex-row items-center space-x-2'  >
               <Text style={{ color: 'white' }}>All upcoming</Text>
               <FontAwesome name = "angle-down" size={20} color="#FFFFFF"/>
@@ -97,7 +97,7 @@ const EventFilter: React.FC<Props> = ({navigation}: {navigation: any}) => {
               <Text style={{ color: 'white' }}>Any Distance</Text>
               <FontAwesome name = "angle-down" size={20} color="#FFFFFF"/>
             </View>
-          </FilterState>
+          </FilterState> */}
         </ScrollView>
 
         {/*  */}

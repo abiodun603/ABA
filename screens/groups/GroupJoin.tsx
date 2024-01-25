@@ -250,25 +250,32 @@ const GroupJoin: React.FC<Props> = ({ navigation: { navigate } , route}) => {
             <Text className='text-black text-sm font-bold mt-3'>Browse by categories</Text>
           </View>
           <View className=''>
-            <FlatList
-              keyExtractor={item => item?.id}
-              data={firstTwoCommunity} 
-              renderItem={({item}) => <JoinCard name = {item.community_name} members = {item.members} community_id={item.id} navigate={navigate}/> }
-            />
+            {
+              firstTwoCommunity.length > 0 ? (
+                <FlatList
+                  keyExtractor={item => item?.id}
+                  data={firstTwoCommunity || []} 
+                  renderItem={({item}) => <JoinCard name = {item.community_name} members = {item.members} community_id={item.id} navigate={navigate}/> }
+                /> ): (
+                  <Text className='text-ksecondary text-sm'>This category do not have community yet !!!</Text>
+                )
+            }
           </View>
         </View>
           
         {/* Divider */}
         <Divider mt={8} thickness={1}/>
           <View className='flex-row justify-between items-center my-4  px-4'>
-            <View className='flex-row  space-x-2'>
+            <View className='flex-row  space-x-3'>
               {/* icon calander */}
-              <MaterialIcons name="location-searching" size={28} />
-              <TouchableWithoutFeedback onPress={() => setShow(true)} className=''>
-                {/* day / month / year */}
-                <Text className='text-sm text-gray-800 font-bold'>Start a new community</Text>
-                {/* time */}
-                <Text className='text-xs text-gray-700 font-medium'>Organise your own events</Text>
+              <MaterialIcons name="location-searching" size={28} className="" />
+              <TouchableWithoutFeedback onPress={() => setShow(true)} className='mr-2'>
+                <View>
+                  {/* day / month / year */}
+                  <Text className='text-sm text-gray-800 font-bold'>Start a new community</Text>
+                  {/* time */}
+                  <Text className='text-xs text-gray-700 font-medium'>Organise your own events</Text>
+                </View>
               </TouchableWithoutFeedback>
             </View>
             {/* icon */}

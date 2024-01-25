@@ -401,3 +401,63 @@ const NewResources = () => {
   )
 
 }
+
+
+
+ <BottomSheet
+          show={show}
+          onDismiss={() => {
+            setShow(false);
+          }}
+          height={0.9}
+
+          enableBackdropDismiss
+        >
+          <FormProvider {...methods}>
+            <ScrollView showsVerticalScrollIndicator={false}>
+              {/* <Text className='font-medium text-2xl text-black '>Create a new events</Text> */}
+              <View className='mt-4'>
+                <Input
+                  name='community_name'
+                  label="Community name"
+                  placeholder="Enter community name"
+                />
+                <Input
+                  name='community_description'
+                  label="Community description"
+                  placeholder="Enter community description"
+                />
+                <View className='flex flex-col mb-5'>
+                  {/* <Text className=' font-normal text-sm text-black'>Gender</Text> */}
+                  <MultipleSelectList 
+                    setSelected={(val: React.SetStateAction<any[]>) => setSelectedMembers(val)} 
+                    data={members} 
+                    save="key"
+                    boxStyles={{borderRadius:4, borderColor: "#80747B", paddingLeft: 10}}
+                    search={true} 
+
+                    placeholder='Select community members'
+                  />
+                </View>
+                <View className='flex flex-col mb-5'>
+                  <SelectList 
+                    setSelected={(val: React.SetStateAction<string>) => setSelectedStatus(val)} 
+                    data={status} 
+                    save="value"
+                    boxStyles={{borderRadius:4, borderColor: "#80747B", height:56, paddingLeft: 10}}
+                    search={false} 
+                    placeholder='Select community status'
+                    
+                  />
+                </View>
+                <View className='mb-20'>
+                  <CustomButton
+                  title="Submit" 
+                  isLoading={createCommunityLoading}
+                  onPress={methods.handleSubmit(handleCreateCommunity)}              
+                  />
+                </View>
+              </View>
+            </ScrollView>
+          </FormProvider>
+        </BottomSheet>
