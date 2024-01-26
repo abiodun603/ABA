@@ -31,7 +31,7 @@ const ChatInput = ({ reply, closeReply, isLeft, username, onPress, message, setM
 
   const height = useSharedValue(70);
 
-  console.log(message)
+  // console.log(message)
 
   useEffect(() => {
 		if (showEmojiPicker) {
@@ -62,7 +62,7 @@ const ChatInput = ({ reply, closeReply, isLeft, username, onPress, message, setM
       if (result.type === 'success') {
         // setSelectedDocument(result);
         // Handle additional logic or UI updates as needed
-        console.log('Selected document:', result);
+        // console.log('Selected document:', result);
         // Read the content of the document as a string
         const documentContent = await FileSystem.readAsStringAsync(result.uri, {
           encoding: FileSystem.EncodingType.UTF8,
@@ -72,7 +72,7 @@ const ChatInput = ({ reply, closeReply, isLeft, username, onPress, message, setM
         const arrayBuffer = stringToArrayBuffer(documentContent);
 
         // Now you can use the 'arrayBuffer' as needed, for example, send it to the server
-        console.log('Selected document content:', arrayBuffer);
+        // console.log('Selected document content:', arrayBuffer);
         setArrayBuffer(arrayBuffer);
         setFileName(result.name)
         setShow(false);
@@ -114,7 +114,7 @@ const ChatInput = ({ reply, closeReply, isLeft, username, onPress, message, setM
       const uriComponents = result.assets[0].uri.split('/');
       const fileName = uriComponents[uriComponents.length - 1];
 
-      console.log('Selected image file name:', fileName);
+      // console.log('Selected image file name:', fileName);
       try {
         // const fileUri = imageUri;
         const fileStream = await FileSystem.readAsStringAsync(result.assets[0].uri, {
@@ -132,7 +132,7 @@ const ChatInput = ({ reply, closeReply, isLeft, username, onPress, message, setM
   
   };
 
-  console.log(arrayBuffer, imageUri);
+  // console.log(arrayBuffer, imageUri);
 
   return(
     <View>

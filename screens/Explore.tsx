@@ -69,7 +69,7 @@ const Explore = ({navigation}: {navigation: any}) => {
     return <Text>No data available.</Text>; // Display a message when there is no data
   }
   // const categories = Object.keys(getEventsByCatType.docs || {});
-  console.log(getPopularEvents)
+  // console.log(getPopularEvents)
 
   const renderEventCard = (event_id: string,about: string, name: string, time: string, city: any,  toggleBookMark: any, bookMark: any, navigation: any) => {
     const onShare = async () => {
@@ -97,7 +97,7 @@ const Explore = ({navigation}: {navigation: any}) => {
       
     }
 
-    console.log( "popular events")
+    // console.log( "popular events")
     return(
       <TouchableOpacity  className='h-60 w-56 rounded-lg mr-3' onPress={() => navigation.navigate("EventDetails", { eventId: event_id })}>
          <View style={{flex:1}} className='rounded-t-lg bg-blue-500'>

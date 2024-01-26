@@ -82,7 +82,7 @@ export const EventCard = ({event_about, event_time ,event_name, event_city, even
     .unwrap()
     .then((data) => {
       // Handle success
-      console.log('res:', data);
+      // console.log('res:', data);
       toast.show({
         placement: 'top',
         render: ({id}) => <Toaster id={id} type="success" message="Thank you!!!. Event have been saved" />
@@ -262,7 +262,7 @@ const Contact = ({navigation}: {navigation: any}) => {
     .unwrap()
     .then((data) => {
       // Handle success
-      console.log('Event attendance updated:', data);
+      // console.log('Event attendance updated:', data);
       methods.reset()
       toast.show({
         placement: 'top',
@@ -284,7 +284,7 @@ const Contact = ({navigation}: {navigation: any}) => {
 
   }
 
-  console.log(selectedMembers)
+  // console.log(selectedMembers)
 
   return (
     <Layout

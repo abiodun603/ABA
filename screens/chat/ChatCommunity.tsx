@@ -39,7 +39,7 @@ const MessageCard = ({message, time, chatId, name, fileUri}: {message: string, t
   }, []);
 
   return (
-    <View style={user?.id === chatId ? [styles.cardContainer, styles.rightChat, { width: containerWidth }]: [styles.cardContainer, , styles.leftChat, { width: containerWidth }]}>
+    <View style={user?.id === chatId ? [styles.cardContainer, styles.rightChat, { width: containerWidth }]: getFileExtension(message) === '.docx' || getFileExtension(message) === '.pdf' ? {backgroundColor: "transparent"} : [styles.cardContainer, styles.leftChat, { width: containerWidth }] }>
       <Text className='text-xs text-gray-400 mb-10 absolute -top-1 left-2 py-1  pl-2'>{chatId !== user?.id ? name : ''}</Text>
         {
           getFileExtension(message) === '.docx' || getFileExtension(message) === '.pdf' ? 
@@ -78,7 +78,6 @@ const ChatCommunity: React.FC<Props> = ({ navigation: { navigate } , route}) => 
     if(arrayBuffer){
       console.log(data)
       socket.emit('uploadFile', data);
-      console.log("try me")
       setArrayBuffer("")
       setFileName("")
       setMessage("")
@@ -117,45 +116,71 @@ const ChatCommunity: React.FC<Props> = ({ navigation: { navigate } , route}) => 
   }, [socket]); 
 
   const convertArrayBufferToFile = async (arrayBuffer: any) => {
-    
     try {
-      const fileUri = `${FileSystem.documentDirectory}downloaded_image.jpg`; // Change the file name and extension as needed
-      await FileSystem.writeAsStringAsync(fileUri, Buffer.from(arrayBuffer).toString('base64'), {
+      if (!arrayBuffer) {
+        console.error('ArrayBuffer is empty or undefined.');
+        return null;
+      }
+  
+      const fileUri = `${FileSystem.documentDirectory}downloaded_image.jpg`;
+      const base64Data = Buffer.from(arrayBuffer).toString('base64');
+  
+      if (!base64Data) {
+        console.error('Base64 data is empty.');
+        return null;
+      }
+  
+      await FileSystem.writeAsStringAsync(fileUri, base64Data, {
         encoding: FileSystem.EncodingType.Base64,
       });
-      setDownloadedFileUri(fileUri)
+  
+      setDownloadedFileUri(fileUri);
       return fileUri;
     } catch (error) {
       console.error('Error converting ArrayBuffer to file:', error);
+      return null;
     }
   };
+  
 
 
   useEffect(() => {
     socket.on("uploadComplete", async (data) => {
       try {
-        console.log(data)
+        console.log(data);
+
+        if(!data.arrayBuffer) return null;
+
         const fileUri = await convertArrayBufferToFile(data.arrayBuffer);
-        setMessagesReceived((state) => [
-          ...state,
-          {
-            id: data.id,
-            message: fileUri,
-            chatId: data.current_user_id,
-            time: data.createdAt,
-          },
-        ]);
+  
+        // Check if fileUri is truthy before updating state
+        if (fileUri) {
+          setMessagesReceived((state) => [
+            ...state,
+            {
+              id: data.id,
+              message: fileUri,
+              chatId: data.chatId,
+              time: data.time,
+            },
+          ]);
+          console.log(data + "image response");
+        } else {
+          console.error('Error converting ArrayBuffer to File. FileUri is undefined.');
+        }
       } catch (error) {
         console.error('Error handling upload complete:', error);
       }
     });
+  
     console.log("file me upload complete");
   
     // Cleanup the event listener when the component is unmounted
-    return () => {
-      socket.off("uploadComplete");
-    };
+    // return () => {
+    //   socket.off("uploadComplete");
+    // };
   }, [socket]);
+  
 
   const handleClearMessage = () => setMessagesReceived([])
 
@@ -214,7 +239,7 @@ const ChatCommunity: React.FC<Props> = ({ navigation: { navigate } , route}) => 
               <FlatList
                 ref={flatListRef}
                 data={messagesRecieved}
-                keyExtractor={(item, index) => item?.id}
+                keyExtractor={(item, index) => index}
                 renderItem={({ item }) => (
                   <MessageCard  message={item.message} time={item.time} chatId= {item.chatId} name={item.name}  fileUri = {item.file}/>
                 )}
@@ -252,7 +277,7 @@ const styles = StyleSheet.create({
     position: "relative",
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#F5E5F5",
+    // backgroundColor: "#F5E5F5",
     borderTopRightRadius: FontSize.base,
     borderBottomLeftRadius: FontSize.base,
     borderBottomRightRadius: FontSize.base,

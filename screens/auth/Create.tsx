@@ -66,7 +66,7 @@ const Create: React.FC<Props> = ({ navigation: { navigate } }) => {
     } else {
       setError(null)
       // Handle form submission with the selected gender
-      console.log('Selected gender:', selected);
+      // console.log('Selected gender:', selected);
     }
     // Handle login logic here
     const signupData = {

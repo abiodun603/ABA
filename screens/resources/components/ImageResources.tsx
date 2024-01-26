@@ -21,9 +21,9 @@ export const ImageCard = ({time, url, isImageTime}: {time?: any, url: string, is
   };
   return(
     <TouchableOpacity onPress={handleDownload}>
-      {
+      {/* {
         isImageTime && <Text className='mt-5 text-sm text-gray-700'>{formatTimestampToTime(time)}</Text>
-      }
+      } */}
       
       <View className='mt-3 rounded-md'>
         {/* Image */}
