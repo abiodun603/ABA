@@ -21,6 +21,8 @@ import BottomSheet from '../components/bottom-sheet/BottomSheet'
 
 // ** Hooks
 import useGlobalState from '../hooks/global.state'
+import { useGetProfileMeQuery } from '../stores/features/auth/authService'
+import { getFirstAndLastName } from '../helpers/getFirstAndLastName'
 
 
 const defaultValues = {
@@ -36,6 +38,12 @@ const Profile = ({navigation}: {navigation: any}) => {
 
   // Get Global State
   const {user} = useGlobalState()
+  const { data} = useGetProfileMeQuery()
+  const fullName = data?.user?.name || ""
+
+  const { firstName, lastName } = getFirstAndLastName(fullName);
+
+
 
   // console.log(profile)
 
@@ -61,7 +69,7 @@ const Profile = ({navigation}: {navigation: any}) => {
                     <Text className='text-white text-sm font-bold'>A</Text>
                   </View>
                   <View className='space-y-1'>
-                    <Text className='text-kblack text-sm font-normal'>{user.name || "firstname"}</Text>
+                    <Text className='text-kblack text-sm font-normal'>{firstName || "firstname"}</Text>
                     <Text className='text-kdesc text-[11px] text-medium'>{user.email || "username"}</Text>
                   </View>
                 </View>

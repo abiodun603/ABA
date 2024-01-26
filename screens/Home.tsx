@@ -32,7 +32,6 @@ import Saved from '../views/HomeView/Saved'
 import TopNavPanel from '../navigation/TopTabs';
 
 // ** Store Services
-import { useGetProfileMeQuery } from '../stores/features/profile/profileService';
 import { getFirstAndLastName } from '../helpers/getFirstAndLastName';
 import useLocation from '../hooks/useLocation';
 import { useGetNextEventQuery } from '../stores/features/event/eventService';
@@ -42,6 +41,7 @@ import fetchCityFromCoordinates from '../services/fetchCityFromCoordinates';
 import { setEventLocation } from '../stores/features/event/eventSlice';
 import { useGetMyCommunityQuery } from '../stores/features/groups/groupsService';
 import socket from '../utils/socket';
+import { useGetProfileMeQuery } from '../stores/features/auth/authService';
 // import Past from './savedItems/Past';
 
 const screenWidth = Dimensions.get("window").width

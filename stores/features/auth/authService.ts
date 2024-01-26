@@ -31,6 +31,7 @@ export interface Profile {
 
 export interface ProfileResponse {
   docs: Profile
+  user: any
   profile: Profile
 }
 
@@ -45,9 +46,9 @@ export interface resetPasswordRequest {
 
 
 export interface ProfileRequest {
-  firstname: string
-  username: string
-  id: string
+  firstname:  string
+  username:   string
+  id:         string
 }
 
 interface OtpRequest {
@@ -74,6 +75,7 @@ export const authApi = createApi({
         body: credentials,
       }),
     }),
+    
     forgetPassword: builder.mutation<UserResponse, forgetPasswordRequest>({
       query: (credentials) => ({
         url: '/users/forgotPassword',
@@ -116,6 +118,20 @@ export const authApi = createApi({
       }),
       providesTags: ["Profile"]
     }),
+    getUsers: builder.query<ProfileResponse, void>({
+      query: () => ({
+        url: '/users',
+        method: 'GET',
+      }),
+      providesTags: ["Profile"]
+    }),
+    getProfileMe: builder.query<ProfileResponse, void>({
+      query: () => ({
+        url: '/users/me',
+        method: 'GET',
+      }),
+      providesTags: ["Profile"]
+    }),
     updateProfile: builder.mutation<void, Partial<ProfileRequest> & Pick<ProfileRequest, 'id'>>({
       query: ({id, ...patch}) => ({
         url: `/users/${id}`,
@@ -127,4 +143,4 @@ export const authApi = createApi({
   }),
 })
 
-export const { useOtpResendMutation, useOtpForgetMutation, useResetPasswordMutation, useForgetPasswordMutation, useLoginMutation, useOtpMutation, useSignupMutation,  useUpdateProfileMutation, useGetProfileQuery } = authApi
+export const { useOtpResendMutation, useGetProfileMeQuery, useOtpForgetMutation, useResetPasswordMutation, useForgetPasswordMutation, useLoginMutation, useOtpMutation, useSignupMutation, useGetUsersQuery,  useUpdateProfileMutation, useGetProfileQuery } = authApi
