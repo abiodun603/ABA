@@ -112,7 +112,7 @@ const EditProfile: React.FC<Props> = ({ navigation: { navigate } }) => {
 
         <View className='flex flex-col items-center  mt-10'>
           {/* Image */}
-          <View className='h-[136px] w-[136px] rounded-2xl bg-slate-800'>
+          <View className='h-[136px] w-[136px] rounded-full bg-slate-800'>
 
           </View>
           <CustomButton

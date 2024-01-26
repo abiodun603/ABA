@@ -65,8 +65,8 @@ const Profile = ({navigation}: {navigation: any}) => {
                 {/* image  */}
                 <View className='flex-row items-center space-x-3'>
                   {/* Image */}
-                  <View className='h-12 w-12 flex items-center justify-center rounded-2xl bg-ksecondary'>
-                    <Text className='text-white text-sm font-bold'>A</Text>
+                  <View className='h-12 w-12 flex items-center justify-center rounded-full bg-ksecondary'>
+                    <Text className='text-white text-sm font-bold'>{firstName.charAt(0)}</Text>
                   </View>
                   <View className='space-y-1'>
                     <Text className='text-kblack text-sm font-normal'>{firstName || "firstname"}</Text>
@@ -94,15 +94,13 @@ const Profile = ({navigation}: {navigation: any}) => {
               </View>
 
               <View className='space-y-8'>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                   onPress={() => setShow(true)}
                   className='flex-row items-center space-x-5 '
                 >
-                  {/* icon */}
                   <AntDesign name="user" size={15}/>
-                  {/* name */}
                   <Text className='text-kblack2 text-sm font-normal '>Set your status</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 <TouchableOpacity  
                   onPress={() => navigation.navigate("ProfileNotification")}
                   className='flex-row items-center space-x-5'>
@@ -111,15 +109,13 @@ const Profile = ({navigation}: {navigation: any}) => {
                   {/* name */}
                   <Text className='text-kblack2 text-sm font-normal '>Pause Notifications</Text>
                 </TouchableOpacity>
-                <TouchableOpacity 
+                {/* <TouchableOpacity 
                   className='flex-row items-center space-x-5'
                   onPress={() => navigation.navigate("CommunityInvites")}
                 >
-                  {/* icon */}
                   <AntDesign name="user" size={15}/>
-                  {/* name */}
                   <Text className='text-kblack2 text-sm font-normal '>Community Invites</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 <TouchableOpacity 
                   onPress={() => navigation.navigate("ProfilePreview")}
                   className='flex-row items-center space-x-5'>
