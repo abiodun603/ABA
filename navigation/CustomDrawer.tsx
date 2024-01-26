@@ -166,9 +166,9 @@ const CustomDrawerContent = ({navigation, selectedTab, setSelectedTab}: {navigat
                   icon = {calendar}
                   onPress= {() =>{
                       setSelectedTab(constants.screens.events)
-                      navigation.navigate("Events")
+                      navigation.navigate("MainLayout")
                   }}
-                  count='8'
+                  // count='8'
                   isFocused = {selectedTab == constants.screens.settings}
                 />
                 <CustomDrawerItem
