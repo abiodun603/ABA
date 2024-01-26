@@ -223,6 +223,7 @@ const Explore = ({navigation}: {navigation: any}) => {
           <View className='flex-row  space-x-2'>
             {/* icon calander */}
             <MaterialIcons name="location-searching" size={28} />
+
             <View className=''>
               {/* day / month / year */}
               <Text className='text-sm text-gray-800 font-bold'>Start a new group</Text>
@@ -231,7 +232,9 @@ const Explore = ({navigation}: {navigation: any}) => {
             </View>
           </View>
           {/* icon */}
-          <MaterialIcons name = "keyboard-arrow-right"  size={18}/>
+          <TouchableOpacity onPress={() => navigation.navigate("GroupCat")}>
+            <MaterialIcons name = "keyboard-arrow-right"  size={18}/>
+          </TouchableOpacity>
         </View>
       <Divider thickness={8}/>
 
