@@ -41,8 +41,10 @@ const Welcome: React.FC<Props> = ({ navigation: { navigate } }) => {
             Welcome to our community! Join us in supporting individuals with autism.
           </Text>
           <StyledView className="flex flex-col mt-5 ">
-            <CustomButton title="Continue to Onboarding" />
-            <CustomButton title="Sign up" buttonColor="transparent" onPress={() => navigate("AccountOption")} titleColor={Colors.primary} buttonStyle={{borderWidth: 1, borderColor: Colors.primary, marginTop: 15}}/>
+            {/*   <CustomButton title="Continue to Onboarding" /> */}
+            {/* <CustomButton title="Sign up" buttonColor="transparent" onPress={() => navigate("AccountOption")} titleColor={Colors.primary} buttonStyle={{borderWidth: 1, borderColor: Colors.primary, marginTop: 15}}/> */}
+            <CustomButton title="Sign up" onPress={() => navigate("AccountOption")} />
+
           </StyledView>
           <Text onPress={() => navigate("Login")} style={styles.text3}>Already have an account? <Text style={styles.text4} >Sign In</Text>.</Text>
         </View>

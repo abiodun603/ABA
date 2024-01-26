@@ -209,7 +209,7 @@ const Group: React.FC<Props> = ({ navigation: { navigate } , route}) => {
 
   return (
     <Layout
-      title = "Group Details"
+      title = "Community Details"
       iconName="dots-horizontal"
       onPress={()=> navigate("Resources", {communityId: communityId})}
    >
@@ -226,7 +226,7 @@ const Group: React.FC<Props> = ({ navigation: { navigate } , route}) => {
             />
           </View>
           <View className='flex-row items-center justify-between mt-3'>
-            <Text className='text-black text-xs font-normal '>Part of {data?.community_name} (117 groups)</Text>
+            <Text className='text-black text-xs font-normal '>Part of {data?.community_name} (117 community)</Text>
             <TouchableOpacity onPress={()=> navigate("Resources", {communityId: communityId})}>
               <Text className="text-ksecondary text-sm opacity-50 font-normal">See Resources</Text>
             </TouchableOpacity>
@@ -254,7 +254,7 @@ const Group: React.FC<Props> = ({ navigation: { navigate } , route}) => {
 
         <View>
           <Text className='text-black text-xs font-bold mt-3'>{getCommunityMembers?.docs?.length || 0} Members</Text>
-          <Text className='text-gray text-xs font-normal'>Lagos, Nigeria Public group</Text>
+          <Text className='text-gray text-xs font-normal'>Lagos, Nigeria Public community</Text>
         </View>
         {
           !isJoinedCommunity?.flag?

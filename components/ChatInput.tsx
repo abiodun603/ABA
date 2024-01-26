@@ -67,16 +67,17 @@ const ChatInput = ({ reply, closeReply, isLeft, username, onPress, message, setM
         const documentContent = await FileSystem.readAsStringAsync(result.uri, {
           encoding: FileSystem.EncodingType.UTF8,
         });
-
-        // Convert the string content to an ArrayBuffer
-        const arrayBuffer = stringToArrayBuffer(documentContent);
-
-        // Now you can use the 'arrayBuffer' as needed, for example, send it to the server
-        // console.log('Selected document content:', arrayBuffer);
-        setArrayBuffer(arrayBuffer);
-        setFileName(result.name)
-        setShow(false);
-        setMessage(`Send File to Community`)
+        
+        if (documentContent === null) {
+          console.error('Error reading document content. Document content is null.');
+        } else {
+          // Convert the string content to an ArrayBuffer
+          const arrayBuffer = stringToArrayBuffer(documentContent);
+          setArrayBuffer(arrayBuffer);
+          setFileName(result.name);
+          setShow(false);
+          setMessage(`Send File to Community`);
+        }
       }
     } catch (err) {
       // Handle errors

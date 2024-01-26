@@ -39,18 +39,23 @@ const MessageCard = ({message, time, chatId, name, fileUri}: {message: string, t
   }, []);
 
   return (
-    <View style={user?.id === chatId ? [styles.cardContainer, styles.rightChat, { width: containerWidth }]: getFileExtension(message) === '.docx' || getFileExtension(message) === '.pdf' ? {backgroundColor: "transparent"} : [styles.cardContainer, styles.leftChat, { width: containerWidth }] }>
-      <Text className='text-xs text-gray-400 mb-10 absolute -top-1 left-2 py-1  pl-2'>{chatId !== user?.id ? name : ''}</Text>
+    <View style={user?.id === chatId ? [styles.cardContainer, styles.rightChat, { width: containerWidth }]: [styles.cardContainer, styles.leftChat, { width: containerWidth }]}>
+      <Text className=' mb-10 absolute -top-1 '>{chatId !== user?.id ? name : ''}</Text>
         {
           getFileExtension(message) === '.docx' || getFileExtension(message) === '.pdf' ? 
           <FileCard url={message} /> :
           getFileExtension(message) === '.jpg' || getFileExtension(message) === '.jpeg'?
           <ImageCard isImageTime url = {message} />
-          : <Text style={styles.messageText}>
+
+          : 
+          <View className='bg-[#F5E5F5]  py-3 relative px-2 w-auto  min-w-[70px] rounded-sm'>
+            <Text className='text-xs mb-2'>
               {message} 
             </Text>
+            <Text style={[styles.time]} className="absolute right-2 -bottom-5">{formatTimestampToTime(time)}</Text>
+          </View>
+        
         }
-      <Text style={[styles.time]} className="absolute -bottom-4 right-2 ">{formatTimestampToTime(time)}</Text>
     </View> 
   )
 }
@@ -293,9 +298,9 @@ const styles = StyleSheet.create({
   },
   rightChat: {
     alignSelf: "flex-end",
-    paddingRight: 60,
-    paddingLeft: 20,
-    paddingVertical: 18,
+    // paddingRight: 60,
+    // paddingLeft: 20,
+    // paddingVertical: 18,
     maxWidth: 200
   },
   messageText: {
