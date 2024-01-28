@@ -29,12 +29,12 @@ export const FileCard = ({url}:{url: string}) => {
   };
 
   return (
-    <View>
-      <TouchableOpacity className='h-20 z-50 w-full border-[2px] border-gray-400 rounded-md mt-5 flex flex-row items-center justify-start pl-6' onPress={handleDownload}>
-        <Feather name="file" size={34} color="#A3229A" />
-        <Text className='text-gray-700 text-lg font-semibold pl-2'>{fileName}</Text>
+      <TouchableOpacity className=' z-50 border-[1px] p-2 border-gray-400 rounded-md mt-5 pl-2' onPress={handleDownload}>
+        <View className=''>
+          <Feather name="file" size={20} color="#A3229A" />
+          <Text className='text-black text-sm m-0 p-0 font-medium leading-none capitalize  truncate'>{fileName}</Text>
+        </View>
       </TouchableOpacity>
-    </View>
   )
 }
 

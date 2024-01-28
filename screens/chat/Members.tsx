@@ -56,24 +56,38 @@ const Members: React.FC<Props> = ({ navigation: { navigate }, route }) => {
     setShow(true)
   }
 
-  const handleChatSession = async(id: string, email: string) => {
-    const data  = {
-      current_user_id: user?.id,
-      contact_user_id: id
+  const handleChatSession = async (id: string, email: string) => {
+    try {
+      const data = {
+        current_user_id: user?.id,
+        contact_user_id: id,
+      };
+  
+      socket.emit("createChat", data);
+      console.log(data);
+  
+      socket.on("findOneChat", (chat) => {
+        try {
+          if (chat && chat.docs && chat.docs.length > 0) {
+            const chatId = chat.docs[0].id;
+            console.log(chatId, chat);
+            dispatch(setMemberEmailAndID({ email, id, chatId }));
+            navigate("Chat");
+          } else {
+            console.error("Unexpected response format from server:", chat);
+            // Handle unexpected response format
+          }
+        } catch (error) {
+          console.error("Error processing findOneChat response:", error);
+          // Handle error processing response
+        }
+      });
+    } catch (error) {
+      console.error("Error during handleChatSession:", error);
+      // Handle other errors related to socket.emit or any other synchronous operations
     }
-    socket.emit("createChat", data)
-    console.log(data)
-
-    socket.on("findOneChat", (chat) => {
-      const chatId = chat?.docs[0].id
-      console.log(chatId, chat)
-      dispatch(setMemberEmailAndID({email, id, chatId}))
-
-      if(chat){
-        navigate("Chat")
-      }
-    })
-  }
+  };
+  
 
   console.log(selectedUserId)
 
