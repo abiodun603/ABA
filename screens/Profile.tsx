@@ -11,7 +11,9 @@ import Layout from '../layouts/Layout'
 
 // ** Third Pary
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
-import AntDesign from '@expo/vector-icons/AntDesign'
+import FontAwesome from '@expo/vector-icons/FontAwesome'
+import Ionicons from '@expo/vector-icons/Ionicons'
+import MaterialIcons from "@expo/vector-icons/MaterialIcons"
 import { FormProvider, useForm } from "react-hook-form";
 
 // ** Components
@@ -105,7 +107,7 @@ const Profile = ({navigation}: {navigation: any}) => {
                   onPress={() => navigation.navigate("ProfileNotification")}
                   className='flex-row items-center space-x-5'>
                   {/* icon */}
-                  <AntDesign name="user" size={15}/>
+                  <Ionicons name="notifications-off-outline" size={28}/>
                   {/* name */}
                   <Text className='text-kblack2 text-sm font-normal '>Pause Notifications</Text>
                 </TouchableOpacity>
@@ -120,7 +122,7 @@ const Profile = ({navigation}: {navigation: any}) => {
                   onPress={() => navigation.navigate("ProfilePreview")}
                   className='flex-row items-center space-x-5'>
                   {/* icon */}
-                  <AntDesign name="user" size={15}/>
+                  <FontAwesome name="user-o" size={26}/>
                   {/* name */}
                   <Text className='text-kblack2 text-sm font-normal '>Profile Preview</Text>
                 </TouchableOpacity>
@@ -129,7 +131,7 @@ const Profile = ({navigation}: {navigation: any}) => {
                   onPress={() => navigation.navigate("SavedItems")}
                 >
                   {/* icon */}
-                  <AntDesign name="user" size={15}/>
+                  <MaterialIcons name="save-alt" size={28}/>
                   {/* name */}
                   <Text className='text-kblack2 text-sm font-normal ' >Saved Items</Text>
                 </TouchableOpacity>

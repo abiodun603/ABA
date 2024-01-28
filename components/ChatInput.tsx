@@ -55,24 +55,30 @@ const ChatInput = ({ reply, closeReply, isLeft, username, onPress, message, setM
 		}
 	})
 
+  // Function to convert a string to an ArrayBuffer
+  const stringToArrayBuffer = (str: any) => {
+    const buffer = new ArrayBuffer(str.length);
+    const bufferView = new Uint8Array(buffer);
+    for (let i = 0; i < str.length; i++) {
+      bufferView[i] = str.charCodeAt(i);
+    }
+    return buffer;
+  };
+
   const pickDocument = async () => {
     try {
       const result = await DocumentPicker.getDocumentAsync();
-
       if (result.type === 'success') {
-        // setSelectedDocument(result);
-        // Handle additional logic or UI updates as needed
-        // console.log('Selected document:', result);
-        // Read the content of the document as a string
         const documentContent = await FileSystem.readAsStringAsync(result.uri, {
           encoding: FileSystem.EncodingType.UTF8,
         });
-        
+        console.log(documentContent)
         if (documentContent === null) {
           console.error('Error reading document content. Document content is null.');
         } else {
           // Convert the string content to an ArrayBuffer
-          const arrayBuffer = stringToArrayBuffer(documentContent);
+          console.log("Hello")
+          const arrayBuffer = await stringToArrayBuffer(documentContent);
           setArrayBuffer(arrayBuffer);
           setFileName(result.name);
           setShow(false);
@@ -86,17 +92,6 @@ const ChatInput = ({ reply, closeReply, isLeft, username, onPress, message, setM
       // closeBottomSheet();
     }
   };
-
-  // Function to convert a string to an ArrayBuffer
-  const stringToArrayBuffer = (str: any) => {
-    const buffer = new ArrayBuffer(str.length);
-    const bufferView = new Uint8Array(buffer);
-    for (let i = 0; i < str.length; i++) {
-      bufferView[i] = str.charCodeAt(i);
-    }
-    return buffer;
-  };
-
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
