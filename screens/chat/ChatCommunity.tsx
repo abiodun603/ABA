@@ -95,6 +95,8 @@ const ChatCommunity: React.FC<Props> = ({ navigation: { navigate } , route}) => 
       // console.log(data);
       socket.emit("sendMessage", data)
       setMessage("")
+      setArrayBuffer("")
+      setFileName("")
     // }
     }
   }
@@ -120,25 +122,36 @@ const ChatCommunity: React.FC<Props> = ({ navigation: { navigate } , route}) => 
     };
   }, [socket]); 
 
-  const convertArrayBufferToFile = async (arrayBuffer: any) => {
+  const convertArrayBufferToFile = async (arrayBuffer, fileType) => {
     try {
       if (!arrayBuffer) {
         console.error('ArrayBuffer is empty or undefined.');
         return null;
       }
-  
-      const fileUri = `${FileSystem.documentDirectory}downloaded_image.jpg`;
-      const base64Data = Buffer.from(arrayBuffer).toString('base64');
-  
-      if (!base64Data) {
-        console.error('Base64 data is empty.');
+
+      let fileExtension = '';
+      if (fileType === 'image/jpeg' || fileType === 'image/png') {
+        fileExtension = 'jpg'; // or 'png' based on the actual image type
+      } else if (fileType === 'application/pdf') {
+        fileExtension = 'pdf';
+      } else if (fileType === 'application/msword' || fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+        fileExtension = 'docx';
+      } else {
+        console.error('Unsupported file type:', fileType);
         return null;
       }
-  
+
+      const uniqueFileName = `downloaded_file_${Date.now()}.${fileExtension}`;
+      const fileUri = `${FileSystem.documentDirectory}${uniqueFileName}`;
+
+      const base64Data = Buffer.from(arrayBuffer).toString('base64');
+
+      if (!base64Data) return null;
+
       await FileSystem.writeAsStringAsync(fileUri, base64Data, {
         encoding: FileSystem.EncodingType.Base64,
       });
-  
+
       setDownloadedFileUri(fileUri);
       return fileUri;
     } catch (error) {
@@ -146,6 +159,7 @@ const ChatCommunity: React.FC<Props> = ({ navigation: { navigate } , route}) => 
       return null;
     }
   };
+
   
 
 
@@ -153,10 +167,8 @@ const ChatCommunity: React.FC<Props> = ({ navigation: { navigate } , route}) => 
     socket.on("uploadComplete", async (data) => {
       try {
         console.log(data);
-
         if(!data.arrayBuffer) return null;
-
-        const fileUri = await convertArrayBufferToFile(data.arrayBuffer);
+        const fileUri = await convertArrayBufferToFile(data.arrayBuffer, "application/pdf");
   
         // Check if fileUri is truthy before updating state
         if (fileUri) {

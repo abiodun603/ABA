@@ -31,7 +31,7 @@ const ChatInput = ({ reply, closeReply, isLeft, username, onPress, message, setM
 
   const height = useSharedValue(70);
 
-  // console.log(message)
+  console.log(message)
 
   useEffect(() => {
 		if (showEmojiPicker) {
@@ -55,6 +55,69 @@ const ChatInput = ({ reply, closeReply, isLeft, username, onPress, message, setM
 		}
 	})
 
+  const pickDocument = async () => {
+
+    try {
+
+      const result = await DocumentPicker.getDocumentAsync({
+        type: ['image/*', 'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
+      });
+
+      console.log(result);
+
+      if(!result.assets) return null;
+
+      const uri = result.assets[0].uri;
+
+      const fileInfo = await FileSystem.getInfoAsync(uri, { size: true });
+      console.log(fileInfo);
+
+
+      const arrayBuffer = await FileSystem.readAsStringAsync(uri, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+
+      const documentArrayBuffer = Buffer.from(arrayBuffer, 'base64');
+
+       // Convert the string content to an ArrayBuffer
+      //  const arrayBufferString = stringToArrayBuffer(arrayBuffer);
+
+      // Now you can use the 'arrayBuffer' as needed, for example, send it to the server
+      console.log('Selected document content:', documentArrayBuffer);
+      setArrayBuffer(arrayBuffer);
+      setFileName(result.assets[0].name)
+      setShow(false);
+      setMessage(`Send File to Community`)
+
+      // if (result.type === 'success') {
+        // setSelectedDocument(result);
+        // Handle additional logic or UI updates as needed
+        // Read the content of the document as a string
+        
+        // const documentContent = await FileSystem.readAsStringAsync(fileName, {
+        //   encoding: FileSystem.EncodingType.UTF8,
+        // });
+
+        // console.log(documentContent);
+        // Convert the string content to an ArrayBuffer
+        // const arrayBuffer = stringToArrayBuffer(documentContent);
+
+        // Now you can use the 'arrayBuffer' as needed, for example, send it to the server
+        // console.log('Selected document content:', arrayBuffer);
+        // setArrayBuffer(arrayBuffer);
+        // console.log(arrayBuffer)
+        // setFileName(result.name)
+        // setShow(false);
+        // setMessage(`Send File to Community`)
+      // }
+    } catch (err) {
+      // Handle errors
+      console.error('Error picking document:', err);
+    } finally {
+      // closeBottomSheet();
+    }
+  };
+
   // Function to convert a string to an ArrayBuffer
   const stringToArrayBuffer = (str: any) => {
     const buffer = new ArrayBuffer(str.length);
@@ -65,33 +128,6 @@ const ChatInput = ({ reply, closeReply, isLeft, username, onPress, message, setM
     return buffer;
   };
 
-  const pickDocument = async () => {
-    try {
-      const result = await DocumentPicker.getDocumentAsync();
-      if (result.type === 'success') {
-        const documentContent = await FileSystem.readAsStringAsync(result.uri, {
-          encoding: FileSystem.EncodingType.UTF8,
-        });
-        console.log(documentContent)
-        if (documentContent === null) {
-          console.error('Error reading document content. Document content is null.');
-        } else {
-          // Convert the string content to an ArrayBuffer
-          console.log("Hello")
-          const arrayBuffer = await stringToArrayBuffer(documentContent);
-          setArrayBuffer(arrayBuffer);
-          setFileName(result.name);
-          setShow(false);
-          setMessage(`Send File to Community`);
-        }
-      }
-    } catch (err) {
-      // Handle errors
-      console.error('Error picking document:', err);
-    } finally {
-      // closeBottomSheet();
-    }
-  };
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -110,7 +146,7 @@ const ChatInput = ({ reply, closeReply, isLeft, username, onPress, message, setM
       const uriComponents = result.assets[0].uri.split('/');
       const fileName = uriComponents[uriComponents.length - 1];
 
-      // console.log('Selected image file name:', fileName);
+      console.log('Selected image file name:', fileName);
       try {
         // const fileUri = imageUri;
         const fileStream = await FileSystem.readAsStringAsync(result.assets[0].uri, {
@@ -128,7 +164,7 @@ const ChatInput = ({ reply, closeReply, isLeft, username, onPress, message, setM
   
   };
 
-  // console.log(arrayBuffer, imageUri);
+  console.log(arrayBuffer, imageUri);
 
   return(
     <View>
