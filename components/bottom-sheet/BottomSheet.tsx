@@ -10,7 +10,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 // ** Third Party
 import { Portal } from 'react-native-paper';
-import { PanGestureHandler, PanGestureHandlerGestureEvent,HandlerStateChangeEvent } from 'react-native-gesture-handler';
+import { PanGestureHandler, PanGestureHandlerGestureEvent,HandlerStateChangeEvent, GestureHandlerRootView } from 'react-native-gesture-handler';
 
 interface BottomSheetProps {
   show: boolean;
@@ -76,55 +76,57 @@ const BottomSheet: React.FC<BottomSheetProps> = ({
 
   return (
     <Portal>
-      <Pressable
-        onPress={enableBackdropDismiss ? onDismiss : undefined}
-        style={styles.backDrop}
-      ></Pressable>
-      <Animated.View
-        style={[
-          styles.root,
-          {
-            height: bottomSheetHeight,
-            bottom: bottom,
-            shadowOffset: {
-              width: 0, // Set width to 0 to disable horizontal shadow
-              height: -3,
-            },
-          },
-          styles.common,
-        ]}
-        className={isTransparent ? "bg-transparent" : "bg-white"}
-      >
-        <PanGestureHandler onGestureEvent={onGesture} onEnded={onGestureEnd}>
-          <View
-            style={[
-              styles.header,
-              // styles.common,
-              {
-                shadowOffset: { 
-                  width: 0, // Set width to 0 to disable horizontal shadow
-                  height: 3,
-                },
+      <GestureHandlerRootView style={{flex: 1}}>
+        <Pressable
+          onPress={enableBackdropDismiss ? onDismiss : undefined}
+          style={styles.backDrop}
+        ></Pressable>
+        <Animated.View
+          style={[
+            styles.root,
+            {
+              height: bottomSheetHeight,
+              bottom: bottom,
+              shadowOffset: {
+                width: 0, // Set width to 0 to disable horizontal shadow
+                height: -3,
               },
-            ]}
-            className={isHeaderTransparent ? "bg-transparent" : "bg-white"}
-          >
+            },
+            styles.common,
+          ]}
+          className={isTransparent ? "bg-transparent" : "bg-white"}
+        >
+          <PanGestureHandler onGestureEvent={onGesture} onEnded={onGestureEnd}>
             <View
-              style={{
-                width: 60,
-                height: 3,
-                borderRadius: 1.5,
-                backgroundColor: '#ccc',
-                position: 'absolute',
-                top: 8,
-                left: (deviceWidth - 60) / 2,
-                zIndex: 10,
-              }}
-            />
-          </View>
-        </PanGestureHandler>
-        <View style={styles.content}>{children}</View>
-      </Animated.View>
+              style={[
+                styles.header,
+                // styles.common,
+                {
+                  shadowOffset: { 
+                    width: 0, // Set width to 0 to disable horizontal shadow
+                    height: 3,
+                  },
+                },
+              ]}
+              className={isHeaderTransparent ? "bg-transparent" : "bg-white"}
+            >
+              <View
+                style={{
+                  width: 60,
+                  height: 3,
+                  borderRadius: 1.5,
+                  backgroundColor: '#ccc',
+                  position: 'absolute',
+                  top: 8,
+                  left: (deviceWidth - 60) / 2,
+                  zIndex: 10,
+                }}
+              />
+            </View>
+          </PanGestureHandler>
+          <View style={styles.content}>{children}</View>
+        </Animated.View>
+      </GestureHandlerRootView>
     </Portal>
   );
 };
