@@ -66,6 +66,7 @@ const ChatCommunity: React.FC<Props> = ({ navigation: { navigate } , route}) => 
   const [imageUri, setImageUri] = useState<any>(null);
   const [arrayBuffer, setArrayBuffer] = useState<any>(null);
   const [fileName, setFileName] = useState<any>(null)
+  const [fileType, setFileType] = useState<any>(null)
   const [downloadedFileUri, setDownloadedFileUri] = useState('');
 
   const flatListRef = useRef<FlatList<any>>(null);
@@ -79,6 +80,7 @@ const ChatCommunity: React.FC<Props> = ({ navigation: { navigate } , route}) => 
       fileName: fileName,
       communityId: communityId,
       currentUserId: user?.id,
+      type: fileType
     }
     if(arrayBuffer){
       console.log(data)
@@ -86,6 +88,7 @@ const ChatCommunity: React.FC<Props> = ({ navigation: { navigate } , route}) => 
       setArrayBuffer("")
       setFileName("")
       setMessage("")
+      // setFileType("")
     }else{
       const data = {
         communityId: communityId,
@@ -97,6 +100,7 @@ const ChatCommunity: React.FC<Props> = ({ navigation: { navigate } , route}) => 
       setMessage("")
       setArrayBuffer("")
       setFileName("")
+      // setFileType("")
     // }
     }
   }
@@ -130,11 +134,17 @@ const ChatCommunity: React.FC<Props> = ({ navigation: { navigate } , route}) => 
       }
 
       let fileExtension = '';
-      if (fileType === 'image/jpeg' || fileType === 'image/png') {
+      if(fileType === 'image/jpeg' || fileType === 'image/png') {
+        console.log("Second choce")
+
         fileExtension = 'jpg'; // or 'png' based on the actual image type
       } else if (fileType === 'application/pdf') {
+        console.log("Third choce")
+
         fileExtension = 'pdf';
       } else if (fileType === 'application/msword' || fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+        console.log("Fourth choce")
+
         fileExtension = 'docx';
       } else {
         console.error('Unsupported file type:', fileType);
@@ -165,11 +175,11 @@ const ChatCommunity: React.FC<Props> = ({ navigation: { navigate } , route}) => 
 
   useEffect(() => {
     socket.on("uploadComplete", async (data) => {
+
       try {
-        console.log(data);
         if(!data.arrayBuffer) return null;
-        const fileUri = await convertArrayBufferToFile(data.arrayBuffer, "application/pdf");
-  
+        const fileUri = await convertArrayBufferToFile(data.arrayBuffer, data.type);
+        console.log( fileUri, "uploadComplette");
         // Check if fileUri is truthy before updating state
         if (fileUri) {
           setMessagesReceived((state) => [
@@ -240,7 +250,7 @@ const ChatCommunity: React.FC<Props> = ({ navigation: { navigate } , route}) => 
     }
   }, [messagesRecieved]);
 
-  console.log(messagesRecieved, downloadedFileUri)
+  console.log(fileType)
 
 
   return (
@@ -268,7 +278,7 @@ const ChatCommunity: React.FC<Props> = ({ navigation: { navigate } , route}) => 
             } 
         </View>
         <TouchableOpacity onPress={handleClearMessage} className='mb-10'><Text>Clear</Text></TouchableOpacity>
-        <ChatInput imageUri={imageUri} setImageUri={setImageUri} arrayBuffer={arrayBuffer} setArrayBuffer={setArrayBuffer} message={message} setMessage={setMessage} onPress={handleSendMessage} setFileName={setFileName} />
+        <ChatInput imageUri={imageUri} setImageUri={setImageUri} arrayBuffer={arrayBuffer} setArrayBuffer={setArrayBuffer} message={message} setMessage={setMessage} onPress={handleSendMessage} setFileName={setFileName}  setFileType={setFileType} />
       </KeyboardAvoidingView>
     </Layout>
   )

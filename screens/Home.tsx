@@ -104,47 +104,76 @@ const Home = ({navigation}: {navigation: any}) => {
 
 
   useEffect(() => {
-    (async () => {
-      if (Platform.OS === 'android' && !Constants.isDevice) {
-        setErrorMessage('Oops, this will not work on Sketch in an Android emulator. Try it on your device!');
-        return;
+    const fetchData = async () => {
+      try {
+        if (Platform.OS === 'android' && !Constants.isDevice) {
+          throw new Error('Oops, this will not work on Sketch in an Android emulator. Try it on your device!');
+        }
+  
+        const { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+          throw new Error('Permission to access location was denied');
+        }
+  
+        const userLocation = await Location.getCurrentPositionAsync({});
+  
+        // Fetch the city based on coordinates
+        const city = await fetchCityFromCoordinates(userLocation.coords.latitude, userLocation.coords.longitude);
+        const data = {
+          location: city,
+          coords: userLocation
+        };
+        
+        dispatch(setEventLocation(data));
+        // console.log(userLocation)
+      } catch (error: any) {
+        console.error('Error fetching location:', error.message);
+        setErrorMessage(error.message);
+        // Handle other error scenarios or update state as needed
       }
-
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        setErrorMessage('Permission to access location was denied');
-        return;
-      }
-
-      const userLocation = await Location.getCurrentPositionAsync({});
-
-      // Fetch the city based on coordinates
-      const city:string = await fetchCityFromCoordinates(userLocation.coords.latitude, userLocation.coords.longitude);
-      const data = {
-        location: city,
-        cords: userLocation
-      }
-      dispatch(setEventLocation(data));
-      // console.log(userLocation)
-    })();
+    };
+  
+    fetchData();
   }, []);
+  
 
   useEffect(() => {
-    // Fetch contacts when the componentu mounts
     const addSocketId = () => {
-      const data = {
-        current_user : user?.id
+      try {
+        const data = {
+          current_user: user?.id
+        };
+  
+        console.log(data);
+        
+        // Emit the "addUser" event
+        socket.emit("addUser", data, (response: any) => {
+          // Handle the acknowledgment from the server if needed
+          console.log("Server acknowledgment:", response);
+        });
+      } catch (error: any) {
+        console.error("Error emitting addUser event:", error.message);
+        // Handle the error, e.g., set an error state
       }
-      console.log(data);
-      socket.emit("addUser", data);
     };
+  
     addSocketId();
-      // Clean up the socket listener when the component unmounts
+  
+    // Cleanup function
     return () => {
-      socket.off("addUser");
-      socket.disconnect();
+      try {
+        // Remove the "addUser" event listener
+        socket.off("addUser");
+  
+        // Disconnect the socket
+        socket.disconnect();
+      } catch (error: any) {
+        console.error("Error during cleanup:", error.message);
+        // Handle the error during cleanup, if needed
+      }
     };
-  }, []); 
+  }, []);
+  
 
   // Store Service
   const fullName = data?.user?.name || ""
@@ -157,9 +186,6 @@ const Home = ({navigation}: {navigation: any}) => {
     }
   });
 
-  const scrollToIndex = (index: number) => {
-    flatListRef.current?.scrollToIndex({animated: true, index: index})
-  }
 
   // const {user} = useGlobalState()
   // const id = user?.id;
@@ -175,9 +201,7 @@ const Home = ({navigation}: {navigation: any}) => {
       </TouchableOpacity>
     )
   }
-
-  console.log(nextEventData)
-
+  
   const MyGroupsCard = ({name, community_id}: any) => {
     const handleCommunity = async() => {
       const data = {
@@ -232,7 +256,7 @@ const Home = ({navigation}: {navigation: any}) => {
             <Text className="text-black text-sm font-semibold">Suggested events 🔍</Text>
             <Text className="text-ksecondary text-sm opacity-50 font-normal">Calender</Text>
           </View>
-          {nextEventData?.docs.length > 0 ? (
+          {nextEventData && nextEventData?.docs.length > 0 ? (
             <View className=''>
               <FlatList
                 horizontal

@@ -24,7 +24,7 @@ import CustomButton from "./CustomButton";
 import * as FileSystem from 'expo-file-system';
 import { Buffer } from '@craftzdog/react-native-buffer';
 
-const ChatInput = ({ reply, closeReply, isLeft, username, onPress, message, setMessage , imageUri, setImageUri, arrayBuffer, setFileName, setArrayBuffer}: any) => {
+const ChatInput = ({ reply, closeReply, isLeft, username, onPress, message, setMessage , imageUri, setImageUri, arrayBuffer, setFileName, setFileType, setArrayBuffer}: any) => {
 	const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [show, setShow ] = useState(false) 
 
@@ -70,46 +70,19 @@ const ChatInput = ({ reply, closeReply, isLeft, username, onPress, message, setM
       const uri = result.assets[0].uri;
 
       const fileInfo = await FileSystem.getInfoAsync(uri, { size: true });
-      console.log(fileInfo);
+      console.log(result, "File Info");
 
 
       const arrayBuffer = await FileSystem.readAsStringAsync(uri, {
         encoding: FileSystem.EncodingType.Base64,
       });
 
-      const documentArrayBuffer = Buffer.from(arrayBuffer, 'base64');
-
-       // Convert the string content to an ArrayBuffer
-      //  const arrayBufferString = stringToArrayBuffer(arrayBuffer);
-
-      // Now you can use the 'arrayBuffer' as needed, for example, send it to the server
-      console.log('Selected document content:', documentArrayBuffer);
+      // const documentArrayBuffer = Buffer.from(arrayBuffer, 'base64');
       setArrayBuffer(arrayBuffer);
+      setFileType(result.assets[0].mimeType)
       setFileName(result.assets[0].name)
       setShow(false);
       setMessage(`Send File to Community`)
-
-      // if (result.type === 'success') {
-        // setSelectedDocument(result);
-        // Handle additional logic or UI updates as needed
-        // Read the content of the document as a string
-        
-        // const documentContent = await FileSystem.readAsStringAsync(fileName, {
-        //   encoding: FileSystem.EncodingType.UTF8,
-        // });
-
-        // console.log(documentContent);
-        // Convert the string content to an ArrayBuffer
-        // const arrayBuffer = stringToArrayBuffer(documentContent);
-
-        // Now you can use the 'arrayBuffer' as needed, for example, send it to the server
-        // console.log('Selected document content:', arrayBuffer);
-        // setArrayBuffer(arrayBuffer);
-        // console.log(arrayBuffer)
-        // setFileName(result.name)
-        // setShow(false);
-        // setMessage(`Send File to Community`)
-      // }
     } catch (err) {
       // Handle errors
       console.error('Error picking document:', err);
@@ -119,14 +92,14 @@ const ChatInput = ({ reply, closeReply, isLeft, username, onPress, message, setM
   };
 
   // Function to convert a string to an ArrayBuffer
-  const stringToArrayBuffer = (str: any) => {
-    const buffer = new ArrayBuffer(str.length);
-    const bufferView = new Uint8Array(buffer);
-    for (let i = 0; i < str.length; i++) {
-      bufferView[i] = str.charCodeAt(i);
-    }
-    return buffer;
-  };
+  // const stringToArrayBuffer = (str: any) => {
+  //   const buffer = new ArrayBuffer(str.length);
+  //   const bufferView = new Uint8Array(buffer);
+  //   for (let i = 0; i < str.length; i++) {
+  //     bufferView[i] = str.charCodeAt(i);
+  //   }
+  //   return buffer;
+  // };
 
 
   const pickImage = async () => {
@@ -136,33 +109,36 @@ const ChatInput = ({ reply, closeReply, isLeft, username, onPress, message, setM
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
-
     });
-
-    if (!result.canceled) {
+  
+    if (!result.canceled) { // Fix the typo here
+      console.log(result);
       setImageUri(result.assets[0].uri);
+  
       // Get the file name
       // Extract file name from the uri
       const uriComponents = result.assets[0].uri.split('/');
       const fileName = uriComponents[uriComponents.length - 1];
-
+  
       console.log('Selected image file name:', fileName);
+  
       try {
-        // const fileUri = imageUri;
         const fileStream = await FileSystem.readAsStringAsync(result.assets[0].uri, {
           encoding: FileSystem.EncodingType.Base64,
         });
+  
         const imageArrayBuffer = Buffer.from(fileStream, 'base64');
         setArrayBuffer(imageArrayBuffer);
-        setFileName(fileName)
+        setFileName(fileName);
+        setFileType("image/jpeg");
         setShow(false);
-          setMessage(`Send File to Community`)
+        setMessage(`Send File to Community`);
       } catch (error) {
         console.error('Error converting image to ArrayBuffer:', error);
       }
     }
-  
   };
+  
 
   console.log(arrayBuffer, imageUri);
 

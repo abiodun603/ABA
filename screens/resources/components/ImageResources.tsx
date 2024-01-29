@@ -43,7 +43,6 @@ const ImageResources: React.FC<ImageResourcesProps>  = ({ route, ...otherProps }
   const media_type = "image"
   console.log("Media type: " + community_id)
   const {data, isLoading} = useGetCommunityImagesQuery({community_id, media_type})
-
   if(isLoading){
     return <Text>Loading...</Text>;
   }
