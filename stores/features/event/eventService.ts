@@ -76,6 +76,12 @@ export const eventsApi = createApi({
       }),
       providesTags: ["Event"]
     }),
+    getUpcomingEvents: builder.query<any, string>({
+      query: (id) => ({
+        url: `/events/upcoming/${id}`,
+        method: 'GET',
+      })
+    }),
     getSortUpcomingEvent: builder.query<any, string>({
       query: (date) => ({ 
         url: `/events/sort?date=${date}`,
@@ -137,4 +143,4 @@ export const eventsApi = createApi({
   })
 })
 
-export const {useGetSortUpcomingEventQuery, useGetMyEventsQuery, useDeleteEventMutation, useGetEventsQuery, useGetEventsByCatTypeQuery, useGetPopularEventsQuery, useLazyGetSortUpcomingEventQuery, useUnSaveEventMutation, useGetNextEventQuery, useUpdateAttendEventMutation, useGetEventByIdQuery, useGetJoinedEventQuery, useGetSavedEventQuery, useSaveEventMutation, useGetEventTypesQuery, useCreateEventMutation, useLeaveEventMutation, useUpdateEventMutation} = eventsApi
+export const {useGetSortUpcomingEventQuery,useGetUpcomingEventsQuery,  useGetMyEventsQuery, useDeleteEventMutation, useGetEventsQuery, useGetEventsByCatTypeQuery, useGetPopularEventsQuery, useLazyGetSortUpcomingEventQuery, useUnSaveEventMutation, useGetNextEventQuery, useUpdateAttendEventMutation, useGetEventByIdQuery, useGetJoinedEventQuery, useGetSavedEventQuery, useSaveEventMutation, useGetEventTypesQuery, useCreateEventMutation, useLeaveEventMutation, useUpdateEventMutation} = eventsApi

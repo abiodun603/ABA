@@ -219,7 +219,7 @@ const Explore = ({navigation}: {navigation: any}) => {
       </View>
       {/* Divider */}
       <Divider mt={8} thickness={1}/>
-        <View className='flex-row justify-between items-center my-4  px-4'>
+        <TouchableOpacity onPress={() => navigation.navigate("GroupCat")} className='flex-row justify-between items-center my-4  px-4'>
           <View className='flex-row  space-x-2'>
             {/* icon calander */}
             <MaterialIcons name="location-searching" size={28} />
@@ -232,10 +232,8 @@ const Explore = ({navigation}: {navigation: any}) => {
             </View>
           </View>
           {/* icon */}
-          <TouchableOpacity onPress={() => navigation.navigate("GroupCat")}>
-            <MaterialIcons name = "keyboard-arrow-right"  size={18}/>
-          </TouchableOpacity>
-        </View>
+          <MaterialIcons name = "keyboard-arrow-right"  size={18}/>
+        </TouchableOpacity>
       <Divider thickness={8}/>
 
       <View className='px-4 mt-4 mb-28'>

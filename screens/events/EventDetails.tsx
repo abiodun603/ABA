@@ -197,39 +197,36 @@ const EventDetails: React.FC<Props>  = ({navigation, route}) => {
                 <Text className = "text-sm text-black font-semibold">{`${data?.members.length || 0} members attending for the first time`}</Text>
               </View>
               <View className = "flex-row items-center space-x-3">
-                {/* Icon */}
                 <FontAwesome name = "hashtag" size={22}/>
                 <Text className = "text-sm text-black font-semibold">Attendees share your interests</Text>
               </View>
             </View>
           </View>
           {/* Divider */}
-          <Divider mt={8} thickness={8}/>
+          {/* <Divider mt={8} thickness={8}/>
           <View className = "px-4">
             <Text className='text-black text-lg font-bold mt-3'>Location</Text>
             <Text className='text-black text-sm font-semibold my-2'>VR PLACE NIGERIA</Text>
             <View className='h-40 bg-blue-500 rounded-lg flex items-center justify-center'>
               <Text className='text-white text-center'>Event Map Goes Here...</Text>
             </View>
-          </View>
+          </View> */}
 
           {/* Divider */}
-          <Divider mt={8} thickness={8}/>
-          <Divider mt={8} thickness={8}/>
+          {/* <Divider mt={8} thickness={8}/>
+          <Divider mt={8} thickness={8}/> */}
 
-          <View className='px-4 mt-4'>
+          {/* <View className='px-4 mt-4'>
             <View className="flex-row items-center justify-between mb-6 ">
-              {/*  */}
               <Text className='text-black text-lg font-bold mt-3'>Photos</Text>
               <Text className="text-ksecondary text-sm opacity-50 font-normal">Add photos</Text>
             </View>
             <Text className=''>No Photo yet !!!</Text>
-          </View>
+          </View> */}
 
-          <Divider mt={8} thickness={8}/>
+          {/* <Divider mt={8} thickness={8}/>
           <View className='px-4 mt-4'>
             <View className="flex-row items-center justify-between mb-6 ">
-              {/*  */}
               <Text className='text-black text-lg font-bold mt-3'>Comments</Text>
             </View>
             <View className='flex-row items-center space-x-2'>
@@ -241,20 +238,18 @@ const EventDetails: React.FC<Props>  = ({navigation, route}) => {
                 <Text className='text-sm font-normal text-gray-600'>Public</Text>
               </View>
             </View>
-          </View>
-          <Divider mt={8} thickness={8}/>
+          </View> */}
+          {/* <Divider mt={8} thickness={8}/>
           <View className='px-4 mt-4'>
             <View className="flex-row items-center justify-between mb-6 ">
-              {/*  */}
               <Text className='text-black text-lg font-bold mt-3'>Upcoming events</Text>
             </View>
             <View><Text className=''>No upcoming events yet !!!</Text></View>
             <View className='flex-row justify-between items-center mt-4 pb-2'>
               <Text className='text-sm text-blue-900 font-semibold'>See all events from this group</Text>
-              {/* icon */}
               <MaterialIcons name = "keyboard-arrow-right"  size={28}/>
             </View>
-          </View>
+          </View> */}
 
           <Divider mt={8} thickness={8}/>
           <Text className='text-sm text-blue-900 font-semibold px-4 mt-5'>Report this event</Text>

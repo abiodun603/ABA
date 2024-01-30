@@ -40,7 +40,7 @@ const Resources: React.FC<Props> = ({ navigation: { navigate }, route }) => {
   return (
     <Layout
       title = "Resources"
-      iconName="plus"
+      // iconName="plus"
       // extraOneIcon="bookmark-outline"
     >
     <View style={styles.container}>

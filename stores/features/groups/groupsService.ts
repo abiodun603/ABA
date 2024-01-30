@@ -63,7 +63,7 @@ export const groupsApi = createApi({
         url: `/community/isMember/${id}`,
         method: 'GET',
       }),
-      providesTags: ["Community"]
+      providesTags: ["Community", "MyCommunity"]
     }),
     getCommunityMembers: builder.query<any, string>({
       query: (id) => ({ 

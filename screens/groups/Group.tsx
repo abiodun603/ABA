@@ -17,6 +17,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import BottomSheet from '../../components/bottom-sheet/BottomSheet';
 import CustomButton from '../../components/CustomButton';
 import Toaster from '../../components/Toaster/Toaster';
+import { useGetUpcomingEventsQuery } from '../../stores/features/event/eventService';
 
 
 type Props = NativeStackScreenProps<RootStackParamList, "Group">;
@@ -129,6 +130,9 @@ const Group: React.FC<Props> = ({ navigation: { navigate } , route}) => {
   const { data: getCommunityMembers, isLoading: isCommunityMembersLoading}  =  useGetCommunityMembersQuery(communityId)
   const [joinCommunity, { isLoading: isJoining }, ] = useJoinCommunityMutation()
 
+  // ** Fetch all Upcoming Events in this community
+  const {isLoading: isLoadingUpcomingEvents, data: getUpcomingEvents} = useGetUpcomingEventsQuery(communityId)
+
 
   console.log(getCommunityResources)
 
@@ -140,7 +144,7 @@ const Group: React.FC<Props> = ({ navigation: { navigate } , route}) => {
     return <Text>No data available.</Text>; // Display a message when there is no data
   }
 
-  console.log(getCommunityEventData)
+  console.log(getUpcomingEvents, "my upcoming events")
 
   const handleLeaveGroup = () => {
     setShow(false);

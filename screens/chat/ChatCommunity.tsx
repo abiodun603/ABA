@@ -82,6 +82,7 @@ const ChatCommunity: React.FC<Props> = ({ navigation: { navigate } , route}) => 
       currentUserId: user?.id,
       type: fileType
     }
+    console.log(data);
     if(arrayBuffer){
       console.log(data)
       socket.emit('uploadFile', data);
@@ -126,7 +127,8 @@ const ChatCommunity: React.FC<Props> = ({ navigation: { navigate } , route}) => 
     };
   }, [socket]); 
 
-  const convertArrayBufferToFile = async (arrayBuffer, fileType) => {
+  const convertArrayBufferToFile = async (arrayBuffer: any[], fileType: string) => {
+    console.log(arrayBuffer, fileType , "i notice u")
     try {
       if (!arrayBuffer) {
         console.error('ArrayBuffer is empty or undefined.');
@@ -154,7 +156,7 @@ const ChatCommunity: React.FC<Props> = ({ navigation: { navigate } , route}) => 
       const uniqueFileName = `downloaded_file_${Date.now()}.${fileExtension}`;
       const fileUri = `${FileSystem.documentDirectory}${uniqueFileName}`;
 
-      const base64Data = Buffer.from(arrayBuffer).toString('base64');
+      const base64Data = await Buffer.from(arrayBuffer).toString('base64');
 
       if (!base64Data) return null;
 
@@ -175,12 +177,13 @@ const ChatCommunity: React.FC<Props> = ({ navigation: { navigate } , route}) => 
 
   useEffect(() => {
     socket.on("uploadComplete", async (data) => {
-
       try {
-        if(!data.arrayBuffer) return null;
+        // Check if data is already an object, if not, parse it  
+        if (!data.arrayBuffer) return null;
+        console.log(data, "my data")
         const fileUri = await convertArrayBufferToFile(data.arrayBuffer, data.type);
-        console.log( fileUri, "uploadComplette");
-        // Check if fileUri is truthy before updating state
+        console.log(fileUri, "uploadComplete");
+  
         if (fileUri) {
           setMessagesReceived((state) => [
             ...state,
@@ -203,13 +206,14 @@ const ChatCommunity: React.FC<Props> = ({ navigation: { navigate } , route}) => 
     console.log("file me upload complete");
   
     // Cleanup the event listener when the component is unmounted
-    // return () => {
-    //   socket.off("uploadComplete");
-    // };
+    return () => {
+      socket.off("uploadComplete");
+    };
   }, [socket]);
   
+  
 
-  const handleClearMessage = () => setMessagesReceived([])
+  // const handleClearMessage = () => setMessagesReceived([])
 
 
 
@@ -237,11 +241,11 @@ const ChatCommunity: React.FC<Props> = ({ navigation: { navigate } , route}) => 
       ]);
     });
   
-    return () => {
-      socket.off('fetchAllMessage')
-      socket.off('fetchAllCommunityMessage')
-    }
-  }, [socket]);
+    // return () => {
+    //   socket.off('fetchAllMessage')
+    //   socket.off('fetchAllCommunityMessage')
+    // }
+  }, []);
 
   useEffect(() => {
     // Scroll to the end of the list when messages are added or changed
@@ -277,7 +281,7 @@ const ChatCommunity: React.FC<Props> = ({ navigation: { navigate } , route}) => 
               :  <Text className='text-center mt-6 '>No message yet</Text>
             } 
         </View>
-        <TouchableOpacity onPress={handleClearMessage} className='mb-10'><Text>Clear</Text></TouchableOpacity>
+        {/* <TouchableOpacity onPress={handleClearMessage} className='mb-10'><Text>Clear</Text></TouchableOpacity> */}
         <ChatInput imageUri={imageUri} setImageUri={setImageUri} arrayBuffer={arrayBuffer} setArrayBuffer={setArrayBuffer} message={message} setMessage={setMessage} onPress={handleSendMessage} setFileName={setFileName}  setFileType={setFileType} />
       </KeyboardAvoidingView>
     </Layout>
