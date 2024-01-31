@@ -1,6 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
-
+import React, { useEffect, useState } from 'react'
+import { useDebounce } from 'usehooks-ts'
 // ** Constants 
 import FontSize from '../constants/FontSize'
 import Colors from '../constants/Colors'
@@ -23,8 +23,9 @@ import BottomSheet from '../components/bottom-sheet/BottomSheet'
 
 // ** Hooks
 import useGlobalState from '../hooks/global.state'
-import { useGetProfileMeQuery } from '../stores/features/auth/authService'
+import { useGetProfileMeQuery, useUpdateProfileMutation } from '../stores/features/auth/authService'
 import { getFirstAndLastName } from '../helpers/getFirstAndLastName'
+import { Toast, ToastTitle, VStack, useToast } from '@gluestack-ui/themed'
 
 
 const defaultValues = {
@@ -38,18 +39,74 @@ interface UserData {
 const Profile = ({navigation}: {navigation: any}) => {
   const [show, setShow ] = useState(false) 
 
+  const methods = useForm({defaultValues});
+  const {watch, setValue} = methods
+  const bioValue = watch('bio');
+  const debouncedValue = useDebounce<string>(bioValue, 2000)
   // Get Global State
-  const {user} = useGlobalState()
+  const {user, profile} = useGlobalState()
   const { data} = useGetProfileMeQuery()
+  const [updateProfile, { isLoading }] = useUpdateProfileMutation();
+
   const fullName = data?.user?.name || ""
 
   const { firstName, lastName } = getFirstAndLastName(fullName);
 
+  //
+  const toast = useToast()
+
+  console.log(profile, user, "SEE USER AND PROFILE")
 
 
-  // console.log(profile)
-
-  const methods = useForm({defaultValues});
+  console.log(bioValue)
+  useEffect(() => {
+    console.log("Fire")
+    const fetchData = async () => {
+      const formData = {
+        id: user.id,
+        bio: bioValue,
+      };
+  
+      try {
+        const res = await updateProfile(formData).unwrap();
+        console.log(res);
+  
+        toast.show({
+          placement: "top",
+          render: ({ id }: any) => (
+            <Toast nativeID={id} action="success" variant="accent">
+              <VStack space="xs">
+                <ToastTitle>Profile update successful!!!</ToastTitle>
+              </VStack>
+            </Toast>
+          ),
+        });
+      } catch (err: any) {
+  
+        if (err) {
+          toast.show({
+            placement: "top",
+            render: ({ id }: any) => (
+              <Toast nativeID={id} action="error" variant="accent">
+                <VStack space="xs">
+                  <ToastTitle>Error updating profile!!!</ToastTitle>
+                </VStack>
+              </Toast>
+            ),
+          });
+        }
+      }
+    };
+  
+    fetchData(); // Call the async function immediately
+  }, [debouncedValue]);
+  
+  // Populate the form fields with the profile data when it's available
+  useEffect(() => {
+    if (user) {
+      setValue('bio', user.bio || ''); // Set the default value to an empty string if the property is undefined
+    }
+  }, [user, setValue]);
 
   return (
       <Layout
