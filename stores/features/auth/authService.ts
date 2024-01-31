@@ -118,6 +118,19 @@ export const authApi = createApi({
       }),
       providesTags: ["Profile"]
     }),
+    updateProfileImage: builder.mutation<void,  string>({
+      query: (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        return {
+          url: `/profile`,
+          method: 'POST',
+          credentials: 'include',
+          body: formData,
+          formData:true
+        };
+      },
+    }),
     getUsers: builder.query<ProfileResponse, void>({
       query: () => ({
         url: '/users',
@@ -143,4 +156,4 @@ export const authApi = createApi({
   }),
 })
 
-export const { useOtpResendMutation, useGetProfileMeQuery, useOtpForgetMutation, useResetPasswordMutation, useForgetPasswordMutation, useLoginMutation, useOtpMutation, useSignupMutation, useGetUsersQuery,  useUpdateProfileMutation, useGetProfileQuery } = authApi
+export const { useOtpResendMutation, useUpdateProfileImageMutation, useGetProfileMeQuery, useOtpForgetMutation, useResetPasswordMutation, useForgetPasswordMutation, useLoginMutation, useOtpMutation, useSignupMutation, useGetUsersQuery,  useUpdateProfileMutation, useGetProfileQuery } = authApi

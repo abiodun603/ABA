@@ -30,7 +30,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import Input from '../../components/Input';
 
 // ** Types
-import { useUpdateProfileMutation} from '../../stores/features/auth/authService';
+import { useUpdateProfileImageMutation, useUpdateProfileMutation} from '../../stores/features/auth/authService';
 import { Image } from 'react-native';
 
 type Props = NativeStackScreenProps<RootStackParamList, "EditProfile">;
@@ -45,6 +45,7 @@ const defaultValues = {
 const EditProfile: React.FC<Props> = ({ navigation: { navigate } }) => {
 
   const [updateProfile, { isLoading }] = useUpdateProfileMutation();
+  const [updateProfileImage, { isLoading: isLoadingProfileImage }] = useUpdateProfileImageMutation();
   const [image, setImage] = useState("")
   const {profile, user} = useGlobalState()
 
@@ -125,7 +126,38 @@ const EditProfile: React.FC<Props> = ({ navigation: { navigate } }) => {
   };
 
   const updatePofileImage = async() => {
-    console.log(image, "My Image")
+    console.log(image)
+    try {
+      await updateProfileImage(image).unwrap().then((res) => console.log(res));
+      toast.show({
+        placement: "top",
+        render: ({ id }) => {
+          return (
+            <Toast nativeID={id} action="success" variant="accent">
+              <VStack space="xs">
+                <ToastTitle>Image update successful!!!</ToastTitle>
+              </VStack>
+            </Toast>
+          )
+        },
+      })
+    } catch (err: any) {
+      console.log(err)
+      if(err.status === 401){
+        toast.show({
+          placement: "top",
+          render: ({ id }) => {
+            return (
+              <Toast nativeID={id} action="error" variant="accent">
+                <VStack space="xs">
+                  <ToastTitle>Error updating profile image!!!</ToastTitle>
+                </VStack>
+              </Toast>
+            )
+          },
+        })
+      }
+    }
   }
   
 
