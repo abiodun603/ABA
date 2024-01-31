@@ -103,14 +103,12 @@ const Profile = ({navigation}: {navigation: any}) => {
                   <AntDesign name="user" size={15}/>
                   <Text className='text-kblack2 text-sm font-normal '>Set your status</Text>
                 </TouchableOpacity> */}
-                <TouchableOpacity  
+                {/* <TouchableOpacity  
                   onPress={() => navigation.navigate("ProfileNotification")}
                   className='flex-row items-center space-x-5'>
-                  {/* icon */}
                   <Ionicons name="notifications-off-outline" size={28}/>
-                  {/* name */}
                   <Text className='text-kblack2 text-sm font-normal '>Pause Notifications</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 {/* <TouchableOpacity 
                   className='flex-row items-center space-x-5'
                   onPress={() => navigation.navigate("CommunityInvites")}
