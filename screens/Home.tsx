@@ -42,6 +42,7 @@ import { setEventLocation } from '../stores/features/event/eventSlice';
 import { useGetMyCommunityQuery } from '../stores/features/groups/groupsService';
 import socket from '../utils/socket';
 import { useGetProfileMeQuery } from '../stores/features/auth/authService';
+import All from '../views/HomeView/All';
 // import Past from './savedItems/Past';
 
 const screenWidth = Dimensions.get("window").width
@@ -50,7 +51,7 @@ const viewConfigRef = { viewAreaCoveragePercentThreshold: 200 }
 
 
 const TabData = [
-  { name: "All", component: Past },
+  { name: "All", component: All },
   { name: "Going", component: Going },
   { name: "Saved", component: Saved },
   { name: "Past", component: Past },
@@ -248,7 +249,7 @@ const Home = ({navigation}: {navigation: any}) => {
       drawerNav
       profileIcon
     >
-      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      <View style={styles.container}>
         <View>
           <Text className='text-black text-3xl font-bold'>Hi {firstName} {lastName} 👋</Text>
           {/* ==== ===== */}
@@ -304,42 +305,12 @@ const Home = ({navigation}: {navigation: any}) => {
               }}
             />
           </View>
+          
         </View>
-        
-        <View className='mt-8' >
-          <View className="flex-row items-center justify-between mb-3">
-            <Text className="text-black text-sm font-semibold">Your Resources</Text>
-            <Text className="text-ksecondary text-sm opacity-50 font-normal">See all</Text>
-          </View>
-          {/* Interests */}
-          <View >
-            {/* <FlatList
-              data={interestTypes}
-              horizontal
-              keyExtractor={(item, index) => index.toString()}
-              showsHorizontalScrollIndicator= {false}
-              renderItem={({item,index}) =>  <View>
-                    <TouchableOpacity key={index} onPress={() => null} className='mr-4'>
-                      <View style={{borderRadius: 8, padding: 8 }} className='bg-gray-800'>
-                        <Text style={{ color: 'white' }}>{item}</Text>
-                      </View>
-                    </TouchableOpacity>
-            </View>}
-            /> */}
-            <Text className='mt-1  text-sm text-ksecondary font-medium'>Opps!!! No Resource Available</Text>          
-          </View>
+        <View className='inline-block flex-1  mt-10'>
+          <TopNavPanel tabs={TabData} /> 
         </View>
-        {/* <View>
-          <View className='mt-10 mb-10'>
-            <View className="flex-row items-center justify-between mb-3">
-              <Text className="text-black text-sm font-semibold">Your calendar</Text>
-            </View>
-            <View style={{ flex: 1 }}>
-              <TopNavPanel tabs={TabData} /> 
-            </View>
-          </View>
-        </View> */}
-      </ScrollView>
+      </View>
     </Layout>
   )
 }
