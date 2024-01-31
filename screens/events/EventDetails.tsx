@@ -19,6 +19,7 @@ import Toaster from '../../components/Toaster/Toaster';
 import { useToast } from '@gluestack-ui/themed';
 import useLocation from '../../hooks/useLocation';
 import { formattedDateWithDay } from '../../helpers/formatDate';
+import { isEventDateLessThanCurrent } from '../../helpers/isPastEvent';
 
 // Define the type for your route parameters
 type RouteParams = {
@@ -182,7 +183,7 @@ const EventDetails: React.FC<Props>  = ({navigation, route}) => {
               </View>
             </View>
 
-            <View className = "space-y-3">
+            <View className = "space-y-3 mb-20">
               <View className = "flex-row items-center space-x-3 mt-5">
                 {/* Icon */}
                 <Ionicons name = "person-add-sharp" size={26} color="red"/>
@@ -248,17 +249,21 @@ const EventDetails: React.FC<Props>  = ({navigation, route}) => {
             </View>
           </View> */}
 
-          <Divider mt={8} thickness={8}/>
-          <Text className='text-sm text-blue-900 font-semibold px-4 mt-5'>Report this event</Text>
+          {/* <Divider mt={8} thickness={8}/> */}
+          {/* <Text className='text-sm text-blue-900 font-semibold px-4 mt-5'>Report this event</Text> */}
         </ScrollView>
-        <View className='fixed w-full h-24  flex-row items-center justify-between px-4 bg-gray-800 bottom-0 left-0 right-0'>
-          <Text className='text-white font-semibold'>Free</Text>
-          {
-            !isJoinedEvent?.flag ?
-              <CustomButton title='Attend' onPress={handleAttendEvent} buttonStyle={{width: 100, borderRadius: 8}} isLoading={attendEventLoading} /> : 
-              <CustomButton title='Leave Event' onPress={handleLeaveEvent} buttonStyle={{width: 100, borderRadius: 8}} isLoading={isLeaveEventLoading} />
-          }
-        </View>
+        {
+          !isEventDateLessThanCurrent(data?.event_date) ? 
+          <View className='fixed w-full h-24  flex-row items-center justify-between px-4 bg-gray-800 bottom-0 left-0 right-0'>
+            <Text className='text-white font-semibold'>Free</Text>
+            {
+              !isJoinedEvent?.flag ?
+                <CustomButton title='Attend' onPress={handleAttendEvent} buttonStyle={{width: 100, borderRadius: 8}} isLoading={attendEventLoading} /> : 
+                <CustomButton title='Leave Event' onPress={handleLeaveEvent} buttonStyle={{width: 100, borderRadius: 8}} isLoading={isLeaveEventLoading} />
+            }
+          </View> : null
+        }
+       
       </View>
     </Layout>
   )

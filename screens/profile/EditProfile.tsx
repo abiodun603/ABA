@@ -1,5 +1,5 @@
-import { StyleSheet, View } from 'react-native'
-import React, { useEffect } from 'react'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 
 // ** Constants
 import FontSize from '../../constants/FontSize';
@@ -13,6 +13,8 @@ import { FormProvider, useForm } from "react-hook-form";
 // ** Third Party
 import { Divider } from 'native-base';
 import { Toast, ToastTitle, VStack, useToast } from "@gluestack-ui/themed";
+import { manipulateAsync, FlipType, SaveFormat } from 'expo-image-manipulator';
+import * as ImagePicker from 'expo-image-picker';
 
 // ** Layout
 import Layout from '../../layouts/Layout';
@@ -29,6 +31,7 @@ import Input from '../../components/Input';
 
 // ** Types
 import { useUpdateProfileMutation} from '../../stores/features/auth/authService';
+import { Image } from 'react-native';
 
 type Props = NativeStackScreenProps<RootStackParamList, "EditProfile">;
 
@@ -40,7 +43,9 @@ const defaultValues = {
 
 
 const EditProfile: React.FC<Props> = ({ navigation: { navigate } }) => {
+
   const [updateProfile, { isLoading }] = useUpdateProfileMutation();
+  const [image, setImage] = useState("")
   const {profile, user} = useGlobalState()
 
   const methods= useForm({defaultValues});
@@ -50,7 +55,7 @@ const EditProfile: React.FC<Props> = ({ navigation: { navigate } }) => {
   const toast = useToast()
 
 
-  console.log(profile, user)
+  
 
 
   const handleUpdate = async(data: any) =>{
@@ -94,6 +99,34 @@ const EditProfile: React.FC<Props> = ({ navigation: { navigate } }) => {
     }
   }
 
+  const pickImage = async () => {
+    try {
+      // Launch the image picker
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+      });
+
+      if (!result.canceled) {
+        // Crop and set the selected image
+        const croppedImage = await manipulateAsync(
+          result.assets[0].uri,
+          [{ crop: { originX: 0, originY: 0, width: result.assets[0].width, height: result.assets[0].height } }],
+          { compress: 1, format: SaveFormat.PNG, base64: false }
+        );
+
+        setImage(croppedImage.uri);
+      }
+    } catch (error) {
+      console.error('Error picking image:', error);
+    }
+  };
+
+  const updatePofileImage = async() => {
+    console.log(image, "My Image")
+  }
   
 
   // Populate the form fields with the profile data when it's available
@@ -102,6 +135,16 @@ const EditProfile: React.FC<Props> = ({ navigation: { navigate } }) => {
       setValue('name', user.name || ''); // Set the default value to an empty string if the property is undefined
     }
   }, [user, setValue]);
+
+  useEffect(() => {
+    // Request permission to access the user's media library
+    (async () => {
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== 'granted') {
+        console.log('Permission denied');
+      }
+    })();
+  }, []);
 
   return (
     <Layout
@@ -112,14 +155,18 @@ const EditProfile: React.FC<Props> = ({ navigation: { navigate } }) => {
 
         <View className='flex flex-col items-center  mt-10'>
           {/* Image */}
-          <View className='h-[136px] w-[136px] rounded-full bg-slate-800'>
-
-          </View>
+          <TouchableOpacity onPress={pickImage}>
+            <View className='h-[136px] w-[136px] rounded-full bg-slate-800'>
+              {image ? (
+                <Image source={{ uri: image }} style={{ width: 136, height: 136, borderRadius: 68 }} />
+              ) : null }
+            </View>
+          </TouchableOpacity>
           <CustomButton
             title='Edit Photo'
             buttonStyle={{backgroundColor: 'transparent', borderColor: "#B3B3B3", borderWidth: 1, marginTop: 15, width: 136}}
             titleColor= {Colors.gray}
-            onPress={() => navigate('EditProfile')}
+            onPress={updatePofileImage}
           />
         </View>
         <View className='flex flex-col '>

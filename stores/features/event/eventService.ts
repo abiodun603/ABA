@@ -138,7 +138,7 @@ export const eventsApi = createApi({
         url: `/events/unsave/${id}`,
         method: 'DELETE',
       }),
-      invalidatesTags: ["SaveEvent"]
+      invalidatesTags: ["SaveEvent", "Event"]
     }),
     deleteEvent: builder.mutation<any, string>({
       query: (id) => ({ 

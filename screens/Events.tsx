@@ -1,4 +1,4 @@
-import {  Dimensions, FlatList, ImageBackground, ScrollView, Share, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import {  FlatList, ImageBackground, ScrollView, Share, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useMemo, useState } from 'react'
 
 // ** Constants 
@@ -15,7 +15,6 @@ import Layout from '../layouts/Layout'
 // ** Third Pary
 import { FormProvider, useForm } from 'react-hook-form'
 import { SelectList, MultipleSelectList } from 'react-native-dropdown-select-list';
-import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 // ** Helpers
 import { formatTimestampToTime, formatTimestampToTimeWithMidday } from '../helpers/timeConverter'
@@ -29,12 +28,13 @@ import Input from '../components/Input'
 import Toaster from '../components/Toaster/Toaster'
 
 // ** Hooks
-import { useCreateEventMutation, useGetEventsQuery, useGetEventTypesQuery, useSaveEventMutation } from '../stores/features/event/eventService'
+import { useCreateEventMutation, useGetEventsQuery, useGetEventTypesQuery, useSaveEventMutation, useUnSaveEventMutation } from '../stores/features/event/eventService'
 import { useGetUsersQuery } from '../stores/features/users/UsersService'
 import { useToast } from '@gluestack-ui/themed'
 import { getTimeZone } from '../helpers/timeZoneformat'
 import { DatePicker } from '../components/datepicker/DatePicker'
 import { useGetCommunityQuery } from '../stores/features/groups/groupsService'
+import Toast from 'react-native-toast-message'
 
 
 const data = [
@@ -76,24 +76,40 @@ const Badge = ({title}: {title: string | boolean}) => {
 export const EventCard = ({event_about, save_event, event_time ,event_name, event_city, event_id, members, navigation, url}: any) => {
   const [bookMark, setBookMark] = useState(false)
   const [saveEvent, {isLoading: saveEventLoading}] = useSaveEventMutation()
+  const [unSaveEvent,  {isLoading: unsaveEventLoading}] = useUnSaveEventMutation()
+
   const toast = useToast()
+
+
+  const showToast = () => {
+    Toast.show({
+      type: 'info',
+      position: 'top',
+      text1: 'Loading...',
+      autoHide: true,
+    });
+  };
+
+  if(saveEventLoading || unsaveEventLoading){
+    showToast();
+  }
 
   // Fucnc
   const toggleBookMark = async () => {
+    console.log("save me ")
+
     try {
       const formData = {
         event_id: event_id
       };
-  
-      const data = await saveEvent(formData).unwrap();
-  
+      await saveEvent(formData).unwrap()
+    
       // Handle success
       toast.show({
         placement: 'top',
-        render: ({ id }) => <Toaster id={id} type="success" message="Thank you!!!. Event has been saved" />
+        render: ({ id }) => <Toaster id={id} type="success" message={`Thank you!!!. Event has been ${!save_event ? "saved" : "unsaved"}`}/>
       });
-  
-      setBookMark(!bookMark);
+      setBookMark(true);
     } catch (error: any) {
       // Handle error
       if (error.data && error.data.errors && error.data.errors.length > 0) {
@@ -107,12 +123,43 @@ export const EventCard = ({event_about, save_event, event_time ,event_name, even
           render: ({ id }) => <Toaster id={id} type="error" message="An error occurred while saving the event." />
         });
       }
-  
       setBookMark(false);
-      console.error(error);
     }
   };
-  
+
+  const toggleUnBookMark = async () => {
+    console.log("unsave me ")
+    try {
+      const formData = {
+        event_id: event_id
+      };
+      console.log(event_id, "unsave me")
+
+      await unSaveEvent(event_id)
+      .unwrap()
+      // Handle success
+      toast.show({
+        placement: 'top',
+        render: ({ id }) =>  <Toaster id={id} type="success" message={`Thank you!!!. Event has been unsaved`}/>
+      });
+      setBookMark(false);
+    } catch (error: any) {
+      // Handle error
+      if (error.data && error.data.errors && error.data.errors.length > 0) {
+        toast.show({
+          placement: 'top',
+          render: ({ id }) => <Toaster id={id} type="error" message={error.data.errors[0].message} />
+        });
+      } else {
+        toast.show({
+          placement: 'top',
+          render: ({ id }) => <Toaster id={id} type="error" message="An error occurred while saving the event." />
+        });
+      }
+      // setBookMark(false);
+    }
+  };
+
 
   const onShare = async () => {
     const options = {
@@ -163,10 +210,10 @@ export const EventCard = ({event_about, save_event, event_time ,event_name, even
           </View>
           <View className="flex-row items-center justify-between mt-3">
             <Text >{members?.length || "0"} going <Text className='capitalize'>{event_city}</Text></Text>
-            <View className='flex-row'>
+            <TouchableOpacity disabled={saveEventLoading || unsaveEventLoading} className='flex-row'>
               <Ionicons name='share-outline' size={23} onPress={onShare}/> 
-              {!save_event ? <Ionicons name='bookmark-outline' size={22} onPress={toggleBookMark} /> :  <Ionicons name='bookmark' size={22} color="#d82727" onPress={toggleBookMark}/>}
-            </View>
+              {!save_event ? <Ionicons name='bookmark-outline' size={22} onPress={toggleBookMark} /> :  <Ionicons name='bookmark' size={22} color="#d82727" onPress={toggleUnBookMark}/>}
+            </TouchableOpacity>
           </View>
       </TouchableOpacity>
     </ScrollView>
