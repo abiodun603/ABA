@@ -34,6 +34,7 @@ import { useGetUsersQuery } from '../stores/features/users/UsersService'
 import { useToast } from '@gluestack-ui/themed'
 import { getTimeZone } from '../helpers/timeZoneformat'
 import { DatePicker } from '../components/datepicker/DatePicker'
+import { useGetCommunityQuery } from '../stores/features/groups/groupsService'
 
 
 const data = [
@@ -56,6 +57,10 @@ const types = [
   {key:'1', value:'Select event types', disabled:true},
 ]
 
+const community = [
+  {key:'1', value:'Select Community', disabled:true},
+]
+
 const Badge = ({title}: {title: string | boolean}) => {
   return (
     <View style={styles.badgeContainer}>
@@ -68,37 +73,46 @@ const Badge = ({title}: {title: string | boolean}) => {
 
 
 
-export const EventCard = ({event_about, event_time ,event_name, event_city, event_id, members, navigation, url}: any) => {
+export const EventCard = ({event_about, save_event, event_time ,event_name, event_city, event_id, members, navigation, url}: any) => {
   const [bookMark, setBookMark] = useState(false)
   const [saveEvent, {isLoading: saveEventLoading}] = useSaveEventMutation()
   const toast = useToast()
 
   // Fucnc
   const toggleBookMark = async () => {
-    const formData = {
-      event_id: event_id
-    }
-    await saveEvent(formData)
-    .unwrap()
-    .then((data) => {
+    try {
+      const formData = {
+        event_id: event_id
+      };
+  
+      const data = await saveEvent(formData).unwrap();
+  
       // Handle success
-      // console.log('res:', data);
       toast.show({
         placement: 'top',
-        render: ({id}) => <Toaster id={id} type="success" message="Thank you!!!. Event have been saved" />
-      })
-    })
-    .catch((error) => {
+        render: ({ id }) => <Toaster id={id} type="success" message="Thank you!!!. Event has been saved" />
+      });
+  
+      setBookMark(!bookMark);
+    } catch (error: any) {
       // Handle error
-      toast.show({
-        placement: 'top',
-        render: ({id}) => <Toaster id={id} type="error" message={error?.data.errors[0].message} />
-      })
-      setBookMark(false)
+      if (error.data && error.data.errors && error.data.errors.length > 0) {
+        toast.show({
+          placement: 'top',
+          render: ({ id }) => <Toaster id={id} type="error" message={error.data.errors[0].message} />
+        });
+      } else {
+        toast.show({
+          placement: 'top',
+          render: ({ id }) => <Toaster id={id} type="error" message="An error occurred while saving the event." />
+        });
+      }
+  
+      setBookMark(false);
       console.error(error);
-    });
-    setBookMark(!bookMark)
-  }
+    }
+  };
+  
 
   const onShare = async () => {
     const options = {
@@ -151,7 +165,7 @@ export const EventCard = ({event_about, event_time ,event_name, event_city, even
             <Text >{members?.length || "0"} going <Text className='capitalize'>{event_city}</Text></Text>
             <View className='flex-row'>
               <Ionicons name='share-outline' size={23} onPress={onShare}/> 
-              {!bookMark ? <Ionicons name='bookmark-outline' size={22} onPress={toggleBookMark} /> :  <Ionicons name='bookmark' size={22} color="#d82727" onPress={toggleBookMark}/>}
+              {!save_event ? <Ionicons name='bookmark-outline' size={22} onPress={toggleBookMark} /> :  <Ionicons name='bookmark' size={22} color="#d82727" onPress={toggleBookMark}/>}
             </View>
           </View>
       </TouchableOpacity>
@@ -174,10 +188,12 @@ const Contact = ({navigation}: {navigation: any}) => {
   const [selectedStatus, setSelectedStatus] = React.useState("");
   const [selectedMembers, setSelectedMembers] = useState<any[]>([])
   const [selectedHost, setSelectedHost] = useState<any[]>([])
+  const [selectedCommunity, setSelectedCommunity] = useState<any>("")
 
   const [show, setShow ] = useState(false) 
   const methods = useForm({defaultValues});
   const {data: getAllEvents, isError, isLoading} = useGetEventsQuery()
+  const {isLoading: isLoadingCommunity, data: getAllCommunity} = useGetCommunityQuery()
   const {data: getEventTypes} = useGetEventTypesQuery()
   const {data: getAllUsers} = useGetUsersQuery()
   const [createEvent, {isLoading: createEventLoading}] = useCreateEventMutation()
@@ -206,11 +222,26 @@ const Contact = ({navigation}: {navigation: any}) => {
   }, 
   [getEventTypes?.docs])
 
+ // get all community
+ const newCommunity  = useMemo(() => {
+  return (getAllCommunity?.docs?.map(
+    (item: { id: string, community_name: string}) => ({
+      key: item.id,
+      value: item?.community_name,
+      disabled:false
+    })
+  ) || []);
+}, 
+[getAllCommunity?.docs])
+
+console.log(getAllCommunity, "GET ALL COMMUNITIES")
+
   // console.log(newEventTypes, getEventTypes)
 
   // Combine arrays using spread operator
   members.push(...newArray);    
   types.push(...newEventTypes);
+  community.push(...newCommunity)
 
   // End Funtion
   const [date1, setDate1] = useState(new Date());
@@ -243,6 +274,7 @@ const Contact = ({navigation}: {navigation: any}) => {
   }
 
   const handleCreateEvent = (data: any) => {
+    
     const formData = {
       event_name: data.event_name,
       event_about: data.event_about,
@@ -253,6 +285,7 @@ const Contact = ({navigation}: {navigation: any}) => {
       event_address: data.event_address,
       event_tags: [{"tag":"event"},{"tag":"chster"}],
       hosted_by: selectedHost,
+      ...(selectedCommunity !== null && selectedCommunity !== '' && { community_id: selectedCommunity }),
       members: selectedMembers,
       status: selectedStatus.toLowerCase(),
     }
@@ -284,7 +317,7 @@ const Contact = ({navigation}: {navigation: any}) => {
 
   }
 
-  console.log(getAllEvents)
+  console.log(getAllEvents, "All Events")
 
   return (
     <Layout
@@ -297,7 +330,7 @@ const Contact = ({navigation}: {navigation: any}) => {
       <ScrollView showsVerticalScrollIndicator={false} className='flex-col space-y-7'> 
         <FlatList
           data={getAllEvents.docs || []}
-          renderItem={({item}) => <EventCard event_about={item.event_about} event_time={item.event_time} event_name={item.event_name} event_city={item.event_city} event_id={item.id} navigation={navigation} members = {item.members} url = {item.url}/>}
+          renderItem={({item}) => <EventCard save_event={item.saveFlag} event_about={item.event_about} event_time={item.event_time} event_name={item.event_name} event_city={item.event_city} event_id={item.id} navigation={navigation} members = {item.members} url = {item.url}/>}
           keyExtractor={item => item.id}
         />
         {/* BottomSheet component */}
@@ -336,6 +369,17 @@ const Contact = ({navigation}: {navigation: any}) => {
                 <DatePicker mode="date" selectedDateCallback={dateCallback1} datePickerPlaceholder={formatDate(date1)} datePickerlabel="Event date"/>
                 <DatePicker mode="time" selectedDateCallback={timeCallback1} datePickerPlaceholder={formatTimestampToTime(time1)} datePickerlabel="Event start time"/>
                 <DatePicker mode="time" selectedDateCallback={timeCallback2} datePickerPlaceholder={formatTimestampToTime(time2)} datePickerlabel="Event end time"/>
+                <View className='flex flex-col mb-5'>
+                  {/* <Text className=' font-normal text-sm text-black'>Gender</Text> */}
+                  <SelectList 
+                    setSelected={(val: React.SetStateAction<any[]>) => setSelectedCommunity(val)} 
+                    data={community} 
+                    save="key"
+                    boxStyles={{borderRadius:4, borderColor: "#80747B", paddingLeft: 10}}
+                    search={false} 
+                    placeholder='Select Community'
+                  />
+                </View>
                 <View className='flex flex-col mb-5'>
                   {/* <Text className=' font-normal text-sm text-black'>Gender</Text> */}
                   <MultipleSelectList 

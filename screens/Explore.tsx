@@ -16,16 +16,13 @@ import Layout from '../layouts/Layout'
 import { Divider } from 'native-base';
 
 // ** Utils
-import socket from '../utils/socket'
-import { GroupCatergory } from '../utils/dummy'
+import { GroupCatergory, filterByDate } from '../utils/dummy'
 
 // ** Hooks
 import MapView, { Marker } from 'react-native-maps'
 import useLocation from '../hooks/useLocation'
 import { useGetEventsByCatTypeQuery, useGetPopularEventsQuery } from '../stores/features/event/eventService'
 import { ShortenedWord } from '../helpers/wordShorther'
-
-const eventsDays =  ["Today", "Tomorrow", "This weekend", "Choose date", "All upcoming"]
 
 interface IGridViewProps<T> {
   data: T[];
@@ -71,7 +68,7 @@ const Explore = ({navigation}: {navigation: any}) => {
   // const categories = Object.keys(getEventsByCatType.docs || {});
   // console.log(getPopularEvents)
 
-  const renderEventCard = (event_id: string,about: string, name: string, time: string, city: any,  toggleBookMark: any, bookMark: any, navigation: any) => {
+  const renderEventCard = (event_id: string,url: string, about: string, name: string, time: string, city: any,  toggleBookMark: any, bookMark: any, navigation: any) => {
     const onShare = async () => {
       const options = {
         message: "Telvida Conferences at London Texas.  i neva reach there before"
@@ -96,16 +93,16 @@ const Explore = ({navigation}: {navigation: any}) => {
       }
       
     }
-
-    // console.log( "popular events")
     return(
       <TouchableOpacity  className='h-60 w-56 rounded-lg mr-3' onPress={() => navigation.navigate("EventDetails", { eventId: event_id })}>
-         <View style={{flex:1}} className='rounded-t-lg bg-blue-500'>
+         <View style={{flex:1}} className='rounded-t-lg'>
           <Image
+            resizeMode="cover"
+            style={{flex: 1}}
             source={{
-              uri: 'https://reactnative.dev/img/tiny_logo.png',
+              uri: url,
             }}
-            className='w-full'
+            className='w-full rounded-t-lg'
           />
         </View>
         <View style={{flex:1}} className='rounded-b-lg bg-gray-100 p-2 justify-between'>
@@ -153,12 +150,11 @@ const Explore = ({navigation}: {navigation: any}) => {
 
         <View className = "flex-row flex-wrap " style={{ flex: 0 }}>
           {
-            eventsDays.map((items, index) => <TouchableOpacity onPress={() => navigation.navigate("EventFilter")} className='pl-2 pr-3 py-2 bg-[#333]  flex-row items-center justify-between rounded-lg  mr-2 mb-2' key={index.toString()} style={{ flex: 0 }} >
-            <Text className='text-white text-xs font-medium'>{items}</Text>
+            filterByDate.map((items:{id: number, name: string}) => <TouchableOpacity onPress={() => navigation.navigate("EventFilter", {filterName: items.name})} className='pl-2 pr-3 py-2 bg-[#333]  flex-row items-center justify-between rounded-lg  mr-2 mb-2' key={items.id} style={{ flex: 0 }} >
+            <Text className='text-white text-xs font-medium capitalize'>{items.name}</Text>
             <MaterialIcons name = "keyboard-arrow-right"  size={20} color="#d1d5db" />
           </TouchableOpacity>)
           }
-          
         </View>
       </View>
       <Divider mt={8} thickness={1}/>
@@ -168,7 +164,7 @@ const Explore = ({navigation}: {navigation: any}) => {
             <MaterialIcons name="location-searching" size={28} />
             <View className=''>
               {/* day / month / year */}
-              <Text className='text-sm text-gray-800 font-bold'>Find a group</Text>
+              <Text className='text-sm text-gray-800 font-bold'>Find a community</Text>
               {/* time */}
               <Text className='text-xs text-gray-700 font-medium'>Search by your interests</Text>
             </View>
@@ -179,7 +175,7 @@ const Explore = ({navigation}: {navigation: any}) => {
       <Divider thickness={8}/>
 
       <View className = "px-4">
-        <Text className='text-black text-sm font-bold mt-3'>Explore Meetup</Text>
+        <Text className='text-black text-sm font-bold mt-3'>Explore ABA</Text>
 
         <View className='mt-3'>
           <Text className='text-black text-xs font-bold my-2'>Popular now</Text>
@@ -188,7 +184,7 @@ const Explore = ({navigation}: {navigation: any}) => {
               horizontal
               data = {getPopularEvents?.docs || []}
               keyExtractor={(item, index) => index.toString()}
-              renderItem={({item}) => renderEventCard(item.id, item.event_about, item.event_name, item.event_time, item.event_city, toggleBookMark, bookMark, navigation)}
+              renderItem={({item}) => renderEventCard(item.id, item.url, item.event_about, item.event_name, item.event_time, item.event_city, toggleBookMark, bookMark, navigation)}
               showsHorizontalScrollIndicator = {false}
             />
           </View> 
@@ -210,7 +206,7 @@ const Explore = ({navigation}: {navigation: any}) => {
                   horizontal
                   data={getEventsByCatType?.docs[category] || []}
                   keyExtractor={(item, index) => index.toString()}
-                  renderItem={({ item }) => renderEventCard(item.id, item.event_about, item.event_name, item.event_time, item.event_city, toggleBookMark, bookMark, navigation)}
+                  renderItem={({ item }) => renderEventCard(item.id, item.url, item.event_about, item.event_name, item.event_time, item.event_city, toggleBookMark, bookMark, navigation)}
                   showsHorizontalScrollIndicator={false}
                 />
               </View>
@@ -226,7 +222,7 @@ const Explore = ({navigation}: {navigation: any}) => {
 
             <View className=''>
               {/* day / month / year */}
-              <Text className='text-sm text-gray-800 font-bold'>Start a new group</Text>
+              <Text className='text-sm text-gray-800 font-bold'>Start a new community</Text>
               {/* time */}
               <Text className='text-xs text-gray-700 font-medium'>Organise your own events</Text>
             </View>

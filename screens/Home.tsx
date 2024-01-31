@@ -254,7 +254,7 @@ const Home = ({navigation}: {navigation: any}) => {
           {/* ==== ===== */}
           <View className="flex-row items-center justify-between mt-4">
             <Text className="text-black text-sm font-semibold">Suggested events 🔍</Text>
-            <Text className="text-ksecondary text-sm opacity-50 font-normal">Calender</Text>
+            <Text className="text-ksecondary text-sm opacity-50 font-normal"></Text>
           </View>
           {nextEventData && nextEventData?.docs.length > 0 ? (
             <View className=''>

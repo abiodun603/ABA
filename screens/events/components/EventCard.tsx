@@ -143,7 +143,7 @@ export const EventCard = ({event_about, event_time ,event_name, event_city, even
             <View className='w-2/3'>
               <Text className='text-yellow-500 text-sm font-bold'>{event_time}</Text>
               {/* Event Description */}
-              <Text className='text-sm text-black opacity-80 font-semibold mt-2' numberOfLines={2} ellipsizeMode="tail"><ShortenedWord word={event_about} maxLength={60}/></Text>
+              <Text className='capitalize text-sm text-black opacity-80 font-semibold mt-2' numberOfLines={2} ellipsizeMode="tail"><ShortenedWord word={event_about} maxLength={60}/></Text>
               <Text className='text-gray-500 font-normal mt-1'><ShortenedWord word={event_name} maxLength={48} /></Text>
             </View>
             <View className='w-1/3 rounded-lg'>

@@ -9,13 +9,15 @@ export function formatDate(date: Date): string {
 // console.log(formattedDate);  // Output: Nov 14, 2023
 
 
-export function formattedDateWithDay(inputDate: Date): string {
+export function formattedDateWithDay(inputDate: string): string {
+  const dateObject = new Date(inputDate);
+
   const options: Intl.DateTimeFormatOptions = {
-    weekday: 'long',
+    weekday: 'short',
     year: 'numeric',
     month: 'long',
     day: 'numeric'
   };
 
-  return inputDate.toLocaleDateString('en-US', options);
+  return new Intl.DateTimeFormat('en-US', options).format(dateObject);
 }

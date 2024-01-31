@@ -26,9 +26,6 @@ type RouteParams = {
 };
 type Props = NativeStackScreenProps<RootStackParamList, "EventDetails">;
 
-
-
-
 const EventDetails: React.FC<Props>  = ({navigation, route}) => {
   const [updateEventAttend, { isLoading: attendEventLoading, isError }] = useUpdateAttendEventMutation();
   const [leaveEvent, { isLoading: isLeaveEventLoading }] = useLeaveEventMutation();
@@ -119,13 +116,13 @@ const EventDetails: React.FC<Props>  = ({navigation, route}) => {
                   <Ionicons name="calendar-outline" size={28} />
                   <View className='space-y-2'>
                     {/* day / month / year */}
-                    <Text className='text-sm text-gray-800 font-semibold'>{formattedDateWithDay(new Date(data?.event_date))}</Text>
+                    <Text className='text-sm text-gray-800 font-semibold'>{formattedDateWithDay(data?.event_date)}</Text>
                     {/* time */}
                     <Text className='text-sm text-gray-800 font-medium'>{data?.event_time}</Text>
                   </View>
                 </View>
                 {/* icon */}
-                <MaterialIcons name = "keyboard-arrow-right"  size={28}/>
+                {/* <MaterialIcons name = "keyboard-arrow-right"  size={28}/> */}
               </View>
               <View className='flex-row justify-between items-center mt-4 border-b border-b-gray-400 pb-2'>
                 <View className='flex-row items-center space-x-2'>
@@ -137,7 +134,7 @@ const EventDetails: React.FC<Props>  = ({navigation, route}) => {
                   </View>
                 </View>
                 {/* icon */}
-                <MaterialIcons name = "keyboard-arrow-right"  size={28}/>
+                {/* <MaterialIcons name = "keyboard-arrow-right"  size={28}/> */}
               </View>
             </View>
 
@@ -145,7 +142,7 @@ const EventDetails: React.FC<Props>  = ({navigation, route}) => {
             <View className='mt-6 flex-row items-center space-x-2'>
               {/* logo */}
               <View className="h-16 w-16 rounded-lg bg-blue-900 items-center justify-center">
-                <Text className='text-white'>Logo</Text>
+                <Text className='text-white uppercase'>{data?.event_name.substring(0, 3)}</Text>
               </View>
               <View>
                 <Text className='text-sm line-4 font-bold '><ShortenedWord word={data?.event_name} maxLength={6} /></Text>

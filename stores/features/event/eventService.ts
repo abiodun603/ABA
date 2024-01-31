@@ -124,7 +124,7 @@ export const eventsApi = createApi({
         method: 'POST',
         body: credentials
       }),
-      invalidatesTags: ["SaveEvent"]
+      invalidatesTags: ["SaveEvent", "Event"]
     }),
     unSaveEvent: builder.mutation<void, any>({
       query: (id) => ({ 

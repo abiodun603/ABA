@@ -8,7 +8,7 @@ import {Ionicons} from "@expo/vector-icons"
 
 // ** Helpers
 import { Avatar, AvatarFallbackText, AvatarGroup, AvatarImage,useToast } from '@gluestack-ui/themed';
-import { useGetCommunityEventQuery, useGetCommunityMembersQuery, useGetCommunityResourcesQuery, useGetJoinedCommunityQuery, useGetOneCommunityQuery, useJoinCommunityMutation, useLeaveCommunityMutation } from '../../stores/features/groups/groupsService';
+import { useGetCommunityEventQuery, useGetCommunityMembersQuery, useGetCommunityQuery, useGetCommunityResourcesQuery, useGetJoinedCommunityQuery, useGetOneCommunityQuery, useJoinCommunityMutation, useLeaveCommunityMutation } from '../../stores/features/groups/groupsService';
 
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -18,6 +18,7 @@ import BottomSheet from '../../components/bottom-sheet/BottomSheet';
 import CustomButton from '../../components/CustomButton';
 import Toaster from '../../components/Toaster/Toaster';
 import { useGetUpcomingEventsQuery } from '../../stores/features/event/eventService';
+import { formattedDateWithDay } from '../../helpers/formatDate';
 
 
 type Props = NativeStackScreenProps<RootStackParamList, "Group">;
@@ -27,7 +28,7 @@ type RouteParams = {
   communityId: string; // Replace 'string' with the correct type for communityId
 };
 
-const renderEventCard = (toggleBookMark: any, bookMark: any, navigation: any) => {
+const renderEventCard = (item: any, toggleBookMark: any, bookMark: any, navigation: any) => {
   const onShare = async () => {
     const options = {
       message: "Telvida Conferences at London Texas.  i neva reach there before"
@@ -56,45 +57,27 @@ const renderEventCard = (toggleBookMark: any, bookMark: any, navigation: any) =>
     <TouchableOpacity className='h-44 w-48 rounded-lg mr-3'>
       <View style={{flex:1}} className='justify-between rounded-b-lg bg-gray-100 p-4'>
         <View className=''>
-          <Text className='text-yellow-500 text-xs font-bold'>SAT, 21 OCT 10:00</Text>
+          <Text className='text-yellow-500 text-xs font-bold'>{formattedDateWithDay(item?.event_date)}</Text>
           {/* Event Description */}
-          <Text className='text-xs text-black opacity-80 font-bold mt-2' numberOfLines={2} ellipsizeMode="tail">Azure Community Con23: Exploring Innovative and Az...</Text>
+          <Text className='truncate text-xs text-black opacity-80 font-bold mt-2' numberOfLines={2} ellipsizeMode="tail">{item?.event_name}</Text>
+
+          <Text className='capitalize truncate text-xs text-black opacity-80 font-bold mt-2' numberOfLines={2} ellipsizeMode="tail">{item?.event_about}</Text>
         </View>
         <View className="flex-row items-center justify-between mt-2">
           <View className='ml-2'>
             <AvatarGroup>
-              <Avatar size="xs">
-                <AvatarFallbackText>John Doe</AvatarFallbackText>
-                <AvatarImage
-                  source={{
-                    uri: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80',
-                  }}
-                />
-              </Avatar>
-              <Avatar size="xs">
-                <AvatarFallbackText>John Doe</AvatarFallbackText>
-                <AvatarImage
-                  source={{
-                    uri: 'https://images.unsplash.com/photo-1603415526960-f7e0328c63b1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-                  }}
-                />
-              </Avatar>
-              <Avatar size="xs">
-                <AvatarFallbackText>John Doe</AvatarFallbackText>
-                <AvatarImage
-                  source={{
-                    uri: 'https://images.unsplash.com/photo-1614289371518-722f2615943d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80',
-                  }}
-                />
-              </Avatar>
-              <Avatar size="xs">
-                <AvatarFallbackText>John Doe</AvatarFallbackText>
-                <AvatarImage
-                  source={{
-                    uri: 'https://images.unsplash.com/photo-1607746882042-944635dfe10e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-                  }}
-                />
-              </Avatar>
+              {
+                item?.hosted_by.map((host: { name: string; }) => (
+                  <Avatar size="xs">
+                    <AvatarFallbackText>{host.name}</AvatarFallbackText>
+                    {/* <AvatarImage
+                      source={{
+                        uri: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB80',
+                      }}
+                    />*/}
+                  </Avatar> 
+                ))
+              }
             </AvatarGroup>
           </View>
           <View className='flex-row items-center'>
@@ -131,7 +114,9 @@ const Group: React.FC<Props> = ({ navigation: { navigate } , route}) => {
   const [joinCommunity, { isLoading: isJoining }, ] = useJoinCommunityMutation()
 
   // ** Fetch all Upcoming Events in this community
-  const {isLoading: isLoadingUpcomingEvents, data: getUpcomingEvents} = useGetUpcomingEventsQuery(communityId)
+  const {data: getUpcomingEvents} = useGetUpcomingEventsQuery(communityId)
+  // ** Fetch all community
+  const {data: getAllCommunity} = useGetCommunityQuery(); 
 
 
   console.log(getCommunityResources)
@@ -210,7 +195,7 @@ const Group: React.FC<Props> = ({ navigation: { navigate } , route}) => {
       }
     }
   };
-
+  console.log(getCommunityEventData, "get community event")
   return (
     <Layout
       title = "Community Details"
@@ -230,7 +215,7 @@ const Group: React.FC<Props> = ({ navigation: { navigate } , route}) => {
             />
           </View>
           <View className='flex-row items-center justify-between mt-3'>
-            <Text className='text-black text-xs font-normal '>Part of {data?.community_name} (117 community)</Text>
+            <Text className='text-black text-xs font-normal '>Part of {data?.community_name} ({getAllCommunity?.docs?.length} community)</Text>
             <TouchableOpacity onPress={()=> navigate("Resources", {communityId: communityId})}>
               <Text className="text-ksecondary text-sm opacity-50 font-normal">See Resources</Text>
             </TouchableOpacity>
@@ -279,7 +264,7 @@ const Group: React.FC<Props> = ({ navigation: { navigate } , route}) => {
             <FlatList
               horizontal
               data = {getCommunityEventData?.docs}
-              renderItem={() => renderEventCard(toggleBookMark, bookMark, navigate)}
+              renderItem={({ item }) => renderEventCard(item, toggleBookMark, bookMark, navigate)}
               keyExtractor={(item, index) => index.toString()}
               showsHorizontalScrollIndicator = {false}
             /> : 

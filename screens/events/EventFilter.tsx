@@ -17,6 +17,11 @@ type Props = NativeStackScreenProps<RootStackParamList, "EventFilter">;
 
 export const interestTypes = ["Date", "All upcoming", "Volunteering", "Walking Tours"]
 
+// Define the type for your route parameters
+type RouteParams = {
+  filterName: any; // Replace 'string' with the correct type for communityId
+};
+
 const FilterState = ({children}: {children: React.ReactNode}) => {
   return (
     <TouchableOpacity onPress={()=>null} className='h-fit rounded-lg p-2 bg-gray-800 mr-1 px-4'>
@@ -26,9 +31,12 @@ const FilterState = ({children}: {children: React.ReactNode}) => {
   )
 }
 
-const EventFilter: React.FC<Props> = ({navigation}: {navigation: any}) => {
+const EventFilter: React.FC<Props> = ({navigation, route}) => {
+  const { filterName } = route.params as unknown  as RouteParams;
+  console.log(filterName, "filterName")
+
   const [show, setShow ] = useState(false) 
-  const [value, setValue] = React.useState('upcoming');
+  const [value, setValue] = React.useState(filterName.toLowerCase());
 
   const [getSortUpcomingEvent, results] = useLazyGetSortUpcomingEventQuery()
   // const { data: getAllEvents, isError, isLoading, refetch: refetchEvents } = useGetSortUpcomingEventQuery(value, {
@@ -65,13 +73,13 @@ const EventFilter: React.FC<Props> = ({navigation}: {navigation: any}) => {
   >
     <View style={styles.container}>
       <View className='mt-3'>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} className='space-x-4 pl-4'>
-          <FilterState>
+        <View className='flex-row space-x-4 pl-4'>
+          <View className='h-fit rounded-lg p-2 bg-gray-800 mr-1 px-4'>
             <View className='rotate-90 h-fit' >
               <Entypo name = "sound-mix" size={20} color="#FFFFFF" className='hidden'  />
             </View>
-          </FilterState>
-          <FilterState>
+          </View>
+          <View className='h-fit rounded-lg p-2 bg-gray-800 mr-1 px-4'>
             <TouchableOpacity       
               onPress={()=> setShow(true)}
               className='flex-row items-center space-x-2' 
@@ -79,26 +87,8 @@ const EventFilter: React.FC<Props> = ({navigation}: {navigation: any}) => {
               <Text style={{ color: 'white' }}>Date</Text>
               <FontAwesome name = "angle-down" size={20} color="#FFFFFF"/>
             </TouchableOpacity>
-          </FilterState>
-          {/* <FilterState>
-            <View className='flex-row items-center space-x-2'  >
-              <Text style={{ color: 'white' }}>All upcoming</Text>
-              <FontAwesome name = "angle-down" size={20} color="#FFFFFF"/>
-            </View>
-          </FilterState>
-          <FilterState>
-            <View className='flex-row items-center space-x-2' >
-              <Text style={{ color: 'white' }}>Venue</Text>
-              <FontAwesome name = "angle-down" size={20} color="#FFFFFF"/>
-            </View>
-          </FilterState>
-          <FilterState>
-            <View className='flex-row items-center space-x-2' >
-              <Text style={{ color: 'white' }}>Any Distance</Text>
-              <FontAwesome name = "angle-down" size={20} color="#FFFFFF"/>
-            </View>
-          </FilterState> */}
-        </ScrollView>
+          </View>
+        </View>
 
         {/*  */}
         <View className='h-auto grow'>
@@ -107,7 +97,7 @@ const EventFilter: React.FC<Props> = ({navigation}: {navigation: any}) => {
             <FlatList
               data={results?.data?.docs || []}
               contentContainerStyle = {{marginTop: 10}}
-              renderItem={({item}) => <EventCard event_about={item.event_about} event_time={item.event_time} event_name={item.event_name} event_city={item.event_city} event_id={item.id} navigation={navigation} members = {item.members}/>}
+              renderItem={({item}) => <EventCard  url={item.url} event_about={item.event_about} event_time={item.event_time} event_name={item.event_name} event_city={item.event_city} event_id={item.id} navigation={navigation} members = {item.members}/>}
               keyExtractor={item => item.id}
             /> : (
               <View className='w-full flex items-center justify-center mt-10'>
