@@ -7,5 +7,5 @@ export function isEventDateLessThanCurrent(eventDate: string): boolean {
   eventDateTime.setUTCHours(0, 0, 0, 0);
 
   // Compare the dates
-  return eventDateTime < currentDateTime;
+  return eventDateTime <= currentDateTime;
 }
