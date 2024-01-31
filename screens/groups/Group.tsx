@@ -200,7 +200,7 @@ const Group: React.FC<Props> = ({ navigation: { navigate } , route}) => {
     <Layout
       title = "Community Details"
       iconName="dots-horizontal"
-      onPress={()=> navigate("Resources", {communityId: communityId})}
+      onPress={()=> setShow(true)}
    >
     <View style={styles.container}>
       <View className='px-5'>

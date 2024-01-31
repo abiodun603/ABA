@@ -185,7 +185,7 @@ const EventDetails: React.FC<Props>  = ({navigation, route}) => {
             <View className = "space-y-3">
               <View className = "flex-row items-center space-x-3 mt-5">
                 {/* Icon */}
-                <FontAwesome name = "meetup" size={26} color="red"/>
+                <Ionicons name = "person-add-sharp" size={26} color="red"/>
                 <Text className = "text-sm text-black font-semibold">Who will be there</Text>
               </View>
               <View className = "flex-row items-center space-x-3">

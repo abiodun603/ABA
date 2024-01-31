@@ -57,11 +57,11 @@ const ProfilePreview: React.FC<Props> = ({ navigation: { navigate } }) => {
           onPress={() => navigate('EditProfile')}
         />
 
-        <CustomButton
+        {/* <CustomButton
           title='Set your Status'
           buttonStyle={{backgroundColor: 'transparent', borderColor: "#B3B3B3", borderWidth: 1}}
           titleColor= {Colors.gray}
-        />
+        /> */}
       </View>
     </View>
   </Layout>

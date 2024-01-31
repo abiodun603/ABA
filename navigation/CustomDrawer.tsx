@@ -192,14 +192,14 @@ const CustomDrawerContent = ({navigation, selectedTab, setSelectedTab}: {navigat
                   }}
                   isFocused = {selectedTab == constants.screens.contact}
                 />
-                <CustomDrawerItem
+                {/* <CustomDrawerItem
                   label={constants.screens.support}
                   icon = {support}
                   onPress= {() => {
                       navigation.navigate("Account")
                   }}
                   isFocused = {selectedTab == constants.screens.contact}
-                />
+                /> */}
                 <CustomDrawerItem
                   label="Logout"
                   icon = {logout}
