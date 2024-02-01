@@ -118,18 +118,13 @@ export const authApi = createApi({
       }),
       providesTags: ["Profile"]
     }),
-    updateProfileImage: builder.mutation<void,  string>({
-      query: (file) => {
-        const formData = new FormData();
-        formData.append('file', file);
-        return {
+    updateProfileImage: builder.mutation<void,  FormData>({
+      query: (formData) => ({
           url: `/profile`,
           method: 'POST',
-          credentials: 'include',
           body: formData,
           formData:true
-        };
-      },
+        })
     }),
     getUsers: builder.query<ProfileResponse, void>({
       query: () => ({

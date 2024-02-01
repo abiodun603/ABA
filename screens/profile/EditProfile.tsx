@@ -46,19 +46,18 @@ const EditProfile: React.FC<Props> = ({ navigation: { navigate } }) => {
 
   const [updateProfile, { isLoading }] = useUpdateProfileMutation();
   const [updateProfileImage, { isLoading: isLoadingProfileImage }] = useUpdateProfileImageMutation();
-  const [image, setImage] = useState("")
+
+  // **** 
   const {profile, user} = useGlobalState()
+
+
+  const [image, setImage] = useState<string | undefined>(`${process.env.EXPO_PUBLIC_ABA_BASE_URL_KEY}${user.imageurl}`)
 
   const methods= useForm({defaultValues});
   const {setValue} = methods
 
   //
   const toast = useToast()
-
-
-  
-
-
   const handleUpdate = async(data: any) =>{
     // Handle login logic here
     const formData = {
@@ -125,40 +124,42 @@ const EditProfile: React.FC<Props> = ({ navigation: { navigate } }) => {
     }
   };
 
-  const updatePofileImage = async() => {
-    console.log(image)
+  const updatePofileImage = async () => {
+    console.log
     try {
-      await updateProfileImage(image).unwrap().then((res) => console.log(res));
+      const formData = new FormData();
+      formData.append('file', {
+        uri: image,
+        type: "image/png",
+        name: "profile_image.png"
+      });
+      const res = await updateProfileImage(formData).unwrap();
+      console.log(res);
       toast.show({
         placement: "top",
-        render: ({ id }) => {
-          return (
-            <Toast nativeID={id} action="success" variant="accent">
-              <VStack space="xs">
-                <ToastTitle>Image update successful!!!</ToastTitle>
-              </VStack>
-            </Toast>
-          )
-        },
-      })
-    } catch (err: any) {
-      console.log(err)
-      if(err.status === 401){
+        render: ({ id }) => (
+          <Toast nativeID={id} action="success" variant="accent">
+            <VStack space="xs">
+              <ToastTitle>Image update successful!!!</ToastTitle>
+            </VStack>
+          </Toast>
+        ),
+      });
+    } catch (err: any) {  
+        console.log(err)
         toast.show({
           placement: "top",
-          render: ({ id }) => {
-            return (
-              <Toast nativeID={id} action="error" variant="accent">
-                <VStack space="xs">
-                  <ToastTitle>Error updating profile image!!!</ToastTitle>
-                </VStack>
-              </Toast>
-            )
-          },
-        })
-      }
+          render: ({ id }) => (
+            <Toast nativeID={id} action="error" variant="accent">
+              <VStack space="xs">
+                <ToastTitle>Error updating profile image!!!</ToastTitle>
+              </VStack>
+            </Toast>
+          ),
+        });
     }
-  }
+  };
+  
   
 
   // Populate the form fields with the profile data when it's available
@@ -188,10 +189,10 @@ const EditProfile: React.FC<Props> = ({ navigation: { navigate } }) => {
         <View className='flex flex-col items-center  mt-10'>
           {/* Image */}
           <TouchableOpacity onPress={pickImage}>
-            <View className='h-[136px] w-[136px] rounded-full bg-slate-800'>
+            <View className='h-[136px] w-[136px] rounded-full bg-ksecondary'>
               {image ? (
-                <Image source={{ uri: image }} style={{ width: 136, height: 136, borderRadius: 68 }} />
-              ) : null }
+                <Image source={{ uri: image  }} style={{ width: 136, height: 136, borderRadius: 68 }} />
+              ) : (<Text className="text-2xl">{user.firstname.charAt(0)}</Text>) }
             </View>
           </TouchableOpacity>
           <CustomButton

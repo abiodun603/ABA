@@ -11,6 +11,8 @@ const Saved = () => {
   console.log(data, isLoading)
   return (
     <View style={styles.container}> 
+     {
+        data?.docs.length > 0 ? (
       <FlatList
         data={data?.docs  || []}
         keyExtractor={item => item.id.toString()}
@@ -28,7 +30,8 @@ const Saved = () => {
               isSave
             />
         }
-      />
+      />) : 
+      <Text>No Event</Text>}
     </View>
   )
 }

@@ -4,6 +4,7 @@ import { useGetPastEventQuery } from '../../stores/features/groups/groupsService
 import { FlatList } from 'react-native'
 import { EventCard } from '../../screens/events/components/EventCard'
 import { useNavigation } from '@react-navigation/native'
+import { Text } from 'react-native'
 
 // export const EventCard = ({event_about, event_time ,event_name, event_city, members}: any) => {
 //   return(
@@ -51,13 +52,16 @@ const Past = () => {
   console.log(data)
   return (
     <View className='flex-1'>
-      <FlatList
-        data={data?.docs}
-        keyExtractor={item => item.id.toString()}
-        renderItem={
-          ({item}) => <EventCard event_url={item?.url} event_about={item?.event_about} event_time={item?.event_time} event_name={item?.event_name} event_city={item?.event_city} event_id={item?.id} members = {item?.members} navigation={navigation}/>
-        }
-      />
+      {
+        data?.docs.length > 0 ? (
+        <FlatList
+          data={data?.docs}
+          keyExtractor={item => item.id.toString()}
+          renderItem={
+            ({item}) => <EventCard event_url={item?.url} event_about={item?.event_about} event_time={item?.event_time} event_name={item?.event_name} event_city={item?.event_city} event_id={item?.id} members = {item?.members} navigation={navigation}/>
+          }
+        />) : 
+      <Text>No Event</Text>}
     </View>
   )
 }

@@ -41,7 +41,7 @@ export const groupsApi = createApi({
         url: `/community/me`,
         method: 'GET',
       }),
-      providesTags: ["MyCommunity"],
+      providesTags: ["MyCommunity", "Community"],
     }),
     getCommunityEvent: builder.query<EventResponse, string>({
       query: (id) => ({ 

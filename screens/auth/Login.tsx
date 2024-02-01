@@ -57,6 +57,7 @@ const LoginScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
   const [login, { isLoading }] = useLoginMutation();
 
   const handleLogin = async (data: UserData) => {
+    console.log(process.env)
     // Handle login logic here
     try {
       const user = await login(data).unwrap().then((res) => console.log(res));
