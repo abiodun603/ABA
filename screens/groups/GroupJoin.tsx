@@ -320,16 +320,13 @@ const GroupJoin: React.FC<Props> = ({ navigation: { navigate } , route}) => {
           </View>
           {/* <Text className=''>No Photo yet !!!</Text> */}
         </View>
-          {/* <Text className=''>No Photo yet !!!</Text> */}
-
-         {/* BottomSheet component */}
-         <BottomSheet
+        {/* BottomSheet component */}
+        <BottomSheet
           show={show}
           onDismiss={() => {
             setShow(false);
           }}
           height={0.9}
-
           enableBackdropDismiss
         >
           <FormProvider {...methods}>

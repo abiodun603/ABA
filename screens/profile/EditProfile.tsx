@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, TouchableOpacity, View, Text } from 'react-native'
 import React, { useEffect, useState } from 'react'
 
 // ** Constants
@@ -28,6 +28,9 @@ import CustomButton from '../../components/CustomButton';
 //
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import Input from '../../components/Input';
+
+import { Ionicons, Feather } from '@expo/vector-icons'; 
+
 
 // ** Types
 import { useUpdateProfileImageMutation, useUpdateProfileMutation} from '../../stores/features/auth/authService';
@@ -64,7 +67,6 @@ const EditProfile: React.FC<Props> = ({ navigation: { navigate } }) => {
       id: user.id,
       name: data.name,
     }
-    console.log(formData)
 
     try {
       await updateProfile(formData).unwrap().then((res) => console.log(res));
@@ -188,17 +190,22 @@ const EditProfile: React.FC<Props> = ({ navigation: { navigate } }) => {
 
         <View className='flex flex-col items-center  mt-10'>
           {/* Image */}
-          <TouchableOpacity onPress={pickImage}>
-            <View className='h-[136px] w-[136px] rounded-full bg-ksecondary'>
-              {image ? (
-                <Image source={{ uri: image  }} style={{ width: 136, height: 136, borderRadius: 68 }} />
-              ) : (<Text className="text-2xl">{user.firstname.charAt(0)}</Text>) }
+          <TouchableOpacity  onPress={pickImage}>
+            <View className="relative ">
+              <Feather name="edit" size={20} className="absolute right-0  top-10" />
+              <View className='h-[136px] w-[136px] rounded-full bg-ksecondary'>
+                {image ? (
+                  <Image source={{ uri: image  }} style={{ width: 136, height: 136, borderRadius: 68 }} />
+                ) :  <Text className="text-2xl">{user.firstname.charAt(0)}</Text> }
+              </View>
             </View>
           </TouchableOpacity>
+          <Text className="text-center text-red-700 text-sm">image should be less than 5mb</Text>
           <CustomButton
-            title='Edit Photo'
+            title='Upload Profile'
             buttonStyle={{backgroundColor: 'transparent', borderColor: "#B3B3B3", borderWidth: 1, marginTop: 15, width: 136}}
             titleColor= {Colors.gray}
+            isLoading={isLoadingProfileImage}
             onPress={updatePofileImage}
           />
         </View>

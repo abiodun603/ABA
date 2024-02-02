@@ -20,7 +20,7 @@ type ResourceRequest = {
 export const groupsApi = createApi({
   baseQuery,
   reducerPath: 'groupsApi',
-  tagTypes: ["Community", "MyCommunity", "Members"],
+  tagTypes: ["Community", "MyCommunity", "Members", "Category"],
   endpoints: (builder) => ({
     getCommunity: builder.query<GroupsResponse, void>({
       query: () => ({
@@ -85,7 +85,15 @@ export const groupsApi = createApi({
         url: '/category',
         method: 'GET',
       }),
-      providesTags: ["Community"],
+      providesTags: ["Category", "Community"],
+    }),
+    createCategory: builder.mutation<GroupsResponse, any>({
+      query: (credentials) => ({
+        url: '/category',
+        method: 'POST',
+        body: credentials
+      }),
+      invalidatesTags: ["Category", "Community"],
     }),
     getCategoryById: builder.query<GroupsResponse, any>({
       query: (id) => ({
@@ -166,4 +174,4 @@ export const groupsApi = createApi({
   })
 })
 
-export const {useGetCommunityMembersQuery, useGetCommunityFileQuery, useGetCommunityImagesQuery, useGetCommunityResourcesQuery, useGetCommunityEventQuery, useAddCommunityAdminMutation, useUpdateMyCommunityMutation, useDeleteCommunityMutation,  useGetCategoryByIdQuery, useGetCategoryQuery, useGetCommunityQuery, useGetOneCommunityQuery, useGetMyCommunityQuery, useGetEventDetailsQuery, useGetSavedEventQuery, useJoinCommunityMutation, useCreateCommunityMutation, useLeaveCommunityMutation, useGetPastEventQuery, useGetJoinedCommunityQuery } = groupsApi
+export const {useGetCommunityMembersQuery, useCreateCategoryMutation, useGetCommunityFileQuery, useGetCommunityImagesQuery, useGetCommunityResourcesQuery, useGetCommunityEventQuery, useAddCommunityAdminMutation, useUpdateMyCommunityMutation, useDeleteCommunityMutation,  useGetCategoryByIdQuery, useGetCategoryQuery, useGetCommunityQuery, useGetOneCommunityQuery, useGetMyCommunityQuery, useGetEventDetailsQuery, useGetSavedEventQuery, useJoinCommunityMutation, useCreateCommunityMutation, useLeaveCommunityMutation, useGetPastEventQuery, useGetJoinedCommunityQuery } = groupsApi

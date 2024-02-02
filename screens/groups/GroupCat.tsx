@@ -1,5 +1,5 @@
 import { Text,View } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 
 // ** Layout
 import Layout from '../../layouts/Layout';
@@ -8,7 +8,14 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from '../../types';
 import { TouchableOpacity } from 'react-native';
 import { ImageBackground } from 'react-native';
-import { useGetCategoryQuery } from '../../stores/features/groups/groupsService';
+import { useCreateCategoryMutation, useGetCategoryQuery } from '../../stores/features/groups/groupsService';
+import Input from '../../components/Input';
+import { ScrollView } from 'react-native';
+import BottomSheet from '../../components/bottom-sheet/BottomSheet';
+import CustomButton from '../../components/CustomButton';
+import { FormProvider, useForm } from 'react-hook-form';
+import { useToast } from '@gluestack-ui/themed';
+import Toaster from '../../components/Toaster/Toaster';
 type Props = NativeStackScreenProps<RootStackParamList, "GroupCat">;
 
 interface IGridViewProps<T> {
@@ -36,20 +43,52 @@ const GridView = <T extends any>(props: IGridViewProps<T>) => {
 
 const GroupCat: React.FC<Props> = ({ navigation: { navigate } }) => {
   const {data, isLoading, } = useGetCategoryQuery()
+  const [show, setShow ] = useState(false) 
+  const [createCommunity, {isLoading: createCategoryLoading}] = useCreateCategoryMutation()
+
+  const toast = useToast()
+
+  const methods = useForm({});
 
   if(isLoading){
     return <Text>Loading...</Text>;
   }
 
-  if (!data?.docs) {
-    return <Text>No data available.</Text>; // Display a message when there is no data
-  }
+  const handleCreateCategory = (data: any) => {
+    const formData = {
+      category_name: data.category_name,
+    }
 
-  console.log(data)
+    createCommunity(formData)
+    .unwrap()
+    .then((data) => {
+      // Handle success
+      console.log('res:', data);
+      toast.show({
+        placement: 'top',
+        render: ({id}) => <Toaster id={id} type="success" message="Thank you!!!. Category Created" />
+      })
+      setShow(false)
+      methods.reset();
+
+    })
+    .catch((error) => {
+      // Handle error
+      toast.show({
+        placement: 'top',
+        render: ({id}) => <Toaster id={id} type="error" message={error?.data.errors[0].message} />
+      })
+      setShow(false)
+
+      console.error(error);
+    });
+  }
 
   return (
     <Layout
-      title = "Community"
+      title ={show ? "Create  Category" : "Community"}
+      iconName={!show && "plus"}
+      onPress={()=> setShow(true)}
     >
      <View className='px-4 mt-4'>
         <View className="flex-row items-center justify-between mb-1 ">
@@ -57,25 +96,58 @@ const GroupCat: React.FC<Props> = ({ navigation: { navigate } }) => {
           <Text className='text-black text-sm font-bold mt-3'>Browse by categories</Text>
         </View>
         <View>
-          <GridView 
-            data={data?.docs} 
-            renderItem={(item: any) => (
-              <TouchableOpacity className=' mt-4 flex-row items-center space-x-2' onPress={() => navigate("GroupJoin", {id: item.id })}>
-                <View className='h-[80px] w-[80px] rounded-lg  justify-center items-center'>
-                  <ImageBackground
-                    resizeMode="cover"
-                    imageStyle={{ borderRadius: 10}}
-                    style={{ flex: 1, width: '100%' }}
-                    source = {{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvVRjzi266UV2c8204Wa2FDqwwxkXFDU4Ybw&usqp=CAU'}}
+          {!data?.docs ? (
+            <Text>No data available.</Text>
+          ) : (
+            <GridView 
+              data={data?.docs} 
+              renderItem={(item: any) => (
+                <TouchableOpacity className=' mt-4 flex-row items-center space-x-2' onPress={() => navigate("GroupJoin", {id: item.id })}>
+                  <View className='h-[80px] w-[80px] rounded-lg  justify-center items-center'>
+                    <ImageBackground
+                      resizeMode="cover"
+                      imageStyle={{ borderRadius: 10}}
+                      style={{ flex: 1, width: '100%' }}
+                      source = {{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvVRjzi266UV2c8204Wa2FDqwwxkXFDU4Ybw&usqp=CAU'}}
+                    />
+                  </View>
+                  <Text className='text-black text-xs font-semibold mt-1 capitalize'>{item?.category_name}</Text>
+                </TouchableOpacity>
+              
+              )}
+            />
+          )}
+        </View>
+
+        {/* BottomSheet component */}
+        <BottomSheet
+          show={show}
+          onDismiss={() => {
+            setShow(false);
+          }}
+          height={0.9}
+          enableBackdropDismiss
+        >
+          <FormProvider {...methods}>
+            <ScrollView showsVerticalScrollIndicator={false}>
+              {/* <Text className='font-medium text-2xl text-black '>Create a new events</Text> */}
+              <View className='mt-4'>
+                <Input
+                  name='category_name'
+                  label="Category name"
+                  placeholder="Enter category name"
+                />
+                <View className='mb-20'>
+                  <CustomButton
+                  title="Submit" 
+                  isLoading={createCategoryLoading}
+                  onPress={methods.handleSubmit(handleCreateCategory)}              
                   />
                 </View>
-                <Text className='text-black text-xs font-semibold mt-1'>{item?.category_name}</Text>
-              </TouchableOpacity>
-             
-            )}
-          />
-        </View>
-        {/* <Text className=''>No Photo yet !!!</Text> */}
+              </View>
+            </ScrollView>
+          </FormProvider>
+        </BottomSheet>
       </View>
     </Layout>
   );

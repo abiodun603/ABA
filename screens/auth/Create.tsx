@@ -101,7 +101,7 @@ const Create: React.FC<Props> = ({ navigation: { navigate } }) => {
       if(err.status === 500){
         toast.show({
           placement: "top",
-          render: ({ id }) => <Toaster id = {id} message="Error Signing up"   />
+          render: ({ id }) => <Toaster id = {id} message="This user already exist"   />
         })
       }
       toast.show({
