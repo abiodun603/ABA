@@ -248,6 +248,7 @@ const Home = ({navigation}: {navigation: any}) => {
       onPress={() => navigation.navigate("Notification")}
       drawerNav
       profileIcon
+      onPressProfile={() => navigation.navigate("EditProfile")}
     >
       <View style={styles.container}>
         <View>

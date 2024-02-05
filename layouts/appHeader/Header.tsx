@@ -29,9 +29,10 @@ interface HeaderProps {
   extraOneIcon? : any;
   profileIcon?:boolean;
   iconColor? : any;
+  onPressProfile?: any;
 }
 
-const Header: React.FC<HeaderProps> = ({ title, extraOneIcon, profileIcon, drawerNav, navigation, iconColor, iconName, onPress=()=>{},rightNavPress=()=>{}, iconButton, rightNavigation}) => {
+const Header: React.FC<HeaderProps> = ({ title, extraOneIcon, profileIcon, onPressProfile, drawerNav, navigation, iconColor, iconName, onPress=()=>{},rightNavPress=()=>{}, iconButton, rightNavigation}) => {
   const navigate = useNavigation()
 
   return (
@@ -88,7 +89,7 @@ const Header: React.FC<HeaderProps> = ({ title, extraOneIcon, profileIcon, drawe
           {
             profileIcon && 
             <TouchableOpacity
-              onPress={onPress}
+              onPress={onPressProfile}
               className='p-2 bg-[#FFD7F3] rounded-full '
               
             >

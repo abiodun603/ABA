@@ -24,13 +24,14 @@ interface LayoutProps {
   iconName? : any;
   iconColor? : any;
   extraOneIcon?: any
+  onPressProfile?: any
 }
 
-const Layout: React.FC<LayoutProps> = ({title,profileIcon, extraOneIcon,  children, iconColor,iconName , rightNavigation, navigation,drawerNav, onPress=() =>{}, rightNavPress=()=>{} }) => {
+const Layout: React.FC<LayoutProps> = ({title,profileIcon,onPressProfile, extraOneIcon,  children, iconColor,iconName , rightNavigation, navigation,drawerNav, onPress=() =>{}, rightNavPress=()=>{} }) => {
 
    return (
     <View style={styles.selectPlanContainer}>
-      <Header title={title} iconName={iconName} extraOneIcon={extraOneIcon} iconColor={iconColor} profileIcon = {profileIcon} onPress={onPress} rightNavigation={rightNavigation} rightNavPress={rightNavPress} navigation={navigation} drawerNav={drawerNav}/>
+      <Header title={title} iconName={iconName} onPressProfile={onPressProfile} extraOneIcon={extraOneIcon} iconColor={iconColor} profileIcon = {profileIcon} onPress={onPress} rightNavigation={rightNavigation} rightNavPress={rightNavPress} navigation={navigation} drawerNav={drawerNav}/>
       {children}
     </View>
    )
