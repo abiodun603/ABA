@@ -21,6 +21,7 @@ import { Ionicons, Feather } from '@expo/vector-icons';
 import BottomSheet from '../../../components/bottom-sheet/BottomSheet';
 import Input from '../../../components/Input';
 import CustomButton from '../../../components/CustomButton';
+import { isEventDateLessThanCurrent } from '../../../helpers/isPastEvent';
 
 
 const defaultValues = {
@@ -159,9 +160,9 @@ export const EventCard = ({event_url,event_about, event_time ,event_name, event_
             </View>
           </View>
           <View className="flex-row items-center justify-between mt-3">
-          {/* <Text >{members?.length || "0"} {isEventDateLessThanCurrent(EventDetails?.event_date) ? "gog" : "went"}  <Text className='capitalize'>{event_city}</Text></Text> */}
+            <Text >{members?.length || "0"} {!isEventDateLessThanCurrent(EventDetails?.event_date) ? "going" : "attended this event in"}  <Text className='capitalize'>{event_city}</Text></Text>
 
-            <Text >{members?.length || "0"} going <Text className='capitalize'>{event_city}</Text></Text>
+            {/* <Text >{members?.length || "0"} going <Text className='capitalize'>{event_city}</Text></Text> */}
             <View className='flex-row space-x-1'>
               {/* <Ionicons name='share-outline' size={23} onPress={onShare}/>  */}
               {
