@@ -1,6 +1,7 @@
 // ** Interface Types
 export interface Profile {
   firstname:  string
+  imageUrl:   string
   name:       string
   username:   string
   location:   string

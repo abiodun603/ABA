@@ -26,6 +26,7 @@ import useGlobalState from '../hooks/global.state'
 import { useGetProfileMeQuery, useUpdateProfileMutation } from '../stores/features/auth/authService'
 import { getFirstAndLastName } from '../helpers/getFirstAndLastName'
 import { Toast, ToastTitle, VStack, useToast } from '@gluestack-ui/themed'
+import { Image } from 'react-native'
 
 
 const defaultValues = {
@@ -123,9 +124,15 @@ const Profile = ({navigation}: {navigation: any}) => {
                 {/* image  */}
                 <View className='flex-row items-center space-x-3'>
                   {/* Image */}
-                  <View className='h-12 w-12 flex items-center justify-center rounded-full bg-ksecondary'>
-                    <Text className='text-white text-sm font-bold'>{firstName.charAt(0)}</Text>
-                  </View>
+                  {
+                    user?.imageurl ? 
+                    <View className='h-12 w-12 flex items-center justify-center rounded-ful'>
+                      <Image source={{ uri: `${process.env.EXPO_PUBLIC_ABA_BASE_URL_KEY}${user?.imageurl}`  }} alt={user?.name}  style={{ width: 48, height: 48, borderRadius: 68 }}/>
+                    </View> : 
+                     <View className='h-12 w-12 flex items-center justify-center rounded-full bg-ksecondary'>
+                      <Text className='text-white text-sm font-bold'>{firstName.charAt(0)}</Text>
+                    </View>
+                  }
                   <View className='space-y-1'>
                     <Text className='text-kblack text-sm font-normal'>{firstName || "firstname"}</Text>
                     <Text className='text-kdesc text-[11px] text-medium'>{user.email || "username"}</Text>

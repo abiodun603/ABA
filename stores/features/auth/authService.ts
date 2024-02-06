@@ -2,11 +2,13 @@ import { createApi } from '@reduxjs/toolkit/query/react'
 import { baseQuery } from '../../../configs/authConfig'
 
 export interface User {
-  id: string
-  name: string
-  firstname: string
-  last_name: string
-  email: string
+  id:         string
+  name:       string
+  firstname:  string
+  imageurl:   string
+  bio:        string
+  last_name:  string
+  email:    string
 }
 
 export interface UserResponse {
@@ -124,7 +126,8 @@ export const authApi = createApi({
           method: 'POST',
           body: formData,
           formData:true
-        })
+        }),
+        invalidatesTags: ["Profile"]
     }),
     getUsers: builder.query<ProfileResponse, void>({
       query: () => ({

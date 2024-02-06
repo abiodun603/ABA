@@ -86,7 +86,7 @@ const GroupCat: React.FC<Props> = ({ navigation: { navigate } }) => {
 
   return (
     <Layout
-      title ={show ? "Create  Category" : "Community"}
+      title ={show ? "Create a new Category" : "Community"}
       iconName={!show && "plus"}
       onPress={()=> setShow(true)}
     >
@@ -125,7 +125,7 @@ const GroupCat: React.FC<Props> = ({ navigation: { navigate } }) => {
           onDismiss={() => {
             setShow(false);
           }}
-          height={0.9}
+          height={0.87}
           enableBackdropDismiss
         >
           <FormProvider {...methods}>

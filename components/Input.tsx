@@ -21,6 +21,7 @@ interface ExtraInputProps {
     name: string;
     placeholder: string;  
     rules?: object; // Add the rules prop
+    editable?: boolean;
 }
 
 type InputProps = TextInputProps & ExtraInputProps
@@ -33,6 +34,7 @@ const Input: React.FC<InputProps> = ({
   passwordIcon,
   placeholder,
   suffixIcon,
+  editable,
   onFocus = () => {},
   name,
   rules,
@@ -66,6 +68,7 @@ const Input: React.FC<InputProps> = ({
           >
             <Text style={[styles.label]}>{label}</Text>
             <TextInput
+              editable={editable}
               secureTextEntry={hidePassword}
               autoCapitalize='none'
               autoCorrect={false}

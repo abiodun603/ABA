@@ -54,7 +54,7 @@ const EditProfile: React.FC<Props> = ({ navigation: { navigate } }) => {
   const {profile, user} = useGlobalState()
 
 
-  const [image, setImage] = useState<string | undefined>(`${process.env.EXPO_PUBLIC_ABA_BASE_URL_KEY}${user.imageurl}`)
+  const [image, setImage] = useState<string | undefined>(`${process.env.EXPO_PUBLIC_ABA_BASE_URL_KEY}${user?.imageurl}`)
 
   const methods= useForm({defaultValues});
   const {setValue} = methods
@@ -181,10 +181,14 @@ const EditProfile: React.FC<Props> = ({ navigation: { navigate } }) => {
     })();
   }, []);
 
+  console.log(user?.name, "User name", image)
+
   return (
     <Layout
       title = "Profile Preview"
-  >
+      // rightNavigation = "Save"
+      // rightNavPress = {() => console.log("click me ")}
+    >
     <View style={styles.container}>
       <FormProvider {...methods}>
 
@@ -192,17 +196,19 @@ const EditProfile: React.FC<Props> = ({ navigation: { navigate } }) => {
           {/* Image */}
           <TouchableOpacity  onPress={pickImage}>
             <View className="relative ">
-              <Feather name="edit" size={20} className="absolute right-0  top-10" />
-              <View className='h-[136px] w-[136px] rounded-full bg-ksecondary'>
+              <View className='absolute right-1 z-40 bg-gray-100 p-2 rounded-full'>
+                <Feather name="edit" size={20}  />
+              </View>
+              <View className='h-[136px] w-[136px] rounded-full bg-ksecondary flex items-center justify-center'>
                 {image ? (
-                  <Image source={{ uri: image  }} style={{ width: 136, height: 136, borderRadius: 68 }} />
-                ) :  <Text className="text-2xl">{user.firstname.charAt(0)}</Text> }
+                  <Image source={{ uri: image  }} alt={user?.name} style={{ width: 136, height: 136, borderRadius: 68 }} />
+                ) :  <Text className="text-2xl text-white z-50">{user?.name}</Text> }
               </View>
             </View>
           </TouchableOpacity>
-          <Text className="text-center text-red-700 text-sm">image should be less than 5mb</Text>
+          <Text className="text-center text-red-700 text-sm mt-2">⚠️ image should be less than 5mb</Text>
           <CustomButton
-            title='Upload Profile'
+            title='Upload Image'
             buttonStyle={{backgroundColor: 'transparent', borderColor: "#B3B3B3", borderWidth: 1, marginTop: 15, width: 136}}
             titleColor= {Colors.gray}
             isLoading={isLoadingProfileImage}

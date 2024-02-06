@@ -368,7 +368,7 @@ console.log(getAllCommunity, "GET ALL COMMUNITIES")
 
   return (
     <Layout
-      title={show ? 'Create new Event': 'Events'}
+      title={show ? 'Create a new Event': 'Events'}
       navigation={navigation}
       drawerNav
       iconName={!show && "plus"}

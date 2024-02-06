@@ -27,7 +27,7 @@ export const DatePicker = ({ selectedDateCallback , datePickerPlaceholder, dateP
   return (
       <View>
           <TouchableOpacity onPress={showDatePicker}>
-            <Input placeholder={datePickerPlaceholder} label={datePickerlabel} name='date' value={selectedDateCallback}/>
+            <Input  placeholder={datePickerPlaceholder} label={datePickerlabel} name='date' value={selectedDateCallback} editable={false}/>
           </TouchableOpacity>
           <DateTimePickerModal
             isVisible={isDatePickerVisible}
