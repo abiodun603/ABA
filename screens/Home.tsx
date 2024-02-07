@@ -177,6 +177,8 @@ const Home = ({navigation}: {navigation: any}) => {
   
 
   // Store Service
+  console.log(data, "HOME PAGE")
+  
   const fullName = data?.user?.name || ""
   const { firstName, lastName } = getFirstAndLastName(fullName);
 
@@ -243,9 +245,9 @@ const Home = ({navigation}: {navigation: any}) => {
     <Layout
       title='ABA'
       navigation={navigation}
-      iconName={"bell-outline"}
+      // iconName={"bell-outline"}
       iconColor="#000000"
-      onPress={() => navigation.navigate("Notification")}
+      // onPress={() => navigation.navigate("Notification")}
       drawerNav
       profileIcon
       onPressProfile={() => navigation.navigate("EditProfile")}

@@ -69,9 +69,9 @@ export const eventsApi = createApi({
       }),
       providesTags: ["Event"]
     }),
-    getSavedEvent: builder.query<EventResponse, string>({
-      query: (id) => ({ 
-        url: `/events/isSaved/${id}`,
+    getSavedEvent: builder.query<EventResponse, void>({
+      query: () => ({ 
+        url: `/events/save`,
         method: 'GET',
       }),
       providesTags: ["SaveEvent"]

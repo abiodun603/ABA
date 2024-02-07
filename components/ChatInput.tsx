@@ -27,7 +27,7 @@ import { Buffer } from '@craftzdog/react-native-buffer';
 const ChatInput = ({ reply, closeReply, isLeft, username, onPress, message, setMessage , imageUri, setImageUri, arrayBuffer, setFileName, setFileType, setArrayBuffer}: any) => {
 	const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [show, setShow ] = useState(false) 
-
+  const [progress, setProgress] = useState(0); 
 
   const height = useSharedValue(70);
 
@@ -101,8 +101,10 @@ const ChatInput = ({ reply, closeReply, isLeft, username, onPress, message, setM
   //   return buffer;
   // };
 
-
+  console.log(progress, "progress")
   const pickImage = async () => {
+    setProgress(0); // Reset progress when starting a new operation
+
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -114,7 +116,6 @@ const ChatInput = ({ reply, closeReply, isLeft, username, onPress, message, setM
     if (!result.canceled) { // Fix the typo here
       console.log(result);
       setImageUri(result.assets[0].uri);
-  
       // Get the file name
       // Extract file name from the uri
       const uriComponents = result.assets[0].uri.split('/');
@@ -123,9 +124,17 @@ const ChatInput = ({ reply, closeReply, isLeft, username, onPress, message, setM
       console.log('Selected image file name:', fileName);
   
       try {
+        const { size } = await FileSystem.getInfoAsync(result.assets[0].uri); // Get file size
+
         const fileStream = await FileSystem.readAsStringAsync(result.assets[0].uri, {
           encoding: FileSystem.EncodingType.Base64,
         });
+
+        // Calculate progress based on the file size and update state
+        const fileSizeInBytes = size;
+        const currentProgress = (fileStream.length / fileSizeInBytes) * 100;
+        setProgress(currentProgress);
+
   
         const imageArrayBuffer = Buffer.from(fileStream, 'base64');
         setArrayBuffer(imageArrayBuffer);

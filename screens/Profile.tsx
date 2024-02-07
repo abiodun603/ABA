@@ -49,6 +49,7 @@ const Profile = ({navigation}: {navigation: any}) => {
   const { data} = useGetProfileMeQuery()
   const [updateProfile, { isLoading }] = useUpdateProfileMutation();
 
+  console.log(data, "Profile me")
   const fullName = data?.user?.name || ""
 
   const { firstName, lastName } = getFirstAndLastName(fullName);
@@ -58,8 +59,6 @@ const Profile = ({navigation}: {navigation: any}) => {
 
   // console.log(profile, user, "SEE USER AND PROFILE")
 
-
-  console.log(bioValue)
   useEffect(() => {
     console.log("file me")
     // Check if bioValue is not null before proceeding
@@ -103,10 +102,10 @@ const Profile = ({navigation}: {navigation: any}) => {
   
   // Populate the form fields with the profile data when it's available
   useEffect(() => {
-    if (user) {
-      setValue('bio', user.bio || ''); // Set the default value to an empty string if the property is undefined
+    if (profile) {
+      setValue('bio', profile.bio || ''); // Set the default value to an empty string if the property is undefined
     }
-  }, [user, setValue]);
+  }, [profile, setValue]);
 
   return (
       <Layout
@@ -127,14 +126,14 @@ const Profile = ({navigation}: {navigation: any}) => {
                   {
                     user?.imageurl ? 
                     <View className='h-12 w-12 flex items-center justify-center rounded-ful'>
-                      <Image source={{ uri: `${process.env.EXPO_PUBLIC_ABA_BASE_URL_KEY}${user?.imageurl}`  }} alt={user?.name}  style={{ width: 48, height: 48, borderRadius: 68 }}/>
+                      <Image source={{ uri: `${process.env.EXPO_PUBLIC_ABA_BASE_URL_KEY}${data?.user?.imageurl}`  }} alt={user?.name}  style={{ width: 48, height: 48, borderRadius: 68 }}/>
                     </View> : 
                      <View className='h-12 w-12 flex items-center justify-center rounded-full bg-ksecondary'>
                       <Text className='text-white text-sm font-bold'>{firstName.charAt(0)}</Text>
                     </View>
                   }
                   <View className='space-y-1'>
-                    <Text className='text-kblack text-sm font-normal'>{firstName || "firstname"}</Text>
+                    <Text className='text-kblack text-sm font-normal'>{firstName} {lastName}</Text>
                     <Text className='text-kdesc text-[11px] text-medium'>{user.email || "username"}</Text>
                   </View>
                 </View>

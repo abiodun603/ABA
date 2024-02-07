@@ -35,6 +35,7 @@ import { getTimeZone } from '../helpers/timeZoneformat'
 import { DatePicker } from '../components/datepicker/DatePicker'
 import { useGetCommunityQuery } from '../stores/features/groups/groupsService'
 import Toast from 'react-native-toast-message'
+import useGlobalState from '../hooks/global.state'
 
 
 const data = [
@@ -80,7 +81,7 @@ export const EventCard = ({event_about, save_event, event_time ,event_name, even
 
   const toast = useToast()
 
-
+  console.log(save_event)
   const showToast = () => {
     Toast.show({
       type: 'info',
@@ -102,16 +103,19 @@ export const EventCard = ({event_about, save_event, event_time ,event_name, even
       const formData = {
         event_id: event_id
       };
-      await saveEvent(formData).unwrap()
+      console.log(formData)
+      await saveEvent(formData).unwrap().then((res: any) => {
+        console.log(res, "from server");
+          // Handle success
+        toast.show({
+          placement: 'top',
+          render: ({ id }) => <Toaster id={id} type="success" message={`Thank you!!!. Event has been ${!save_event ? "saved" : "unsaved"}`}/>
+        });
+        setBookMark(true);
+        });
     
-      // Handle success
-      toast.show({
-        placement: 'top',
-        render: ({ id }) => <Toaster id={id} type="success" message={`Thank you!!!. Event has been ${!save_event ? "saved" : "unsaved"}`}/>
-      });
-      setBookMark(true);
     } catch (error: any) {
-      console.log(error)
+      console.log(error, "error from server")
       // Handle error
       if (error.data && error.data.errors && error.data.errors.length > 0) {
         toast.show({
@@ -247,6 +251,8 @@ const Contact = ({navigation}: {navigation: any}) => {
   const [createEvent, {isLoading: createEventLoading}] = useCreateEventMutation()
 
   const toast = useToast()
+  const {user} = useGlobalState()
+  console.log(user.id)
 
   // Function
   const newArray = useMemo(() => {
@@ -347,7 +353,7 @@ const Contact = ({navigation}: {navigation: any}) => {
       methods.reset()
       toast.show({
         placement: 'top',
-        render: ({id}) => <Toaster id={id} type="success" message="Thank you!!!. Your sit have been reserved" />
+        render: ({id}) => <Toaster id={id} type="success" message="Event Successfully created!!!" />
       })
       setShow(false)
 
@@ -365,7 +371,7 @@ const Contact = ({navigation}: {navigation: any}) => {
 
   }
 
-  // console.log(getAllEvents, "All Events")
+  console.log(getAllEvents, "All Events")
 
   return (
     <Layout
@@ -378,7 +384,17 @@ const Contact = ({navigation}: {navigation: any}) => {
       <ScrollView showsVerticalScrollIndicator={false} className='flex-col space-y-7'> 
         <FlatList
           data={getAllEvents.docs || []}
-          renderItem={({item}) => <EventCard save_event={item.saveFlag} event_about={item.event_about} event_time={item.event_time} event_name={item.event_name} event_city={item.event_city} event_id={item.id} navigation={navigation} members = {item.members} url = {item.url}/>}
+          renderItem={({item}) => 
+            <EventCard 
+              save_event={item.savedEvent.some((event: { user: { id: string } }) => event?.user?.id === user?.id)} // Check if any event_id matches the logged-in user ID
+              event_about={item.event_about} 
+              event_time={item.event_time} 
+              event_name={item.event_name} 
+              event_city={item.event_city} 
+              event_id={item.id} 
+              navigation={navigation} 
+              members = {item.members} 
+              url = {item.url}/>}
           keyExtractor={item => item.id}
         />
         {/* BottomSheet component */}

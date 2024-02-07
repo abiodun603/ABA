@@ -54,12 +54,13 @@ const EditProfile: React.FC<Props> = ({ navigation: { navigate } }) => {
   const {profile, user} = useGlobalState()
 
 
-  const [image, setImage] = useState<string | undefined>(`${process.env.EXPO_PUBLIC_ABA_BASE_URL_KEY}${user?.imageurl}`)
+  const [image, setImage] = useState<string | undefined>(`${process.env.EXPO_PUBLIC_ABA_BASE_URL_KEY}${profile?.imageurl}`)
 
   const methods= useForm({defaultValues});
   const {setValue} = methods
 
-  //
+  console.log("profile", profile)
+
   const toast = useToast()
   const handleUpdate = async(data: any) =>{
     // Handle login logic here
@@ -67,6 +68,7 @@ const EditProfile: React.FC<Props> = ({ navigation: { navigate } }) => {
       id: user.id,
       name: data.name,
     }
+
 
     try {
       await updateProfile(formData).unwrap().then((res) => console.log(res));
@@ -166,10 +168,10 @@ const EditProfile: React.FC<Props> = ({ navigation: { navigate } }) => {
 
   // Populate the form fields with the profile data when it's available
   useEffect(() => {
-    if (user) {
-      setValue('name', user.name || ''); // Set the default value to an empty string if the property is undefined
+    if (profile) {
+      setValue('name', profile.name || ''); // Set the default value to an empty string if the property is undefined
     }
-  }, [user, setValue]);
+  }, [profile, setValue]);
 
   useEffect(() => {
     // Request permission to access the user's media library

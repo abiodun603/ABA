@@ -195,7 +195,7 @@ const Group: React.FC<Props> = ({ navigation: { navigate } , route}) => {
       }
     }
   };
-  console.log(getCommunityEventData, "get community event")
+  console.log(data, "get community event")
   return (
     <Layout
       title = "Community Details"

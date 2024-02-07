@@ -22,10 +22,10 @@ const slice = createSlice({
       }
     ),
     builder.addMatcher(
-      authApi.endpoints.getProfile.matchFulfilled,
+      authApi.endpoints.getProfileMe.matchFulfilled,
       (state, { payload }) => {
-        console.log(payload)
-        state.profile = payload.docs
+        console.log(payload, "get my profile")
+        state.profile = payload.user
       }
     )
   },

@@ -37,12 +37,13 @@ const Event = () => {
         renderItem={
           ({item}) => 
             <EventCard
-              event_about={item?.event_id?.event_about} 
-              event_time={item?.event_id?.event_time} 
-              event_name={item?.event_id?.event_name} 
-              event_city={item?.event_id?.event_city} 
-              event_id={item?.event_id?.id} 
-              members = {item?.event_id?.members}
+              event_about={item?.event_about} 
+              event_time={item?.event_time} 
+              event_name={item?.event_name} 
+              event_city={item?.event_city} 
+              event_id={item?.id} 
+              members = {item?.members}
+              event_url = {item?.url}
               navigation={navigation}
               isSave
             />
