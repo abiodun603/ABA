@@ -139,25 +139,25 @@ const Explore = ({navigation}: {navigation: any}) => {
       onPress={()=> setShow(true)}
     >
       <ScrollView style={styles.container}>
-      <View className='px-5'>
-        {/* Image */}
-        <View className='h-40  rounded-lg flex items-center justify-center mt-5'>
-          <MapView region={mapRegion} style = {{height: 160, width: "100%",}} >
-            <Marker coordinate={mapRegion} title='marker' />
-          </MapView>
-        </View>
-        <Text className='text-black text-sm font-bold my-3'>Discover events by date</Text>
+        <View className='px-5'>
+          {/* Image */}
+          <View className='h-40  rounded-lg flex items-center justify-center mt-5'>
+            <MapView region={mapRegion} style = {{height: 160, width: "100%",}} >
+              <Marker coordinate={mapRegion} title='marker' />
+            </MapView>
+          </View>
+          <Text className='text-black text-sm font-bold my-3'>Discover events by date</Text>
 
-        <View className = "flex-row flex-wrap " style={{ flex: 0 }}>
-          {
-            filterByDate.map((items:{id: number, name: string}) => <TouchableOpacity onPress={() => navigation.navigate("EventFilter", {filterName: items.name})} className='pl-2 pr-3 py-2 bg-[#333]  flex-row items-center justify-between rounded-lg  mr-2 mb-2' key={items.id} style={{ flex: 0 }} >
-            <Text className='text-white text-xs font-medium capitalize'>{items.name}</Text>
-            <MaterialIcons name = "keyboard-arrow-right"  size={20} color="#d1d5db" />
-          </TouchableOpacity>)
-          }
+          <View className = "flex-row flex-wrap " style={{ flex: 0 }}>
+            {
+              filterByDate.map((items:{id: number, name: string}) => <TouchableOpacity onPress={() => navigation.navigate("EventFilter", {filterName: items.name})} className='pl-2 pr-3 py-2 bg-[#333]  flex-row items-center justify-between rounded-lg  mr-2 mb-2' key={items.id} style={{ flex: 0 }} >
+              <Text className='text-white text-xs font-medium capitalize'>{items.name}</Text>
+              <MaterialIcons name = "keyboard-arrow-right"  size={20} color="#d1d5db" />
+            </TouchableOpacity>)
+            }
+          </View>
         </View>
-      </View>
-      <Divider mt={8} thickness={1}/>
+        <Divider mt={8} thickness={1}/>
         <TouchableOpacity onPress={() => navigation.navigate("GroupCat")} className='flex-row justify-between items-center my-4  px-4'>
           <View className='flex-row  space-x-2'>
             {/* icon calander */}
@@ -172,49 +172,49 @@ const Explore = ({navigation}: {navigation: any}) => {
           {/* icon */}
           <MaterialIcons name = "keyboard-arrow-right"  size={18}/>
         </TouchableOpacity>
-      <Divider thickness={8}/>
+        <Divider thickness={8}/>
 
-      <View className = "px-4">
-        <Text className='text-black text-sm font-bold mt-3'>Explore ABA</Text>
+        <View className = "px-4">
+          <Text className='text-black text-sm font-bold mt-3'>Explore ABA</Text>
 
-        <View className='mt-3'>
-          <Text className='text-black text-xs font-bold my-2'>Popular now</Text>
+          <View className='mt-3'>
+            <Text className='text-black text-xs font-bold my-2'>Popular now</Text>
+            <View>
+              <FlatList
+                horizontal
+                data = {getPopularEvents?.docs || []}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({item}) => renderEventCard(item.id, item.url, item.event_about, item.event_name, item.event_time, item.event_city, toggleBookMark, bookMark, navigation)}
+                showsHorizontalScrollIndicator = {false}
+              />
+            </View> 
+          </View>
           <View>
-            <FlatList
-              horizontal
-              data = {getPopularEvents?.docs || []}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({item}) => renderEventCard(item.id, item.url, item.event_about, item.event_name, item.event_time, item.event_city, toggleBookMark, bookMark, navigation)}
-              showsHorizontalScrollIndicator = {false}
-            />
-          </View> 
-        </View>
-        <View>
-          {getEventsByCatType?.docs &&
-            Object.keys(getEventsByCatType?.docs).map((category, index) => (
-              <View key={index} className='mt-3'>
-                <View style={{flexDirection: "row", justifyContent: "space-between", marginBottom: 10}}>
-                  <Text className='text-black text-xs font-bold my-2 capitalize'>{category}</Text>
-                  {/* touch button */}
-                  <TouchableOpacity
-                    onPress={() => navigation.navigate("EventFilter")}
-                  > 
-                    <Text style={{color: Colors.primary, fontFamily: Font['inter-medium'], fontSize: FontSize.small}}>See all</Text>
-                  </TouchableOpacity>              
+            {getEventsByCatType?.docs &&
+              Object.keys(getEventsByCatType?.docs).map((category, index) => (
+                <View key={index} className='mt-3'>
+                  <View style={{flexDirection: "row", justifyContent: "space-between", marginBottom: 10}}>
+                    <Text className='text-black text-xs font-bold my-2 capitalize'>{category}</Text>
+                    {/* touch button */}
+                    {/* <TouchableOpacity
+                      onPress={() => navigation.navigate("EventFilter")}
+                    > 
+                      <Text style={{color: Colors.primary, fontFamily: Font['inter-medium'], fontSize: FontSize.small}}>See all</Text>
+                    </TouchableOpacity>               */}
+                  </View>
+                  <FlatList
+                    horizontal
+                    data={getEventsByCatType?.docs[category] || []}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={({ item }) => renderEventCard(item.id, item.url, item.event_about, item.event_name, item.event_time, item.event_city, toggleBookMark, bookMark, navigation)}
+                    showsHorizontalScrollIndicator={false}
+                  />
                 </View>
-                <FlatList
-                  horizontal
-                  data={getEventsByCatType?.docs[category] || []}
-                  keyExtractor={(item, index) => index.toString()}
-                  renderItem={({ item }) => renderEventCard(item.id, item.url, item.event_about, item.event_name, item.event_time, item.event_city, toggleBookMark, bookMark, navigation)}
-                  showsHorizontalScrollIndicator={false}
-                />
-              </View>
-            ))}
+              ))}
+          </View>
         </View>
-      </View>
-      {/* Divider */}
-      <Divider mt={8} thickness={1}/>
+        {/* Divider */}
+        <Divider mt={8} thickness={1}/>
         <TouchableOpacity onPress={() => navigation.navigate("GroupCat")} className='flex-row justify-between items-center my-4  px-4'>
           <View className='flex-row  space-x-2'>
             {/* icon calander */}
@@ -230,35 +230,35 @@ const Explore = ({navigation}: {navigation: any}) => {
           {/* icon */}
           <MaterialIcons name = "keyboard-arrow-right"  size={18}/>
         </TouchableOpacity>
-      <Divider thickness={8}/>
+        <Divider thickness={8}/>
 
-      <View className='px-4 mt-4 mb-28'>
-        <View className="flex-row items-center justify-between mb-1 ">
-          {/*  */}
-          <Text className='text-black text-sm font-bold mt-3'>Browse by categories</Text>
+        <View className='px-4 mt-4 mb-28'>
+          <View className="flex-row items-center justify-between mb-1 ">
+            {/*  */}
+            <Text className='text-black text-sm font-bold mt-3'>Browse by categories</Text>
+          </View>
+          <View>
+            <GridView 
+              data={GroupCatergory} 
+              renderItem={(item) => (
+                <TouchableOpacity className='mx-2 mt-4' onPress={() => navigation.navigate("GroupCat")}>
+                  <View className='h-[150px] bg-slate-400 rounded-lg  justify-center items-center'>
+                    <ImageBackground
+                      resizeMode="cover"
+                      imageStyle={{ borderRadius: 10}}
+                      style={{ flex: 1, width: '100%' }}
+                      source = {{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvVRjzi266UV2c8204Wa2FDqwwxkXFDU4Ybw&usqp=CAU'}}
+                    />
+                  </View>
+                  <Text className='text-black text-xs font-semibold mt-1'>{item}</Text>
+                </TouchableOpacity>
+              
+              )}
+            />
+          </View>
+          {/* <Text className=''>No Photo yet !!!</Text> */}
         </View>
-        <View>
-          <GridView 
-            data={GroupCatergory} 
-            renderItem={(item) => (
-              <TouchableOpacity className='mx-2 mt-4' onPress={() => navigation.navigate("GroupCat")}>
-                <View className='h-[150px] bg-slate-400 rounded-lg  justify-center items-center'>
-                  <ImageBackground
-                    resizeMode="cover"
-                    imageStyle={{ borderRadius: 10}}
-                    style={{ flex: 1, width: '100%' }}
-                    source = {{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvVRjzi266UV2c8204Wa2FDqwwxkXFDU4Ybw&usqp=CAU'}}
-                  />
-                </View>
-                <Text className='text-black text-xs font-semibold mt-1'>{item}</Text>
-              </TouchableOpacity>
-             
-            )}
-          />
-        </View>
-        {/* <Text className=''>No Photo yet !!!</Text> */}
-      </View>
-    </ScrollView>
+      </ScrollView>
     </Layout>
   )
 }

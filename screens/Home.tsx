@@ -250,68 +250,70 @@ const Home = ({navigation}: {navigation: any}) => {
       profileIcon
       onPressProfile={() => navigation.navigate("EditProfile")}
     >
-      <View style={styles.container}>
+      <ScrollView 
+        scrollEnabled
+        // horizontal={true}
+        style={styles.container}>
         <View>
-          <Text className='text-black text-3xl font-bold'>Hi {firstName} {lastName} 👋</Text>
-          {/* ==== ===== */}
-          <View className="flex-row items-center justify-between mt-4">
-            <Text className="text-black text-sm font-semibold">Suggested events 🔍</Text>
-            <Text className="text-ksecondary text-sm opacity-50 font-normal"></Text>
-          </View>
-          {nextEventData && nextEventData?.docs.length > 0 ? (
+          <View>
+            <Text className='text-black text-3xl font-bold'>Hi {firstName} {lastName} 👋</Text>
+            <View className="flex-row items-center justify-between mt-4">
+              <Text className="text-black text-sm font-semibold">Suggested events 🔍</Text>
+              <Text className="text-ksecondary text-sm opacity-50 font-normal"></Text>
+            </View>
+            {nextEventData && nextEventData?.docs.length > 0 ? (
+              <View className=''>
+                <FlatList
+                  horizontal
+                  data = {nextEventData?.docs}
+                  renderItem={({ item }) => <RenderItems  event_about={item.event_about} event_time={item.event_time} event_name={item.event_name} event_city={item.event_city} event_id={item.id} navigation={navigation}/>}
+                  keyExtractor={(item, index) => index.toString()}
+                  showsHorizontalScrollIndicator = {false}
+                  pagingEnabled
+                  ref = {(ref) => {
+                    flatListRef.current = ref;
+                  }}
+                  contentContainerStyle = {{maxWidth: screenWidth}}
+                  viewabilityConfig={viewConfigRef}
+                  onViewableItemsChanged={onViewRef.current}
+                />
+                <View style = {{flexDirection: "row", justifyContent: "center", marginVertical: 20}} >
+                  {nextEventData?.docs.map((item: any,index:number) => {
+                    return (
+                      <TouchableOpacity key = {index.toString()} style = {[styles.circle , {backgroundColor: index == currentIndex ? "black" : "grey"}]} />
+                    )
+                  })}
+                </View>
+              </View> ) : <Text className='mt-3 mb-6 text-sm text-ksecondary font-medium'>Opps!!! Availabe Event is not close to you</Text>}
+            </View>
+          {/* Your Groups */}
+          <View className='mt-1'>
+            <View className="flex-row items-center justify-between mb-3">
+              <Text className="text-black text-sm  font-semibold">Your community</Text>
+              <Text onPress={() => navigation.navigate("GroupCat")} className="text-ksecondary text-sm opacity-50 font-normal">See all</Text>
+            </View>
             <View className=''>
               <FlatList
                 horizontal
-                data = {nextEventData?.docs}
-                renderItem={({ item }) => <RenderItems  event_about={item.event_about} event_time={item.event_time} event_name={item.event_name} event_city={item.event_city} event_id={item.id} navigation={navigation}/>}
+                showsHorizontalScrollIndicator={false}
+                data={dataWithDiscoverMore}
                 keyExtractor={(item, index) => index.toString()}
-                showsHorizontalScrollIndicator = {false}
-                pagingEnabled
-                ref = {(ref) => {
-                  flatListRef.current = ref;
+                renderItem={({ item }) => {
+                  if (item.type === 'discover-more') {
+                    return <DiscoverMoreGroups />;
+                  } else {
+                    return <MyGroupsCard community_id = {item.id} name={item.community_name}/>;
+                  }
                 }}
-                contentContainerStyle = {{maxWidth: screenWidth}}
-                viewabilityConfig={viewConfigRef}
-                onViewableItemsChanged={onViewRef.current}
               />
-              <View style = {{flexDirection: "row", justifyContent: "center", marginVertical: 20}} >
-                {nextEventData?.docs.map((item: any,index:number) => {
-                  return (
-                    <TouchableOpacity key = {index.toString()} style = {[styles.circle , {backgroundColor: index == currentIndex ? "black" : "grey"}]} />
-                  )
-                })}
-              </View>
-            </View> ) : <Text className='mt-3 mb-6 text-sm text-ksecondary font-medium'>Opps!!! Availabe Event is not close to you</Text>}
-        </View>
-        {/* Your Groups */}
-        <View className='mt-1'>
-          <View className="flex-row items-center justify-between mb-3">
-            {/*  */}
-            <Text className="text-black text-sm  font-semibold">Your community</Text>
-            <Text onPress={() => navigation.navigate("GroupCat")} className="text-ksecondary text-sm opacity-50 font-normal">See all</Text>
-          </View>
-          {/* Groups */}
-          <View className=''>
-            <FlatList
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              data={dataWithDiscoverMore}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({ item }) => {
-                if (item.type === 'discover-more') {
-                  return <DiscoverMoreGroups />;
-                } else {
-                  return <MyGroupsCard community_id = {item.id} name={item.community_name}/>;
-                }
-              }}
-            />
+            </View>
           </View>
           
+          <View className=' mt-10 h-full bg-red-500' style={{backgroundColor: "red"}}>
+            <TopNavPanel tabs={TabData}  /> 
+          </View>
         </View>
-        <View className='inline-block flex-1  mt-10'>
-          <TopNavPanel tabs={TabData} /> 
-        </View>
-      </View>
+      </ScrollView>
     </Layout>
   )
 }
@@ -336,7 +338,6 @@ const styles = StyleSheet.create({
   // Home
   container: {
     padding: 20,
-    flexDirection: "column",
     flex: 1,
   },
   circle: {

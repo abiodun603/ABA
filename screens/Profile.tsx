@@ -56,7 +56,7 @@ const Profile = ({navigation}: {navigation: any}) => {
   //
   const toast = useToast()
 
-  console.log(profile, user, "SEE USER AND PROFILE")
+  // console.log(profile, user, "SEE USER AND PROFILE")
 
 
   console.log(bioValue)

@@ -92,6 +92,12 @@ const Create: React.FC<Props> = ({ navigation: { navigate } }) => {
     
     } catch (err: any) {
       console.log(err)
+      if(err.status === 400){
+        toast.show({
+          placement: "top",
+          render: ({ id }) => <Toaster id = {id} message="User already exist"   />
+        })
+      }
       if(err.status === 401){
         toast.show({
           placement: "top",

@@ -22,7 +22,7 @@ export const eventsApi = createApi({
         url: '/events',
         method: 'GET',
       }),
-      providesTags: ["Event"]
+      providesTags: ["Event", "SaveEvent"]
     }),
     getGoingEvents: builder.query<EventResponse, void>({
       query: () => ({
@@ -36,7 +36,7 @@ export const eventsApi = createApi({
         url: `/events/me`,
         method: 'GET',
       }),
-      providesTags: ["MyEvents"],
+      providesTags: ["MyEvents", "SaveEvent"],
     }),
     getPopularEvents: builder.query<EventResponse, void>({
       query: () => ({
@@ -69,9 +69,9 @@ export const eventsApi = createApi({
       }),
       providesTags: ["Event"]
     }),
-    getSavedEvent: builder.query<EventResponse, void>({
-      query: () => ({ 
-        url: "/events/save",
+    getSavedEvent: builder.query<EventResponse, string>({
+      query: (id) => ({ 
+        url: `/events/isSaved/${id}`,
         method: 'GET',
       }),
       providesTags: ["SaveEvent"]
@@ -127,7 +127,7 @@ export const eventsApi = createApi({
     }),
     saveEvent: builder.mutation<void, SaveEventRequest>({
       query: (credentials) => ({ 
-        url: `/saves`,
+        url: `/events/save`,
         method: 'POST',
         body: credentials
       }),

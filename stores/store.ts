@@ -33,7 +33,10 @@ const store = configureStore({
     const profileApiMiddleware = profileApi.middleware;
     const groupsApiMiddleware = groupsApi.middleware;
     const usersApiMiddleware = usersApi.middleware;
-    return getDefaultMiddleware()
+    return getDefaultMiddleware({
+      immutableCheck: false,
+      serializableCheck: false,
+    })
       .concat(authApiMiddleware)
       .concat(eventsApiMiddleware)
       .concat(resourcesApiMiddleware)

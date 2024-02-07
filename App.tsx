@@ -10,7 +10,7 @@ import { NativeBaseProvider,  } from "native-base";
 import Toast from 'react-native-toast-message';
 import {DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { GluestackUIProvider, config } from "@gluestack-ui/themed"
-
+// import "/App.css"
 import store from './stores/store';
 
 

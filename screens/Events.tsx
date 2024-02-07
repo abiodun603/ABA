@@ -111,6 +111,7 @@ export const EventCard = ({event_about, save_event, event_time ,event_name, even
       });
       setBookMark(true);
     } catch (error: any) {
+      console.log(error)
       // Handle error
       if (error.data && error.data.errors && error.data.errors.length > 0) {
         toast.show({
@@ -281,7 +282,7 @@ const Contact = ({navigation}: {navigation: any}) => {
 }, 
 [getAllCommunity?.docs])
 
-console.log(getAllCommunity, "GET ALL COMMUNITIES")
+// console.log(getAllCommunity, "GET ALL COMMUNITIES")
 
   // console.log(newEventTypes, getEventTypes)
 
@@ -364,11 +365,11 @@ console.log(getAllCommunity, "GET ALL COMMUNITIES")
 
   }
 
-  console.log(getAllEvents, "All Events")
+  // console.log(getAllEvents, "All Events")
 
   return (
     <Layout
-      title={show ? 'Create a new Event': 'Events'}
+      title={show ? 'Create new Event': 'Events'}
       navigation={navigation}
       drawerNav
       iconName={!show && "plus"}

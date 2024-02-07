@@ -6,12 +6,12 @@ import { FlatList } from 'react-native';
 import { EventCard } from '../../screens/events/components/EventCard';
 
 const Saved = () => {
-  const {data, isLoading} = useGetSavedEventQuery()
+  // const {data, isLoading} = useGetSavedEventQuery()
   const navigation = useNavigation();
-  console.log(data, isLoading)
+  // console.log(data, isLoading)
   return (
     <View style={styles.container}> 
-     {
+     {/* {
         data?.docs.length > 0 ? (
       <FlatList
         data={data?.docs  || []}
@@ -31,7 +31,7 @@ const Saved = () => {
             />
         }
       />) : 
-      <Text>No Event</Text>}
+      <Text>No Event</Text>} */}
     </View>
   )
 }

@@ -28,6 +28,7 @@ import Home from './Home'
 import Community from './Events'
 import Profile from './Profile'
 import Contact from './Explore';
+import { ScrollView } from 'native-base';
 
 // ** Images
 const TabButton = ({label, icon, isFocused,onPress, outerContainerStyle, innerContainerStyle}: {label: string, icon: any,isFocused: boolean, onPress: () => void, outerContainerStyle: any,  innerContainerStyle: any}) => {
@@ -236,9 +237,7 @@ const MainLayout = ({navigation, selectedTab, setSelectedTab}: {navigation: any,
     },[selectedTab])
     return (
         <Animated.View style={{flex:1, backgroundColor: COLORS.white}}>
-
-
-            <View style ={{flex:1}}>
+            <View style ={{flex: 1}}>
               <FlatList
                 ref={flatListRef}
                 // horizontal

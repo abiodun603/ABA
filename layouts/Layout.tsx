@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react'
 // import { Box } from 'native-base'
 import {  StyleSheet, View } from 'react-native'
 import Header from './appHeader/Header'
+import { ScrollView } from 'native-base';
 // import { ILinearGradientProps } from "native-base/lib/typescript/components/primitives/Box/types";
 // import {
 //   ResponsiveValue,

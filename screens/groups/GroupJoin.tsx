@@ -52,7 +52,7 @@ interface IGridViewProps<T> {
   col?:number;
 }
 
-const GridView = <T extends any>(props: IGridViewProps<T>) => {
+export const GridView = <T extends any>(props: IGridViewProps<T>) => {
   const {data, renderItem, col = 2} = props;
   return (
     <View className='w-full flex-row flex-wrap'>
@@ -209,7 +209,8 @@ const GroupJoin: React.FC<Props> = ({ navigation: { navigate } , route}) => {
       community_name: data.community_name,
       community_description: data.community_description,
       status: selectedStatus.toLowerCase(),
-      members: selectedMembers
+      members: selectedMembers,
+      community_category: id
     }
 
     createCommunity(formData)
