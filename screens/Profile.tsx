@@ -95,9 +95,10 @@ const Profile = ({navigation}: {navigation: any}) => {
           });
         }
     }
-    fetchData(); // Call the async function immediately
-
-  }, [ debouncedValue]);
+    if(bioValue !== "" && bioValue !== null && bioValue !== undefined) {
+      fetchData(); // Call the async function immediately
+    }
+  }, [ debouncedValue, bioValue]);
   
   
   // Populate the form fields with the profile data when it's available

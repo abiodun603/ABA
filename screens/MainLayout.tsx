@@ -256,11 +256,15 @@ const MainLayout = ({navigation, selectedTab, setSelectedTab}: {navigation: any,
                         width: SIZES.width
                       }}
                     >
-                      {item.label === constants.screens.home && <Home navigation={navigation}/>}
-                      {item.label == constants.screens.contact && <Contact navigation={navigation}/>}
-                      {/* {item.label == constants.screens.chats && <Messages navigation={navigation}/>} */}
-                      {item.label == constants.screens.community && <Community navigation={navigation}/>}
-                      {item.label == constants.screens.profile && <Profile navigation={navigation}/>}
+                     {/* Conditionally render components based on the selected tab */}
+                      {item.label === selectedTab && (
+                        <View style={{ flex: 1 }}>
+                          {item.label === constants.screens.home && <Home navigation={navigation} />}
+                          {item.label === constants.screens.contact && <Contact navigation={navigation} />}
+                          {item.label === constants.screens.community && <Community navigation={navigation} />}
+                          {item.label === constants.screens.profile && <Profile navigation={navigation} />}
+                        </View>
+                      )}
                     </View>
                   )
                 }}
