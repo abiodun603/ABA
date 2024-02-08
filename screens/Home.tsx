@@ -160,20 +160,7 @@ const Home = ({navigation}: {navigation: any}) => {
     };
   
     addSocketId();
-  
-    // Cleanup function
-    return () => {
-      try {
-        // Remove the "addUser" event listener
-        socket.off("addUser");
-  
-        // Disconnect the socket
-        socket.disconnect();
-      } catch (error: any) {
-        console.error("Error during cleanup:", error.message);
-        // Handle the error during cleanup, if needed
-      }
-    };
+
   }, []);
   
 
