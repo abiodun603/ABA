@@ -49,7 +49,7 @@ const Past = () => {
   const {data, isLoading} = useGetPastMeEventQuery()
   const navigation = useNavigation();
 
-  console.log(data)
+  console.log(data, "EVENT DATA DATE")
   return (
     <View className='flex-1'>
       {
@@ -58,7 +58,9 @@ const Past = () => {
           data={data?.docs}
           keyExtractor={item => item.id.toString()}
           renderItem={
-            ({item}) => <EventCard event_url={item?.url} event_about={item?.event_about} event_time={item?.event_time} event_name={item?.event_name} event_city={item?.event_city} event_id={item?.id} members = {item?.members} navigation={navigation}/>
+            ({item}) => <EventCard event_url={item?.url} event_about={item?.event_about} event_time={item?.event_time} event_name={item?.event_name} event_city={item?.event_city} event_id={item?.id} members = {item?.members} navigation={navigation}
+            event_date={item?.event_date}
+            />
           }
         />) : 
       <Text>No Event</Text>}

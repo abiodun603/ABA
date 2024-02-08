@@ -32,7 +32,7 @@ const defaultValues = {
   event_address: '',
 }
 
-export const EventCard = ({event_url,event_about, event_time ,event_name, event_city, event_id, members, isDelete, isEdit, navigation,isSave ,  handleEdit}: any) => {
+export const EventCard = ({event_url,event_about, event_time ,event_name, event_city, event_id, members, isDelete, isEdit, navigation,isSave ,event_date,  handleEdit}: any) => {
   const [bookMark, setBookMark] = useState(true)
   const [show, setShow ] = useState(false) 
 
@@ -182,6 +182,8 @@ export const EventCard = ({event_url,event_about, event_time ,event_name, event_
     }
   }, [EventDetails, setValue]);
 
+  console.log(EventDetails?.event_date)
+
   return(
     <ScrollView style= {{width: "100%"}} className='border-b border-gray-200 mt-6 px-4'>
       <TouchableOpacity 
@@ -208,7 +210,7 @@ export const EventCard = ({event_url,event_about, event_time ,event_name, event_
             </View>
           </View>
           <View className="flex-row items-center justify-between mt-3">
-            <Text >{members?.length || "0"} {isEventDateLessThanCurrent(EventDetails?.event_date) ? "attended this event in" : "going"}  <Text className='capitalize'>{event_city}</Text></Text>
+            <Text >{members?.length || "0"} {isEventDateLessThanCurrent(event_date) ? "attended this event in" : "going"}  <Text className='capitalize'>{event_city}</Text></Text>
 
             {/* <Text >{members?.length || "0"} going <Text className='capitalize'>{event_city}</Text></Text> */}
             <View className='flex-row space-x-1'>
