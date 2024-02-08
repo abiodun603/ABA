@@ -33,7 +33,7 @@ import { useGetUsersQuery } from '../stores/features/users/UsersService'
 import { useToast } from '@gluestack-ui/themed'
 import { getTimeZone } from '../helpers/timeZoneformat'
 import { DatePicker } from '../components/datepicker/DatePicker'
-import { useGetCommunityQuery } from '../stores/features/groups/groupsService'
+import { useGetCommunityQuery, useGetMyCommunityQuery } from '../stores/features/groups/groupsService'
 import Toast from 'react-native-toast-message'
 import useGlobalState from '../hooks/global.state'
 
@@ -245,7 +245,7 @@ const Contact = ({navigation}: {navigation: any}) => {
   const [show, setShow ] = useState(false) 
   const methods = useForm({defaultValues});
   const {data: getAllEvents, isError, isLoading} = useGetEventsQuery()
-  const {isLoading: isLoadingCommunity, data: getAllCommunity} = useGetCommunityQuery()
+  const {isLoading: isLoadingCommunity, data: getAllMyCommunity} = useGetMyCommunityQuery()
   const {data: getEventTypes} = useGetEventTypesQuery()
   const {data: getAllUsers} = useGetUsersQuery()
   const [createEvent, {isLoading: createEventLoading}] = useCreateEventMutation()
@@ -359,15 +359,15 @@ const Contact = ({navigation}: {navigation: any}) => {
   }, [getEventTypes]);
 
   useEffect(() => {
-    if (getAllCommunity && getAllCommunity.docs) {
-      const newCommunity = getAllCommunity.docs.map((item: { id: string; community_name: string }) => ({
+    if (getAllMyCommunity && getAllMyCommunity.docs) {
+      const newCommunity = getAllMyCommunity.docs.map((item: { id: string; community_name: string }) => ({
         key: item.id,
         value: item.community_name,
         disabled: false,
       }));
       setCommunity(newCommunity);
     }
-  }, [getAllCommunity]);
+  }, [getAllMyCommunity]);
 
   return (
     <Layout
