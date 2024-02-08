@@ -378,21 +378,26 @@ const Contact = ({navigation}: {navigation: any}) => {
       onPress={()=> setShow(true)}
     >
       <ScrollView showsVerticalScrollIndicator={false} className='flex-col space-y-7'> 
-        <FlatList
-          data={getAllEvents.docs || []}
-          renderItem={({item}) => 
-            <EventCard 
-              save_event={item.savedEvent.some((event: { user: { id: string } }) => event?.user?.id === user?.id)} // Check if any event_id matches the logged-in user ID
-              event_about={item.event_about} 
-              event_time={item.event_time} 
-              event_name={item.event_name} 
-              event_city={item.event_city} 
-              event_id={item.id} 
-              navigation={navigation} 
-              members = {item.members} 
-              url = {item.url}/>}
-          keyExtractor={item => item.id}
-        />
+        {
+          getAllEvents.docs.lenght > 0 ?  (
+            <FlatList
+            data={getAllEvents.docs || []}
+            renderItem={({item}) => 
+              <EventCard 
+                save_event={item.savedEvent.some((event: { user: { id: string } }) => event?.user?.id === user?.id)} // Check if any event_id matches the logged-in user ID
+                event_about={item.event_about} 
+                event_time={item.event_time} 
+                event_name={item.event_name} 
+                event_city={item.event_city} 
+                event_id={item.id} 
+                navigation={navigation} 
+                members = {item.members} 
+                url = {item.url}/>}
+            keyExtractor={item => item.id}
+          />
+          ) : <Text className='text-center mt-20'>Oppss!! No Event</Text>
+        }
+       
         {/* BottomSheet component */}
         <BottomSheet
           show={show}
