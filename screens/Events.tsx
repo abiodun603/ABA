@@ -92,7 +92,7 @@ export const EventCard = ({event_about, save_event, event_time ,event_name, even
       const formData = {
         event_id: event_id
       };
-      console.log(formData)
+      console.log(formData, "Save eventt Id")
       await saveEvent(formData).unwrap().then((res: any) => {
         if(res?.docs.length > 0){
           toast.show({
@@ -205,7 +205,7 @@ export const EventCard = ({event_about, save_event, event_time ,event_name, even
             </View>
           </View>
           <View className="flex-row items-center justify-between mt-3">
-            <Text >{members?.length || "0"} going <Text className='capitalize'>{event_city}</Text></Text>
+            <Text >{members?.length || "0"} going <Text className='text-2xl'>.</Text> <Text className='capitalize'>{event_city}</Text></Text>
             <TouchableOpacity disabled={saveEventLoading || unsaveEventLoading} className='flex-row'>
               <Ionicons name='share-outline' size={23} onPress={onShare}/> 
               {!save_event ? <Ionicons name='bookmark-outline' size={22} onPress={toggleBookMark} /> :  <Ionicons name='bookmark' size={22} color="#d82727" onPress={toggleUnBookMark}/>}
