@@ -120,7 +120,7 @@ export const groupsApi = createApi({
     }), 
     getOneCommunity: builder.query<GroupsDetailsResponse, string>({
       query: (id) => ({ 
-        url: `/community/${id}`,
+        url: `/community/details/${id}`,
         method: 'GET',
       })
     }),

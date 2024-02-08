@@ -1,5 +1,5 @@
 import {  FlatList, ImageBackground, ScrollView, Share, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 // ** Constants 
 import Colors from '../constants/Colors'
@@ -198,8 +198,8 @@ export const EventCard = ({event_about, save_event, event_time ,event_name, even
             <View className='w-2/3'>
               <Text className='text-yellow-500 text-sm font-bold'>{event_time}</Text>
               {/* Event Description */}
-              <Text className=' font-normal mt-2 text-black capitalize'><ShortenedWord word={event_name} maxLength={48} /></Text>
-              <Text className='text-sm  text-gray-500 opacity-80 font-semibold mt-1' numberOfLines={2} ellipsizeMode="tail"><ShortenedWord word={event_about} maxLength={60}/></Text>
+              <Text className='text-sm  capitalize text-gray-500 opacity-80 font-semibold mt-2' numberOfLines={2} ellipsizeMode="tail"><ShortenedWord word={event_about} maxLength={60}/></Text>
+              <Text className=' font-normal mt-1 text-black '><ShortenedWord word={event_name} maxLength={48} /></Text>
             </View>
             <View className='w-1/3 rounded-lg'>
               {/* image */}
@@ -250,52 +250,16 @@ const Contact = ({navigation}: {navigation: any}) => {
   const {data: getAllUsers} = useGetUsersQuery()
   const [createEvent, {isLoading: createEventLoading}] = useCreateEventMutation()
 
+   // Initialize arrays
+   const [members, setMembers] = useState<any[]>([]);
+   const [types, setTypes] = useState<any[]>([]);
+   const [community, setCommunity] = useState<any[]>([]);
+
   const toast = useToast()
   const {user} = useGlobalState()
   console.log(user.id)
 
-  // Function
-  const newArray = useMemo(() => {
-    return (getAllUsers?.docs || []).map(
-      (item: { id: string; name: string }) => ({
-        key: item.id,
-        value: item.name,
-        disabled: false,
-      })
-    );
-  }, [getAllUsers?.docs]);
 
-  const newEventTypes  = useMemo(() => {
-    return (getEventTypes?.docs?.map(
-      (item: { id: string, event_types: string}) => ({
-        key: item.id,
-        value: item.event_types,
-        disabled:false
-      })
-    ) || []);
-  }, 
-  [getEventTypes?.docs])
-
- // get all community
- const newCommunity  = useMemo(() => {
-  return (getAllCommunity?.docs?.map(
-    (item: { id: string, community_name: string}) => ({
-      key: item.id,
-      value: item?.community_name,
-      disabled:false
-    })
-  ) || []);
-}, 
-[getAllCommunity?.docs])
-
-// console.log(getAllCommunity, "GET ALL COMMUNITIES")
-
-  // console.log(newEventTypes, getEventTypes)
-
-  // Combine arrays using spread operator
-  members.push(...newArray);    
-  types.push(...newEventTypes);
-  community.push(...newCommunity)
 
   // End Funtion
   const [date1, setDate1] = useState(new Date());
@@ -371,7 +335,39 @@ const Contact = ({navigation}: {navigation: any}) => {
 
   }
 
-  console.log(getAllEvents, "All Events")
+  // Update arrays when data changes
+  useEffect(() => {
+    if (getAllUsers && getAllUsers.docs) {
+      const newArray = getAllUsers.docs.map((item: { id: string; name: string }) => ({
+        key: item.id,
+        value: item.name,
+        disabled: false,
+      }));
+      setMembers(newArray);
+    }
+  }, [getAllUsers]);
+
+  useEffect(() => {
+    if (getEventTypes && getEventTypes.docs) {
+      const newEventTypes = getEventTypes.docs.map((item: { id: string; event_types: string }) => ({
+        key: item.id,
+        value: item.event_types,
+        disabled: false,
+      }));
+      setTypes(newEventTypes);
+    }
+  }, [getEventTypes]);
+
+  useEffect(() => {
+    if (getAllCommunity && getAllCommunity.docs) {
+      const newCommunity = getAllCommunity.docs.map((item: { id: string; community_name: string }) => ({
+        key: item.id,
+        value: item.community_name,
+        disabled: false,
+      }));
+      setCommunity(newCommunity);
+    }
+  }, [getAllCommunity]);
 
   return (
     <Layout
@@ -414,21 +410,33 @@ const Contact = ({navigation}: {navigation: any}) => {
                   name='event_name'
                   label="Event name"
                   placeholder="Enter event name"
+                  rules={{
+                    required: 'This field is required',
+                  }}
                 />
                 <Input
                   name='event_about'
                   label="Event description"
                   placeholder="Enter event description"
+                  rules={{
+                    required: 'This field is required',
+                  }}
                 />
                 <Input
                   name='event_city'
                   label="Event city"
                   placeholder="Enter event city"
+                  rules={{
+                    required: 'This field is required',
+                  }}
                 />
                 <Input
                   name='event_address'
                   label="Event address"
                   placeholder="Enter event address"
+                  rules={{
+                    required: 'This field is required',
+                  }}
                 />
                 <DatePicker mode="date" selectedDateCallback={dateCallback1} datePickerPlaceholder={formatDate(date1)} datePickerlabel="Event date"/>
                 <DatePicker mode="time" selectedDateCallback={timeCallback1} datePickerPlaceholder={formatTimestampToTime(time1)} datePickerlabel="Event start time"/>

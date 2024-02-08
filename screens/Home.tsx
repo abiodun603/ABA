@@ -286,7 +286,7 @@ const Home = ({navigation}: {navigation: any}) => {
                     )
                   })}
                 </View>
-              </View> ) : <Text className='mt-3 mb-6 text-sm text-ksecondary font-medium'>Opps!!! Availabe Event is not close to you</Text>}
+              </View> ) : <Text className='mt-3 mb-6 text-sm text-ksecondary font-medium'>Opps!!! No available event is close to you</Text>}
             </View>
           {/* Your Groups */}
           <View className='mt-1'>

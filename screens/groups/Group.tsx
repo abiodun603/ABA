@@ -129,7 +129,7 @@ const Group: React.FC<Props> = ({ navigation: { navigate } , route}) => {
     return <Text>No data available.</Text>; // Display a message when there is no data
   }
 
-  console.log(getUpcomingEvents, "my upcoming events")
+  console.log( data, "my upcoming events")
 
   const handleLeaveGroup = () => {
     setShow(false);
@@ -221,7 +221,7 @@ const Group: React.FC<Props> = ({ navigation: { navigate } , route}) => {
             </TouchableOpacity>
           </View>
           
-          <Text className='text-gray-800 text-lg font-bold mt-2 uppercase'>{data?.community_name}-community</Text>
+          <Text className='text-gray-800 text-lg font-bold mt-2 uppercase'>{data?.docs[0].community_name} community</Text>
         </View>
         <View className='flex-row items-center justify-between'>
           <TouchableOpacity 
@@ -256,7 +256,7 @@ const Group: React.FC<Props> = ({ navigation: { navigate } , route}) => {
           <View className="flex-row items-center justify-between mb-3">
             {/*  */}
             <Text className="text-black text-sm  font-semibold">Event</Text>
-            <Text className="text-ksecondary text-sm opacity-50 font-normal">See all</Text>
+            {/* <Text className="text-ksecondary text-sm opacity-50 font-normal">See all</Text> */}
           </View>          
           <View>
           {
@@ -284,9 +284,9 @@ const Group: React.FC<Props> = ({ navigation: { navigate } , route}) => {
 
         enableBackdropDismiss
       >
-        <View>
+        {/* <View>
           <CustomButton title='Your resources' onPress={toggleShowResources} buttonStyle={{marginBottom: 10}} />
-        </View>
+        </View> */}
         <View>
           <CustomButton title='Leave group' onPress={handleLeaveGroup} />
         </View>
