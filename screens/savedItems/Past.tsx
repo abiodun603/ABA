@@ -9,9 +9,9 @@ import Font from '../../constants/Font';
 
 // ** Store, Features
 import { ShortenedWord } from '../../helpers/wordShorther';
-import { useGetPastEventQuery } from '../../stores/features/groups/groupsService';
 import { useNavigation } from '@react-navigation/native';
 import { isEventDateLessThanCurrent } from '../../helpers/isPastEvent';
+import { useGetPastEventQuery } from '../../stores/features/event/eventService';
 
 export const EventCard = ({event_url, event_date, event_about, event_time ,event_name, event_city, members, event_id, navigation}: any) => {
   return(

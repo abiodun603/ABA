@@ -33,9 +33,9 @@ const ProfilePreview: React.FC<Props> = ({ navigation: { navigate } }) => {
     >
     <View style={styles.container}>
       {/* Image */}
-      <View className='h-[348px] w-full rounded-2xl bg-slate-800'>
+      {/* <View className='h-[348px] w-full rounded-2xl bg-slate-800'>
 
-      </View>
+      </View> */}
       {/* name */}
       <Text className='text-kblack font-normal text-[22px] mt-3'>{user?.name || ""}</Text>
       <Divider className='mt-2'/>
