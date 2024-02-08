@@ -28,7 +28,7 @@ type RouteParams = {
   communityId: string; // Replace 'string' with the correct type for communityId
 };
 
-const renderEventCard = (item: any, toggleBookMark: any, bookMark: any, navigation: any) => {
+const renderEventCard = (item: any, toggleBookMark: any, bookMark: any, navigate: any) => {
   const onShare = async () => {
     const options = {
       message: "Telvida Conferences at London Texas.  i neva reach there before"
@@ -54,7 +54,7 @@ const renderEventCard = (item: any, toggleBookMark: any, bookMark: any, navigati
     
   }
   return(
-    <TouchableOpacity className='h-44 w-48 rounded-lg mr-3'>
+    <TouchableOpacity className='h-44 w-48 rounded-lg mr-3' onPress={() => navigate("EventDetails", { eventId: item.id })}>
       <View style={{flex:1}} className='justify-between rounded-b-lg bg-gray-100 p-4'>
         <View className=''>
           <Text className='text-yellow-500 text-xs font-bold'>{formattedDateWithDay(item?.event_date)}</Text>
@@ -265,7 +265,7 @@ const Group: React.FC<Props> = ({ navigation: { navigate } , route}) => {
               horizontal
               data = {getCommunityEventData?.docs}
               renderItem={({ item }) => renderEventCard(item, toggleBookMark, bookMark, navigate)}
-              keyExtractor={(item, index) => index.toString()}
+              keyExtractor={(item) => item.id}
               showsHorizontalScrollIndicator = {false}
             /> : 
             <Text className='text-sm text-ksecondary'>No Event at the Moment!!!</Text>

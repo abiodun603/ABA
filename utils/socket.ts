@@ -1,3 +1,3 @@
 import { io } from "socket.io-client";
-const socket = io(`${process.env.EXPO_PUBLIC_ABA_BASE_URL_KEY}`)
+const socket = io("https://1c69-105-112-199-222.ngrok-free.app")
 export default socket;
