@@ -4,7 +4,7 @@ import { FlatList } from 'react-native'
 import { EventCard } from '../../screens/events/components/EventCard'
 import { useNavigation } from '@react-navigation/native'
 import { Text } from 'react-native'
-import { useGetPastEventQuery } from '../../stores/features/event/eventService'
+import { useGetPastEventQuery, useGetPastMeEventQuery } from '../../stores/features/event/eventService'
 
 // export const EventCard = ({event_about, event_time ,event_name, event_city, members}: any) => {
 //   return(
@@ -46,7 +46,7 @@ import { useGetPastEventQuery } from '../../stores/features/event/eventService'
 // }
 
 const Past = () => {
-  const {data, isLoading} = useGetPastEventQuery()
+  const {data, isLoading} = useGetPastMeEventQuery()
   const navigation = useNavigation();
 
   console.log(data)

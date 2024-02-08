@@ -246,7 +246,7 @@ const Contact = ({navigation}: {navigation: any}) => {
   const methods = useForm({defaultValues});
   const {data: getAllEvents, isError, isLoading} = useGetEventsQuery()
   const {isLoading: isLoadingCommunity, data: getAllMyCommunity} = useGetMyCommunityQuery()
-  const {data: getEventTypes} = useGetEventTypesQuery()
+  const {data: getEventTypes, isLoading: isLoadingEventTypes} = useGetEventTypesQuery()
   const {data: getAllUsers} = useGetUsersQuery()
   const [createEvent, {isLoading: createEventLoading}] = useCreateEventMutation()
 

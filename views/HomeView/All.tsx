@@ -1,12 +1,12 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { useGetEventsQuery } from '../../stores/features/event/eventService'
+import { useGetEventMeEventQuery, useGetEventsQuery } from '../../stores/features/event/eventService'
 import { EventCard } from '../../screens/Events'
 import { useNavigation } from '@react-navigation/native';
 
 
 const All = () => {
-  const {data: getAllEvents, isError, isLoading} = useGetEventsQuery()
+  const {data: getAllEvents, isError, isLoading} = useGetEventMeEventQuery()
   const navigation = useNavigation();
 
   return (

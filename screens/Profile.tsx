@@ -59,46 +59,46 @@ const Profile = ({navigation}: {navigation: any}) => {
 
   // console.log(profile, user, "SEE USER AND PROFILE")
 
-  useEffect(() => {
-    console.log("file me")
-    // Check if bioValue is not null before proceeding
-      const fetchData = async () => {
-        const formData = {
-          id: user.id,
-          bio: bioValue,
-        };
+  // useEffect(() => {
+  //   console.log("file me")
+  //   // Check if bioValue is not null before proceeding
+  //     const fetchData = async () => {
+  //       const formData = {
+  //         id: user.id,
+  //         bio: bioValue,
+  //       };
   
-        try {
-          const res = await updateProfile(formData).unwrap();
-          console.log(res);
+  //       try {
+  //         const res = await updateProfile(formData).unwrap();
+  //         console.log(res);
   
-          toast.show({
-            placement: "top",
-            render: ({ id }) => (
-              <Toast nativeID={id} action="success" variant="accent">
-                <VStack space="xs">
-                  <ToastTitle>Profile update successful!!!</ToastTitle>
-                </VStack>
-              </Toast>
-            ),
-          });
-        } catch (err) {
-          toast.show({
-            placement: "top",
-            render: ({ id }) => (
-              <Toast nativeID={id} action="error" variant="accent">
-                <VStack space="xs">
-                  <ToastTitle>Error updating profile!!!</ToastTitle>
-                </VStack>
-              </Toast>
-            ),
-          });
-        }
-    }
-    if(bioValue !== "" && bioValue !== null && bioValue !== undefined) {
-      fetchData(); // Call the async function immediately
-    }
-  }, [ debouncedValue]);
+  //         toast.show({
+  //           placement: "top",
+  //           render: ({ id }) => (
+  //             <Toast nativeID={id} action="success" variant="accent">
+  //               <VStack space="xs">
+  //                 <ToastTitle>Profile update successful!!!</ToastTitle>
+  //               </VStack>
+  //             </Toast>
+  //           ),
+  //         });
+  //       } catch (err) {
+  //         toast.show({
+  //           placement: "top",
+  //           render: ({ id }) => (
+  //             <Toast nativeID={id} action="error" variant="accent">
+  //               <VStack space="xs">
+  //                 <ToastTitle>Error updating profile!!!</ToastTitle>
+  //               </VStack>
+  //             </Toast>
+  //           ),
+  //         });
+  //       }
+  //   }
+  //   if(bioValue !== "" && bioValue !== null && bioValue !== undefined) {
+  //     fetchData(); // Call the async function immediately
+  //   }
+  // }, [ debouncedValue]);
   
   
   // Populate the form fields with the profile data when it's available

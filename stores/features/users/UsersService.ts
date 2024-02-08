@@ -21,8 +21,16 @@ export const usersApi = createApi({
         method: 'PATCH',
       }),
       invalidatesTags: ["Users"]
-    }),  
+    }), 
+    getAdmins: builder.query<ProfileResponse, void>({
+      query: () => ({
+        url: '/users/admin',
+        method: 'GET',
+      }),
+      providesTags: ["Users"],
+
+    }), 
   })
 })
 
-export const { useGetUsersQuery, useAddAdminMutation } = usersApi
+export const { useGetUsersQuery, useAddAdminMutation, useGetAdminsQuery } = usersApi

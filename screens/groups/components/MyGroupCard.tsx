@@ -1,4 +1,4 @@
-import {  useState } from "react";
+import {  useEffect, useState } from "react";
 import { Alert, View, ScrollView, TouchableOpacity , Text, ImageBackground} from "react-native";
 
 // ** Thirld Party
@@ -44,6 +44,7 @@ export const GroupCard = ({name, members, community_id, navigate}: any) => {
   console.log(CommunityDetails)
 
   const methods = useForm({defaultValues});
+  const { setValue } = methods
   // const {setValue} = methods
   const toast = useToast()
 
@@ -105,7 +106,7 @@ export const GroupCard = ({name, members, community_id, navigate}: any) => {
     .unwrap()
     .then((data) => {
       // Handle success
-      console.log('Event updated:', data);
+      console.log('Community updated:', data);
       methods.reset()
       toast.show({
         placement: 'top',
@@ -127,12 +128,14 @@ export const GroupCard = ({name, members, community_id, navigate}: any) => {
   }
 
     // Populate the form fields with the profile data when it's available
-    // useEffect(() => {
-    //   if (CommunityDetails) {
-    //     setValue('community_name',  CommunityDetails?.community_name ||'');
-    //     setValue('community_description',  CommunityDetails?.community_description ||'');
-    //   }
-    // }, [CommunityDetails, setValue]);
+    useEffect(() => {
+      if (CommunityDetails) {
+        setValue('community_name',  CommunityDetails?.docs[0].community_name ||'');
+        setValue('community_description',  CommunityDetails?.docs[0].community_description ||'');
+        setSelectedStatus(CommunityDetails?.docs[0].status)
+      }
+    }, [CommunityDetails, setValue]);
+
 
   return (
     <View className = "flex-row items-center justify-between ">
@@ -193,7 +196,7 @@ export const GroupCard = ({name, members, community_id, navigate}: any) => {
                   boxStyles={{borderRadius:4, borderColor: "#80747B", height:56, paddingLeft: 10}}
                   search={false} 
                   placeholder='Select community status'
-                  
+                  defaultOption= {{key:selectedStatus, value:selectedStatus}}
                 />
               </View>
               <View className='mb-20'>

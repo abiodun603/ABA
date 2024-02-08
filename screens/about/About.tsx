@@ -13,12 +13,14 @@ import Layout from '../../layouts/Layout';
 
 //
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useAddAdminMutation, useGetUsersQuery } from '../../stores/features/users/UsersService';
+import { useAddAdminMutation, useGetAdminsQuery, useGetUsersQuery } from '../../stores/features/users/UsersService';
 import CustomButton from '../../components/CustomButton';
 import Toaster from '../../components/Toaster/Toaster';
 import { useToast } from '@gluestack-ui/themed';
 import { useUpdateProfileMutation } from '../../stores/features/auth/authService';
 import Toast from 'react-native-toast-message';
+import { FlatList } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 type Props = NativeStackScreenProps<RootStackParamList, "About">;
 
 
@@ -31,6 +33,7 @@ const About: React.FC<Props> = ({ navigation: { navigate } }) => {
 
   const {data: getAllUsers} = useGetUsersQuery()
   const [addAdmin, { isLoading: isAddAdminLoading }] = useAddAdminMutation();
+  const { data: getAdminMembers, isLoading} =  useGetAdminsQuery()
 
 
   const methods = useForm({defaultValues});
@@ -77,12 +80,12 @@ const About: React.FC<Props> = ({ navigation: { navigate } }) => {
       setMembers(newArray);
     }
   }, [getAllUsers]);
-
+  console.log(getAdminMembers, "ALL ADMIN USER")
   return (
     <Layout
       title = "About ABA"
     >
-      <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
+      <View style={styles.container}>
         {/* search button */}
         {/* <Text className='text-black text-sm font-normal text-justify'>
           The Autism Community App is a mobile application designed to connect and support educators, parents, caregivers, and advocates of autistic individuals. The app aims to create a vibrant community that fosters meaningful relationships, empowers education and shares resources to help those who care for individuals with Autism Spectrum Disorder (ASD).
@@ -111,7 +114,25 @@ const About: React.FC<Props> = ({ navigation: { navigate } }) => {
             </View>
           </FormProvider>
         </View>
-      </ScrollView>
+
+        <View>
+          <FlatList
+            data={getAdminMembers?.docs || []}
+            keyExtractor={(item: any, index: { toString: () => any; }) => index.toString()}
+            renderItem={({ item }: any) => 
+              <View className='flex-row items-center justify-between mb-5'>
+                <TouchableOpacity  className='flex-row items-center space-x-3'>
+                  <View className='w-16 h-16 rounded-full border border-black bg-blue-400 items-center justify-center'>
+                    <Text>{(item.name || '').charAt(0).toUpperCase()}</Text>
+                  </View>
+                  <Text className='text-lg text-gray-900 font-semibold'>{item.name}</Text>
+                </TouchableOpacity>
+                {item.role === 'admin' && <Text className='italic text-sm text-gray-800 capitalize'>{item.role}</Text>}
+              </View>
+           }
+          />
+        </View>
+      </View>
     </Layout>
   )
 }
