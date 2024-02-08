@@ -379,7 +379,7 @@ const Contact = ({navigation}: {navigation: any}) => {
     >
       <ScrollView showsVerticalScrollIndicator={false} className='flex-col space-y-7'> 
         {
-          getAllEvents.docs.lenght > 0 ?  (
+          getAllEvents.docs  ?  (
             <FlatList
             data={getAllEvents.docs || []}
             renderItem={({item}) => 
