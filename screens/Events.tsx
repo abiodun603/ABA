@@ -94,14 +94,20 @@ export const EventCard = ({event_about, save_event, event_time ,event_name, even
       };
       console.log(formData)
       await saveEvent(formData).unwrap().then((res: any) => {
-        console.log(res, "from server");
-          // Handle success
-        toast.show({
+        if(res?.docs.length > 0){
+          toast.show({
+            placement: 'top',
+            render: ({ id }) => <Toaster id={id} type="success" message={`Thank you!!!. Event has been ${!save_event ? "saved" : "unsaved"}`}/>
+          });
+          setBookMark(true);
+
+        }else{
+          toast.show({
           placement: 'top',
-          render: ({ id }) => <Toaster id={id} type="success" message={`Thank you!!!. Event has been ${!save_event ? "saved" : "unsaved"}`}/>
+          render: ({ id }) => <Toaster id={id} type="error" message="Event not saved. Try again!!!" />
         });
-        setBookMark(true);
-        });
+        }
+      });
     
     } catch (error: any) {
       console.log(error, "error from server")
