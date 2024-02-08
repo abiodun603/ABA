@@ -146,7 +146,7 @@ const EventDetails: React.FC<Props>  = ({navigation, route}) => {
                 <Text className='text-white uppercase'>{data?.event_name.substring(0, 3)}</Text>
               </View>
               <View>
-                <Text className='text-sm line-4 font-bold '><ShortenedWord word={data?.event_name} maxLength={6} /></Text>
+                <Text className='text-sm line-4 font-bold '><ShortenedWord word={data?.event_name} maxLength={20} /></Text>
                 <Text className='text-sm font-normal text-gray-600 capitalize'>{data?.status}</Text>
               </View>
             </View>
@@ -160,13 +160,13 @@ const EventDetails: React.FC<Props>  = ({navigation, route}) => {
                   {data?.event_about || ""}
                 </Text>
 
-                <View className='mt-3'>
+                {/* <View className='mt-3'>
                   <Text className='text-gray-700 text-xs font-medium'>Ticket at Door N4,000</Text>
                   <Text className='text-gray-700 text-xs font-medium'>Side Attractions Food, Games & Networking</Text>
                   <Text className='text-gray-700 text-xs font-medium'>Contact telvida@gmail.com for Inquires</Text>
                 </View>
 
-                <TouchableOpacity ><Text className='text-blue-900 font-semibold mt-1'>Read More</Text></TouchableOpacity>
+                <TouchableOpacity ><Text className='text-blue-900 font-semibold mt-1'>Read More</Text></TouchableOpacity> */}
               </View>
             </View>
           </View>
