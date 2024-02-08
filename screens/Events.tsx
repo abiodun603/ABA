@@ -448,7 +448,7 @@ const Contact = ({navigation}: {navigation: any}) => {
                     data={community} 
                     save="key"
                     boxStyles={{borderRadius:4, borderColor: "#80747B", paddingLeft: 10}}
-                    search={false} 
+                    search={true} 
                     placeholder='Select Community'
                   />
                 </View>
@@ -459,7 +459,7 @@ const Contact = ({navigation}: {navigation: any}) => {
                     data={members} 
                     save="key"
                     boxStyles={{borderRadius:4, borderColor: "#80747B", paddingLeft: 10}}
-                    search={false} 
+                    search={true} 
 
                     placeholder='Select Host'
                   />
@@ -471,7 +471,7 @@ const Contact = ({navigation}: {navigation: any}) => {
                     data={types} 
                     save="key"
                     boxStyles={{borderRadius:4, borderColor: "#80747B", height:56, paddingLeft: 10}}
-                    search={false} 
+                    search={true} 
                     placeholder='Select event type'
                   />
                 </View>
@@ -482,7 +482,7 @@ const Contact = ({navigation}: {navigation: any}) => {
                     data={members} 
                     save="key"
                     boxStyles={{borderRadius:4, borderColor: "#80747B", paddingLeft: 10}}
-                    search={false} 
+                    search={true} 
 
                     placeholder='Select Members'
                   />
@@ -494,7 +494,7 @@ const Contact = ({navigation}: {navigation: any}) => {
                     data={data} 
                     save="value"
                     boxStyles={{borderRadius:4, borderColor: "#80747B", height:56, paddingLeft: 10}}
-                    search={false} 
+                    search={true} 
                     placeholder='Select event tags'
                   />
                 </View>
@@ -504,7 +504,7 @@ const Contact = ({navigation}: {navigation: any}) => {
                     data={status} 
                     save="value"
                     boxStyles={{borderRadius:4, borderColor: "#80747B", height:56, paddingLeft: 10}}
-                    search={false} 
+                    search={true} 
                     placeholder='Select event status'
                   />
                 </View>

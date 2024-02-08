@@ -98,7 +98,7 @@ const Profile = ({navigation}: {navigation: any}) => {
     if(bioValue !== "" && bioValue !== null && bioValue !== undefined) {
       fetchData(); // Call the async function immediately
     }
-  }, [ debouncedValue, bioValue]);
+  }, [ debouncedValue]);
   
   
   // Populate the form fields with the profile data when it's available
