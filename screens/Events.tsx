@@ -33,7 +33,7 @@ import { useGetUsersQuery } from '../stores/features/users/UsersService'
 import { useToast } from '@gluestack-ui/themed'
 import { getTimeZone } from '../helpers/timeZoneformat'
 import { DatePicker } from '../components/datepicker/DatePicker'
-import { useGetCommunityQuery, useGetMyCommunityQuery } from '../stores/features/groups/groupsService'
+import { useGetCommunityQuery } from '../stores/features/groups/groupsService'
 import Toast from 'react-native-toast-message'
 import useGlobalState from '../hooks/global.state'
 
@@ -50,17 +50,7 @@ const status = [
   {key:'public', value:'Public'},
 ]
 
-const members = [
-  {key:'1', value:'Select members', disabled:true},
-]
 
-const types = [
-  {key:'1', value:'Select event types', disabled:true},
-]
-
-const community = [
-  {key:'1', value:'Select Community', disabled:true},
-]
 
 const Badge = ({title}: {title: string | boolean}) => {
   return (
@@ -95,7 +85,6 @@ export const EventCard = ({event_about, save_event, event_time ,event_name, even
     showToast();
   }
 
-  // Fucnc
   const toggleBookMark = async () => {
     console.log("save me ")
 
@@ -116,7 +105,6 @@ export const EventCard = ({event_about, save_event, event_time ,event_name, even
     
     } catch (error: any) {
       console.log(error, "error from server")
-      // Handle error
       if (error.data && error.data.errors && error.data.errors.length > 0) {
         toast.show({
           placement: 'top',
@@ -142,7 +130,6 @@ export const EventCard = ({event_about, save_event, event_time ,event_name, even
 
       await unSaveEvent(event_id)
       .unwrap()
-      // Handle success
       toast.show({
         placement: 'top',
         render: ({ id }) =>  <Toaster id={id} type="success" message={`Thank you!!!. Event has been unsaved`}/>
@@ -161,7 +148,6 @@ export const EventCard = ({event_about, save_event, event_time ,event_name, even
           render: ({ id }) => <Toaster id={id} type="error" message="An error occurred while saving the event." />
         });
       }
-      // setBookMark(false);
     }
   };
 
@@ -192,7 +178,6 @@ export const EventCard = ({event_about, save_event, event_time ,event_name, even
     <ScrollView style= {{width: "100%"}} className='border-b border-gray-200 mt-6 px-4'>
       <TouchableOpacity 
         onPress={() => navigation.navigate("EventDetails", { eventId: event_id })}
-        // onPress={() =>handeViewEvent(event_id)}
         className='mb-3'>
           <View className='flex-row ' >
             <View className='w-2/3'>
@@ -241,19 +226,20 @@ const Contact = ({navigation}: {navigation: any}) => {
   const [selectedMembers, setSelectedMembers] = useState<any[]>([])
   const [selectedHost, setSelectedHost] = useState<any[]>([])
   const [selectedCommunity, setSelectedCommunity] = useState<any>("")
-
-  const [show, setShow ] = useState(false) 
-  const methods = useForm({defaultValues});
-  const {data: getAllEvents, isError, isLoading} = useGetEventsQuery()
-  const {isLoading: isLoadingCommunity, data: getAllMyCommunity} = useGetMyCommunityQuery()
-  const {data: getEventTypes, isLoading: isLoadingEventTypes} = useGetEventTypesQuery()
-  const {data: getAllUsers} = useGetUsersQuery()
-  const [createEvent, {isLoading: createEventLoading}] = useCreateEventMutation()
-
    // Initialize arrays
    const [members, setMembers] = useState<any[]>([]);
    const [types, setTypes] = useState<any[]>([]);
    const [community, setCommunity] = useState<any[]>([]);
+
+  const [show, setShow ] = useState(false) 
+  const methods = useForm({defaultValues});
+  const {data: getAllEvents, isError, isLoading} = useGetEventsQuery()
+  const {isLoading: isLoadingCommunity, data: getAllCommunity} = useGetCommunityQuery()
+  const {data: getEventTypes} = useGetEventTypesQuery()
+  const {data: getAllUsers} = useGetUsersQuery()
+  const [createEvent, {isLoading: createEventLoading}] = useCreateEventMutation()
+
+
 
   const toast = useToast()
   const {user} = useGlobalState()
@@ -286,6 +272,8 @@ const Contact = ({navigation}: {navigation: any}) => {
   if(isLoading){
     return <Text>Loading...</Text>;
   }
+
+  if(isLoadingCommunity)return <Text>Loading...</Text>
 
   if (!getAllEvents) {
     return <Text>No data available.</Text>; // Display a message when there is no data
@@ -336,38 +324,91 @@ const Contact = ({navigation}: {navigation: any}) => {
   }
 
   // Update arrays when data changes
-  useEffect(() => {
-    if (getAllUsers && getAllUsers.docs) {
-      const newArray = getAllUsers.docs.map((item: { id: string; name: string }) => ({
+// Check if members state is empty and getAllUsers.docs is available
+if (members.length === 0 && getAllUsers && getAllUsers.docs) {
+  // Create a Set to keep track of unique user IDs
+  const uniqueIds = new Set<string>();
+
+  // Map through getAllUsers.docs and filter out duplicate user IDs
+  const uniqueMembers = getAllUsers.docs.reduce((acc: any[], item: { id: string; name: string }) => {
+    // Check if the current user ID is not already in the Set
+    if (!uniqueIds.has(item.id)) {
+      // If it's not, add it to the Set and push the user object to the accumulator array
+      uniqueIds.add(item.id);
+      acc.push({
         key: item.id,
         value: item.name,
         disabled: false,
-      }));
-      setMembers(newArray);
+      });
     }
-  }, [getAllUsers]);
+    return acc;
+  }, []);
 
-  useEffect(() => {
-    if (getEventTypes && getEventTypes.docs) {
-      const newEventTypes = getEventTypes.docs.map((item: { id: string; event_types: string }) => ({
+  // Update the members state with the uniqueMembers array
+  setMembers(uniqueMembers);
+}
+
+// Check if members state is empty and getAllUsers.docs is available
+if (types.length === 0 && getEventTypes && getEventTypes.docs) {
+  // Create a Set to keep track of unique user IDs
+  const uniqueIds = new Set<string>();
+
+  // Map through getAllUsers.docs and filter out duplicate user IDs
+  const uniqueTypes = getEventTypes.docs.reduce((acc: any[], item: { id: string; event_types: string }) => {
+    // Check if the current user ID is not already in the Set
+    if (!uniqueIds.has(item.id)) {
+      // If it's not, add it to the Set and push the user object to the accumulator array
+      uniqueIds.add(item.id);
+      acc.push({
         key: item.id,
         value: item.event_types,
         disabled: false,
-      }));
-      setTypes(newEventTypes);
+      });
     }
-  }, [getEventTypes]);
+    return acc;
+  }, []);
 
-  useEffect(() => {
-    if (getAllMyCommunity && getAllMyCommunity.docs) {
-      const newCommunity = getAllMyCommunity.docs.map((item: { id: string; community_name: string }) => ({
+  // Update the members state with the uniqueMembers array
+  setTypes(uniqueTypes);
+}
+
+// Check if members state is empty and getAllUsers.docs is available
+if (community.length === 0 && getAllCommunity && getAllCommunity.docs) {
+  // Create a Set to keep track of unique user IDs
+  const uniqueIds = new Set<string>();
+
+  // Map through getAllUsers.docs and filter out duplicate user IDs
+  const uniqueCom = getAllCommunity.docs.reduce((acc: any[], item: { id: string; community_name: string }) => {
+    // Check if the current user ID is not already in the Set
+    if (!uniqueIds.has(item.id)) {
+      // If it's not, add it to the Set and push the user object to the accumulator array
+      uniqueIds.add(item.id);
+      acc.push({
         key: item.id,
         value: item.community_name,
         disabled: false,
-      }));
-      setCommunity(newCommunity);
+      });
     }
-  }, [getAllMyCommunity]);
+    return acc;
+  }, []);
+
+  // Update the members state with the uniqueMembers array
+  setCommunity(uniqueCom);
+}
+
+
+  // useEffect(() => {
+  //   if (getEventTypes && getEventTypes.docs) {
+  //     const newEventTypes = getEventTypes.docs.map((item: { id: string; event_types: string }) => ({
+  //       key: item.id,
+  //       value: item.event_types,
+  //       disabled: false,
+  //     }));
+  //     setTypes(newEventTypes);
+  //   }
+  // }, [getEventTypes]);
+  console.log(getAllCommunity, "bug")
+
 
   return (
     <Layout
@@ -378,26 +419,22 @@ const Contact = ({navigation}: {navigation: any}) => {
       onPress={()=> setShow(true)}
     >
       <ScrollView showsVerticalScrollIndicator={false} className='flex-col space-y-7'> 
-        {
-          getAllEvents.docs  ?  (
-            <FlatList
-            data={getAllEvents.docs || []}
-            renderItem={({item}) => 
-              <EventCard 
-                save_event={item.savedEvent.some((event: { user: { id: string } }) => event?.user?.id === user?.id)} // Check if any event_id matches the logged-in user ID
-                event_about={item.event_about} 
-                event_time={item.event_time} 
-                event_name={item.event_name} 
-                event_city={item.event_city} 
-                event_id={item.id} 
-                navigation={navigation} 
-                members = {item.members} 
-                url = {item.url}/>}
-            keyExtractor={item => item.id}
-          />
-          ) : <Text className='text-center mt-20'>Oppss!! No Event</Text>
-        }
-       
+
+        <FlatList
+          data={getAllEvents?.docs || []}
+          renderItem={({item}) => 
+            <EventCard 
+              save_event={item.savedEvent.some((event: { user: { id: string } }) => event?.user?.id === user?.id)} // Check if any event_id matches the logged-in user ID
+              event_about={item.event_about} 
+              event_time={item.event_time} 
+              event_name={item.event_name} 
+              event_city={item.event_city} 
+              event_id={item.id} 
+              navigation={navigation} 
+              members = {item.members} 
+              url = {item.url}/>}
+          keyExtractor={item => item.id}
+        />
         {/* BottomSheet component */}
         <BottomSheet
           show={show}

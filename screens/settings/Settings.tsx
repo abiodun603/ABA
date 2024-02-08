@@ -22,7 +22,7 @@ type Props = NativeStackScreenProps<RootStackParamList, "Settings">;
 const DATA: any = [
   {
     id: 1,
-    name: "Storage",
+    name: "Add Admin",
     newMessage: "1",
     route: "About"
   },

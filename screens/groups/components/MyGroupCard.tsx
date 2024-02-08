@@ -34,7 +34,7 @@ const status = [
   {key:'public', value:'Public'},
 ]
 
-export const GroupCard = ({name, members, community_id, navigate}: any) => {
+export const GroupCard = ({name, members,event_url, community_id, navigate}: any) => {
   const [show, setShow ] = useState(false) 
   const [selectedStatus, setSelectedStatus] = useState("");
 
@@ -110,7 +110,7 @@ export const GroupCard = ({name, members, community_id, navigate}: any) => {
       methods.reset()
       toast.show({
         placement: 'top',
-        render: ({id}) => <Toaster id={id} type="success" message="Event updated!!!" />
+        render: ({id}) => <Toaster id={id} type="success" message="Community updated!!!" />
       })
       setShow(false)
 
@@ -145,7 +145,7 @@ export const GroupCard = ({name, members, community_id, navigate}: any) => {
           resizeMode="cover"
           imageStyle={{ borderRadius: 10}}
           style={{ flex: 1, width: '100%' }}
-          source = {{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvVRjzi266UV2c8204Wa2FDqwwxkXFDU4Ybw&usqp=CAU'}}
+          source = {{uri: event_url}}
         />
         </View>
         <View className=' flex-wrap space-y-2'>

@@ -31,7 +31,7 @@ const PersonalGroups: React.FC<Props> = ({ navigation: { navigate } }) => {
     return <Text>No data available.</Text>; // Display a message when there is no data
   }
 
-  console.log(data?.docs);
+  console.log(data?.docs, "HMM");
   return (
     <Layout
       title = "My Community"
