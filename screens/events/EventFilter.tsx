@@ -37,6 +37,7 @@ const EventFilter: React.FC<Props> = ({navigation, route}) => {
 
   const [show, setShow ] = useState(false) 
   const [value, setValue] = React.useState(filterName.toLowerCase());
+  const [isLoading, setIsLoading] = useState<boolean>(false); 
 
   const [getSortUpcomingEvent, results] = useLazyGetSortUpcomingEventQuery()
   // const { data: getAllEvents, isError, isLoading, refetch: refetchEvents } = useGetSortUpcomingEventQuery(value, {
@@ -51,12 +52,21 @@ const EventFilter: React.FC<Props> = ({navigation, route}) => {
   //   return <Text>No data available.</Text>; // Display a message when there is no data
   // }
 
-  const handleDateSorting = async(value: string) => {
-    console.log(value);
-    await getSortUpcomingEvent(value);
-    // Access the loading state from the results
-    const { isLoading } = results;
-    console.log('Loading state:', isLoading);
+  const handleDateSorting = async (value: string) => {
+    setIsLoading(true); // Set loading state to true when starting the sorting process
+    try {
+      // Perform the sorting operation
+      const res = await getSortUpcomingEvent(value).unwrap();
+      // Set loading state to false after the operation is completed
+      setIsLoading(false);
+      setShow(false)
+    } catch (error) {
+      // Handle errors if any
+      console.error("Error occurred while sorting events:", error);
+      // Set loading state to false in case of errors as well
+      setIsLoading(false);
+      setShow(false)
+    }
   };
 
   useEffect(() => {
@@ -130,7 +140,7 @@ const EventFilter: React.FC<Props> = ({navigation, route}) => {
             ))}
           </RadioButton.Group>
           <View className='mt-10'>
-            <CustomButton title='Apply' onPress={() => handleDateSorting(value)} />
+            <CustomButton title='Apply' onPress={() => handleDateSorting(value)} isLoading={isLoading} />
           </View>
         </View>
       </BottomSheet>

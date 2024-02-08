@@ -58,15 +58,14 @@ const Explore = ({navigation}: {navigation: any}) => {
 
   // console.log(getEventsByCatType)
 
-  if(isPopularEventsLoading && isEventsByCatTypeLoading){
-    return <Text>Loading...</Text>;
-  }
+  // if(isPopularEventsLoading && isEventsByCatTypeLoading){
+  //   return <Text>Loading...</Text>;
+  // }
 
-  if (!getPopularEvents && !getEventsByCatType) {
-    return <Text>No data available.</Text>; // Display a message when there is no data
-  }
-  // const categories = Object.keys(getEventsByCatType.docs || {});
-  // console.log(getPopularEvents)
+  // if (!getPopularEvents && !getEventsByCatType) {
+  //   return <Text>No data available.</Text>;
+  // }
+
 
   const renderEventCard = (event_id: string,url: string, about: string, name: string, time: string, city: any,  toggleBookMark: any, bookMark: any, navigation: any) => {
     const onShare = async () => {

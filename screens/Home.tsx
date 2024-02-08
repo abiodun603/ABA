@@ -57,6 +57,7 @@ const TabData = [
   { name: "Past", component: Past },
 ];
 
+
 const RenderItems = ({event_about, event_time ,event_name, event_city, event_id, navigation}: any) => {
   return (
     <View  
