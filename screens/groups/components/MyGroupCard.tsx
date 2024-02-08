@@ -21,6 +21,7 @@ import BottomSheet from "../../../components/bottom-sheet/BottomSheet";
 import Input from "../../../components/Input";
 import CustomButton from "../../../components/CustomButton";
 import { SelectList } from "react-native-dropdown-select-list";
+import Toast from "react-native-toast-message";
 
 const defaultValues = {
   community_name: '',
@@ -37,7 +38,7 @@ export const GroupCard = ({name, members, community_id, navigate}: any) => {
   const [show, setShow ] = useState(false) 
   const [selectedStatus, setSelectedStatus] = useState("");
 
-  const [deleteCommunity, { isLoading: isJoining }, ] = useDeleteCommunityMutation()
+  const [deleteCommunity, { isLoading: isDeleteCommunity}, ] = useDeleteCommunityMutation()
   const [updateMyCommunity, {isLoading: isUpdatingLoading}] = useUpdateMyCommunityMutation();
   const {  data: CommunityDetails } = useGetOneCommunityQuery(community_id);
   console.log(CommunityDetails)
@@ -45,6 +46,19 @@ export const GroupCard = ({name, members, community_id, navigate}: any) => {
   const methods = useForm({defaultValues});
   // const {setValue} = methods
   const toast = useToast()
+
+  const showToast = () => {
+    Toast.show({
+      type: 'info',
+      position: 'top',
+      text1: 'Loading...',
+      autoHide: true,
+    });
+  };
+
+  if(isDeleteCommunity){
+    showToast()
+  }
 
   const handleJoinPress = async (community_id: any) => {
     console.log(community_id)
@@ -62,7 +76,10 @@ export const GroupCard = ({name, members, community_id, navigate}: any) => {
             deleteCommunity(community_id)
             .unwrap()
             .then((data) => {
-              console.log('res:', data);
+              toast.show({
+                placement: 'top',
+                render: ({ id }) => <Toaster id={id} type="success" message="Community Deleted" />
+              });
             })
             .catch((error) => {
               toast.show({

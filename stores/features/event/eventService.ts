@@ -38,6 +38,13 @@ export const eventsApi = createApi({
       }),
       providesTags: ["MyEvents", "SaveEvent"],
     }),
+    getPastEvent: builder.query<EventResponse, void>({
+      query: () => ({ 
+        url: "/events/past/me",
+        method: 'GET',
+      }),
+      providesTags: ["Event", "MyEvents"],
+    }),
     getPopularEvents: builder.query<EventResponse, void>({
       query: () => ({
         url: '/events/popular',
@@ -142,7 +149,7 @@ export const eventsApi = createApi({
     }),
     deleteEvent: builder.mutation<any, string>({
       query: (id) => ({ 
-        url: `/event/${id}`,
+        url: `/events/${id}`,
         method: 'DELETE',
       }),
       invalidatesTags: ["MyEvents"]
@@ -150,4 +157,4 @@ export const eventsApi = createApi({
   })
 })
 
-export const {useGetSortUpcomingEventQuery,useGetGoingEventsQuery,useGetUpcomingEventsQuery,  useGetMyEventsQuery, useDeleteEventMutation, useGetEventsQuery, useGetEventsByCatTypeQuery, useGetPopularEventsQuery, useLazyGetSortUpcomingEventQuery, useUnSaveEventMutation, useGetNextEventQuery, useUpdateAttendEventMutation, useGetEventByIdQuery, useGetJoinedEventQuery, useGetSavedEventQuery, useSaveEventMutation, useGetEventTypesQuery, useCreateEventMutation, useLeaveEventMutation, useUpdateEventMutation} = eventsApi
+export const {useGetSortUpcomingEventQuery,useGetGoingEventsQuery,useGetUpcomingEventsQuery,  useGetMyEventsQuery, useGetPastEventQuery, useDeleteEventMutation, useGetEventsQuery, useGetEventsByCatTypeQuery, useGetPopularEventsQuery, useLazyGetSortUpcomingEventQuery, useUnSaveEventMutation, useGetNextEventQuery, useUpdateAttendEventMutation, useGetEventByIdQuery, useGetJoinedEventQuery, useGetSavedEventQuery, useSaveEventMutation, useGetEventTypesQuery, useCreateEventMutation, useLeaveEventMutation, useUpdateEventMutation} = eventsApi

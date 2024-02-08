@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, ScrollView, ImageBackground } from 'react-native'
+import { View, Text, TouchableOpacity, ScrollView, ImageBackground, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 
 // ** Third Party
@@ -8,7 +8,7 @@ import { parseISO } from 'date-fns';
 import { FormProvider } from 'react-hook-form';
 
 // ** Store, Hooks
-import { useUnSaveEventMutation, useGetEventByIdQuery, useUpdateEventMutation } from '../../../stores/features/event/eventService';
+import { useUnSaveEventMutation, useGetEventByIdQuery, useUpdateEventMutation, useDeleteEventMutation } from '../../../stores/features/event/eventService';
 
 // ** Component
 import Toaster from '../../../components/Toaster/Toaster';
@@ -22,6 +22,7 @@ import BottomSheet from '../../../components/bottom-sheet/BottomSheet';
 import Input from '../../../components/Input';
 import CustomButton from '../../../components/CustomButton';
 import { isEventDateLessThanCurrent } from '../../../helpers/isPastEvent';
+import Toast from 'react-native-toast-message';
 
 
 const defaultValues = {
@@ -31,7 +32,7 @@ const defaultValues = {
   event_address: '',
 }
 
-export const EventCard = ({event_url,event_about, event_time ,event_name, event_city, event_id, members, isDelete, handleDeleteEvent, isEdit, navigation,isSave ,  handleEdit}: any) => {
+export const EventCard = ({event_url,event_about, event_time ,event_name, event_city, event_id, members, isDelete, isEdit, navigation,isSave ,  handleEdit}: any) => {
   const [bookMark, setBookMark] = useState(true)
   const [show, setShow ] = useState(false) 
 
@@ -41,6 +42,7 @@ export const EventCard = ({event_url,event_about, event_time ,event_name, event_
 
   // ** Slice Store
   const [unSaveEvent] = useUnSaveEventMutation()
+  const [deleteEvent, {isLoading: isDeleteEventLoading}] = useDeleteEventMutation()
   const [updateEvent, {isLoading: isUpdateLoading}] = useUpdateEventMutation()
   const { isLoading: isEventIdLoading, data: EventDetails } = useGetEventByIdQuery(event_id);
   console.log(EventDetails)
@@ -49,6 +51,18 @@ export const EventCard = ({event_url,event_about, event_time ,event_name, event_
   const initialDate = EventDetails?.event_date && parseISO(EventDetails?.event_date);
   const toast = useToast()
 
+  const showToast = () => {
+    Toast.show({
+      type: 'info',
+      position: 'top',
+      text1: 'Loading...',
+      autoHide: true,
+    });
+  };
+
+  if(isDeleteEventLoading){
+    showToast()
+  }
 
   // End Funtion
   const [date1, setDate1] = useState(initialDate);
@@ -123,6 +137,40 @@ export const EventCard = ({event_url,event_about, event_time ,event_name, event_
     };
     setBookMark(!bookMark)
   }
+
+  const handleDeleteEvent = async () => {
+    console.log(event_id)
+    Alert.alert(
+      'Delete Group',
+      'This action is irreversible!!!',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'OK',
+          onPress: () => {
+            deleteEvent(event_id)
+            .unwrap()
+            .then(() => {
+              toast.show({
+                placement: 'top',
+                render: ({ id }) => <Toaster id={id} type="success" message="Event Deleted" />
+              });
+            })
+            .catch((error: any) => {
+              // toast.show({
+              //   placement: 'top',
+              //   render: ({id}) => <Toaster id={id} type="error" message={error?.data.errors[0].message} />
+              // })
+              console.error(error);
+            });
+          },
+        },
+      ],
+    ); 
+  };
 
   // Populate the form fields with the profile data when it's available
   useEffect(() => {

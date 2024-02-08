@@ -16,6 +16,7 @@ import CustomButton from '../../components/CustomButton';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useToast } from '@gluestack-ui/themed';
 import Toaster from '../../components/Toaster/Toaster';
+import useGlobalState from '../../hooks/global.state';
 type Props = NativeStackScreenProps<RootStackParamList, "GroupCat">;
 
 interface IGridViewProps<T> {
@@ -45,7 +46,8 @@ const GroupCat: React.FC<Props> = ({ navigation: { navigate } }) => {
   const {data, isLoading, } = useGetCategoryQuery()
   const [show, setShow ] = useState(false) 
   const [createCommunity, {isLoading: createCategoryLoading}] = useCreateCategoryMutation()
-
+  const {profile} = useGlobalState()
+  console.log(profile, "Group Cat");
   const toast = useToast()
 
   const methods = useForm({});
@@ -87,7 +89,7 @@ const GroupCat: React.FC<Props> = ({ navigation: { navigate } }) => {
   return (
     <Layout
       title ={show ? "Create a new Category" : "Community"}
-      iconName={!show && "plus"}
+      iconName={!show && profile?.role === "admin" && "plus"}
       onPress={()=> setShow(true)}
     >
      <View className='px-4 mt-4'>

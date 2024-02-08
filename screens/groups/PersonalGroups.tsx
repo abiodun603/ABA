@@ -40,7 +40,7 @@ const PersonalGroups: React.FC<Props> = ({ navigation: { navigate } }) => {
         <FlatList
           keyExtractor={item => item?.id}
           data={data?.docs} 
-          renderItem={({item}) => <GroupCard name = {item.community_name} members = {item.members} community_id={item.id} navigate={navigate}/> }
+          renderItem={({item}) => <GroupCard name = {item.community_name} members = {item.members} community_id={item.id} navigate={navigate} event_url={item.url}/> }
         />
       </View>
     </Layout>

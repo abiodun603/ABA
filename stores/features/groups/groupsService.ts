@@ -137,13 +137,7 @@ export const groupsApi = createApi({
       }),
       providesTags: ["Community"],
     }),
-    getPastEvent: builder.query<EventResponse, void>({
-      query: () => ({ 
-        url: "/events/past",
-        method: 'GET',
-      }),
-      providesTags: ["Community"],
-    }),
+
     
     joinCommunity: builder.mutation<any, GetOneCommunityRequest>({
       query: (credentials) => ({
@@ -174,4 +168,4 @@ export const groupsApi = createApi({
   })
 })
 
-export const {useGetCommunityMembersQuery, useCreateCategoryMutation, useGetCommunityFileQuery, useGetCommunityImagesQuery, useGetCommunityResourcesQuery, useGetCommunityEventQuery, useAddCommunityAdminMutation, useUpdateMyCommunityMutation, useDeleteCommunityMutation,  useGetCategoryByIdQuery, useGetCategoryQuery, useGetCommunityQuery, useGetOneCommunityQuery, useGetMyCommunityQuery, useGetEventDetailsQuery, useGetSavedEventQuery, useJoinCommunityMutation, useCreateCommunityMutation, useLeaveCommunityMutation, useGetPastEventQuery, useGetJoinedCommunityQuery } = groupsApi
+export const {useGetCommunityMembersQuery, useCreateCategoryMutation, useGetCommunityFileQuery, useGetCommunityImagesQuery, useGetCommunityResourcesQuery, useGetCommunityEventQuery, useAddCommunityAdminMutation, useUpdateMyCommunityMutation, useDeleteCommunityMutation,  useGetCategoryByIdQuery, useGetCategoryQuery, useGetCommunityQuery, useGetOneCommunityQuery, useGetMyCommunityQuery, useGetEventDetailsQuery, useGetSavedEventQuery, useJoinCommunityMutation, useCreateCommunityMutation, useLeaveCommunityMutation, useGetJoinedCommunityQuery } = groupsApi
