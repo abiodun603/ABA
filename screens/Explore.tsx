@@ -23,6 +23,8 @@ import MapView, { Marker } from 'react-native-maps'
 import useLocation from '../hooks/useLocation'
 import { useGetEventsByCatTypeQuery, useGetPopularEventsQuery } from '../stores/features/event/eventService'
 import { ShortenedWord } from '../helpers/wordShorther'
+import { useGetCategoryQuery } from '../stores/features/groups/groupsService'
+import GroupCat from './groups/GroupCat'
 
 interface IGridViewProps<T> {
   data: T[];
@@ -55,6 +57,8 @@ const Explore = ({navigation}: {navigation: any}) => {
   const {  cords } = useLocation()
   const {isLoading: isPopularEventsLoading, data: getPopularEvents} = useGetPopularEventsQuery()
   const {isLoading: isEventsByCatTypeLoading, data: getEventsByCatType} = useGetEventsByCatTypeQuery()
+  const {data:getAllCategory, isLoading, } = useGetCategoryQuery()
+
 
   // console.log(getEventsByCatType)
 
@@ -65,7 +69,7 @@ const Explore = ({navigation}: {navigation: any}) => {
   // if (!getPopularEvents && !getEventsByCatType) {
   //   return <Text>No data available.</Text>;
   // }
-
+  console.log(getAllCategory)
 
   const renderEventCard = (event_id: string,url: string, about: string, name: string, time: string, city: any,  toggleBookMark: any, bookMark: any, navigation: any) => {
     const onShare = async () => {
@@ -232,28 +236,34 @@ const Explore = ({navigation}: {navigation: any}) => {
         <Divider thickness={8}/>
 
         <View className='px-4 mt-4 mb-28'>
-          <View className="flex-row items-center justify-between mb-1 ">
+          <TouchableOpacity onPress={()=> navigation.navigate(GroupCat)} className="flex-row items-center justify-between mb-1 ">
             {/*  */}
-            <Text className='text-black text-sm font-bold mt-3'>Browse by categories</Text>
-          </View>
+            <Text className='text-black text-sm font-bold mt-3'>Browse more categories</Text>
+          </TouchableOpacity>
           <View>
-            <GridView 
-              data={GroupCatergory} 
-              renderItem={(item) => (
-                <TouchableOpacity className='mx-2 mt-4' onPress={() => navigation.navigate("GroupCat")}>
-                  <View className='h-[150px] bg-slate-400 rounded-lg  justify-center items-center'>
-                    <ImageBackground
-                      resizeMode="cover"
-                      imageStyle={{ borderRadius: 10}}
-                      style={{ flex: 1, width: '100%' }}
-                      source = {{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvVRjzi266UV2c8204Wa2FDqwwxkXFDU4Ybw&usqp=CAU'}}
-                    />
-                  </View>
-                  <Text className='text-black text-xs font-semibold mt-1'>{item}</Text>
-                </TouchableOpacity>
-              
-              )}
-            />
+            {
+              !getAllCategory?.docs ? (
+                <Text>No data available.</Text>
+              ) : (
+                <GridView 
+                data={getAllCategory?.docs.slice(0, 3)} 
+                renderItem={(item: any) => (
+                  <TouchableOpacity className='mx-2 mt-4' onPress={() => navigation.navigate("GroupCat")}>
+                    <View className='h-[150px] bg-slate-400 rounded-lg  justify-center items-center'>
+                      <ImageBackground
+                        resizeMode="cover"
+                        imageStyle={{ borderRadius: 10}}
+                        style={{ flex: 1, width: '100%' }}
+                        source = {{uri: item.url}}
+                      />
+                    </View>
+                    <Text className='text-black text-xs font-semibold mt-1 capitalize'>{item?.category_name}</Text>
+                  </TouchableOpacity>
+                
+                )}
+              />
+              )
+            }
           </View>
           {/* <Text className=''>No Photo yet !!!</Text> */}
         </View>

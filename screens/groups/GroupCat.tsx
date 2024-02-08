@@ -108,7 +108,7 @@ const GroupCat: React.FC<Props> = ({ navigation: { navigate } }) => {
                       resizeMode="cover"
                       imageStyle={{ borderRadius: 10}}
                       style={{ flex: 1, width: '100%' }}
-                      source = {{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvVRjzi266UV2c8204Wa2FDqwwxkXFDU4Ybw&usqp=CAU'}}
+                      source = {{uri: item.url }}
                     />
                   </View>
                   <Text className='text-black text-xs font-semibold mt-1 capitalize'>{item?.category_name}</Text>
