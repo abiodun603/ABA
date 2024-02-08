@@ -129,7 +129,17 @@ const EditProfile: React.FC<Props> = ({ navigation: { navigate } }) => {
   };
 
   const updatePofileImage = async () => {
-    console.log
+    if(!image) return toast.show({
+      placement: "top",
+      render: ({ id }) => (
+        <Toast nativeID={id} action="error" variant="accent">
+          <VStack space="xs">
+            <ToastTitle>Select Image</ToastTitle>
+          </VStack>
+        </Toast>
+      ),
+    });
+
     try {
       const formData = new FormData();
       formData.append('file', {
@@ -214,6 +224,7 @@ const EditProfile: React.FC<Props> = ({ navigation: { navigate } }) => {
             buttonStyle={{backgroundColor: 'transparent', borderColor: "#B3B3B3", borderWidth: 1, marginTop: 15, width: 136}}
             titleColor= {Colors.gray}
             isLoading={isLoadingProfileImage}
+            
             onPress={updatePofileImage}
           />
         </View>
