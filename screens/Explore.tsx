@@ -248,7 +248,7 @@ const Explore = ({navigation}: {navigation: any}) => {
                 <GridView 
                 data={getAllCategory?.docs.slice(0, 3)} 
                 renderItem={(item: any) => (
-                  <TouchableOpacity className='mx-2 mt-4' onPress={() => navigation.navigate("GroupCat")}>
+                  <TouchableOpacity className='mx-2 mt-4' onPress={() => navigation.navigate("GroupJoin", {id: item.id, category_name: item.category_name})}>
                     <View className='h-[150px] bg-slate-400 rounded-lg  justify-center items-center'>
                       <ImageBackground
                         resizeMode="cover"

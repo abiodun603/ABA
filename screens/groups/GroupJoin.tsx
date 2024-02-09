@@ -32,7 +32,8 @@ type Props = NativeStackScreenProps<RootStackParamList, "GroupJoin">;
 
 // Define the type for your route parameters
 type RouteParams = {
-  id: any;
+  id: string;
+  category_name: string
 };
 const screenWidth = Dimensions.get("window").width
 
@@ -165,7 +166,7 @@ const JoinCard = ({name, members, community_id, url, navigate}: any) => {
 
 
 const GroupJoin: React.FC<Props> = ({ navigation: { navigate } , route}) => {
-  const { id} = route.params as unknown  as RouteParams;
+  const { id, category_name} = route.params as unknown  as RouteParams;
   const [show, setShow ] = useState(false) 
   const [selectedStatus, setSelectedStatus] = useState("");
   const [selectedMembers, setSelectedMembers] = useState<any[]>([])
@@ -192,7 +193,7 @@ const GroupJoin: React.FC<Props> = ({ navigation: { navigate } , route}) => {
 
   // Combine arrays using spread operator
   members.push(...newArray);    
-  console.log(data)
+  console.log(data, "MyCategories")
 
   if(isLoading){
     return <Text>Loading...</Text>;
@@ -242,7 +243,7 @@ const GroupJoin: React.FC<Props> = ({ navigation: { navigate } , route}) => {
   
   return (
     <Layout
-      title = {show ? "Create new Community" : "Community Join"}
+      title = {show ? "Create new Community" : `${category_name.charAt(0).toUpperCase()}${category_name.slice(1)}`}
       iconName={!show && "plus"}
       onPress={()=> setShow(true)}
     >
@@ -309,7 +310,7 @@ const GroupJoin: React.FC<Props> = ({ navigation: { navigate } , route}) => {
                 <GridView 
                 data={getAllCategory?.docs.slice(0, 3)} 
                 renderItem={(item: any) => (
-                  <TouchableOpacity className='mx-2 mt-4' onPress={() => navigate("GroupCat")}>
+                  <TouchableOpacity className='mx-2 mt-4' onPress={() => navigate("GroupJoin", {id: item.id, category_name: item.category_name})}>
                     <View className='h-[150px] bg-slate-400 rounded-lg  justify-center items-center'>
                       <ImageBackground
                         resizeMode="cover"

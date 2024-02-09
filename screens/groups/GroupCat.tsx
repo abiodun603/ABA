@@ -104,7 +104,7 @@ const GroupCat: React.FC<Props> = ({ navigation: { navigate } }) => {
             <GridView 
               data={data?.docs} 
               renderItem={(item: any) => (
-                <TouchableOpacity className=' mt-4 flex-row items-center space-x-2' onPress={() => navigate("GroupJoin", {id: item.id })}>
+                <TouchableOpacity className=' mt-4 flex-row items-center space-x-2' onPress={() => navigate("GroupJoin", {id: item.id, category_name: item.category_name})}>
                   <View className='h-[80px] w-[80px] rounded-lg  justify-center items-center'>
                     <ImageBackground
                       resizeMode="cover"
