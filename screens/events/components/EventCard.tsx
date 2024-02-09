@@ -210,7 +210,7 @@ export const EventCard = ({event_url,event_about, event_time ,event_name, event_
             </View>
           </View>
           <View className="flex-row items-center justify-between mt-3">
-            <Text >{members?.length || "0"} {isEventDateLessThanCurrent(event_date) ? "attended this event in" : "going"}  <Text className='capitalize'>{event_city}</Text></Text>
+            <Text >{members?.length || "0"} {isEventDateLessThanCurrent(event_date) ? "attended this event in" : "going . "}  <Text className='capitalize'>{event_city}</Text></Text>
 
             {/* <Text >{members?.length || "0"} going <Text className='capitalize'>{event_city}</Text></Text> */}
             <View className='flex-row space-x-1'>
