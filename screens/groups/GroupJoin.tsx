@@ -292,7 +292,7 @@ const GroupJoin: React.FC<Props> = ({ navigation: { navigate } , route}) => {
               keyExtractor={item => item?.id}
               data={remainingCommunity}
               renderItem={({ item }) => (
-              <JoinCard name = {item.community_name} members = {item.members} community_id={item.id} navigate={navigate}/> )}
+              <JoinCard name = {item.community_name} members = {item.members} community_id={item.id} navigate={navigate} url={item.url} /> )}
             />
           ): null}
         </View>
