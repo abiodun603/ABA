@@ -100,7 +100,7 @@ export const filterByDate: any = [
   },
   {
     id: 3,
-    name: "tommorrow",
+    name: "tomorrow",
   },
   {
     id: 4,
