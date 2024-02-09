@@ -112,6 +112,7 @@ const Profile = ({navigation}: {navigation: any}) => {
       <Layout
         title='Profile'
         navigation={navigation}
+
         drawerNav
       >
         <View
@@ -146,19 +147,17 @@ const Profile = ({navigation}: {navigation: any}) => {
               </View>
 
               {/*  */}
-              <View style={{marginVertical: 25}} className="" >
+              {/* <View style={{marginVertical: 25}} className="" >
                 <FormProvider {...methods}>
-                  {/* Email Address set up */}
                   <Input
                     label="Bio"
                     name='bio'
                     placeholder='Write a shote bio'
-                    // placeholder={profile && profile[0]?.short_bio || "What's your bio"}
                   />
                 </FormProvider>
-              </View>
+              </View> */}
 
-              <View className='space-y-8'>
+              <View className='space-y-8 mt-10'>
                 {/* <TouchableOpacity
                   onPress={() => setShow(true)}
                   className='flex-row items-center space-x-5 '

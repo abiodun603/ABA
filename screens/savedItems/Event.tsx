@@ -1,4 +1,4 @@
-import { View, StyleSheet, FlatList } from 'react-native'
+import { View, StyleSheet, FlatList, Text } from 'react-native'
 import React from 'react'
 
 // ** Constants 
@@ -30,7 +30,9 @@ const Event = () => {
   console.log(data, isLoading)
   return (
     <View style={styles.container}> 
-      <FlatList
+    {
+      data?.docs.length > 0 ? (
+        <FlatList
         data={data?.docs  || []}
         keyExtractor={item => item.id.toString()}
         showsVerticalScrollIndicator = {false}
@@ -49,6 +51,9 @@ const Event = () => {
             />
         }
       />
+      ) : (<Text className='text-ksecondary text-center mt-10' >No Saved Events</Text>)
+    }
+      
     </View>
   )
 }

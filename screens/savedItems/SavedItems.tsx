@@ -9,7 +9,7 @@ import Past from './Past';
 
 const TabData = [
   { name: "Past", component: Past },
-  { name: "Events", component: Event },
+  { name: "Saved Events", component: Event },
 ];
 
 const SavedItems = () => {
